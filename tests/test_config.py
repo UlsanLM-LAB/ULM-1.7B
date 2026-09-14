@@ -60,3 +60,13 @@ def test_snapshot_does_not_accept_different_resume_config(tmp_path) -> None:
     second = TrainingConfig.from_mapping(base_config(output_dir=str(output), seed=99))
     with pytest.raises(FileExistsError):
         save_snapshot(second, output, allow_existing=True)
+
+
+def test_snapshot_allows_resume_flag_change(tmp_path) -> None:
+    output = tmp_path / "run"
+    first = TrainingConfig.from_mapping(base_config(output_dir=str(output)))
+    save_snapshot(first, output)
+    resumed = TrainingConfig.from_mapping(
+        base_config(output_dir=str(output), resume_from_checkpoint=True)
+    )
+    assert save_snapshot(resumed, output, allow_existing=True) == output / "config.resolved.json"

@@ -215,7 +215,11 @@ def save_snapshot(
     destination_dir = Path(output_dir)
     destination_dir.mkdir(parents=True, exist_ok=True)
     destination = destination_dir / "config.resolved.json"
-    rendered = json.dumps(config.to_dict(), ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    snapshot_values = config.to_dict()
+    # resume_from_checkpoint는 실행 시점의 재개 지시이며 모델 hyperparameter가 아니다.
+    # 따라서 새 실행과 resume 실행이 동일한 output의 설정 snapshot을 공유할 수 있다.
+    snapshot_values["resume_from_checkpoint"] = None
+    rendered = json.dumps(snapshot_values, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     if destination.exists():
         if destination.read_text(encoding="utf-8") != rendered:
             raise FileExistsError(

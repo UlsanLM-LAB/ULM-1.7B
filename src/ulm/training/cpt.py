@@ -96,7 +96,7 @@ def run_cpt(config: TrainingConfig) -> Path:
             bnb_4bit_use_double_quant=config.double_quantization,
             bnb_4bit_compute_dtype=compute_dtype,
         )
-    model_kwargs: dict[str, Any] = {"device_map": "auto"}
+    model_kwargs: dict[str, Any] = {"device_map": "auto", "torch_dtype": compute_dtype}
     if quantization_config is not None:
         model_kwargs["quantization_config"] = quantization_config
     if config.trust_remote_code:

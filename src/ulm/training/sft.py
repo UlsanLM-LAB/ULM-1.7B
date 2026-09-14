@@ -136,6 +136,14 @@ def _filtered_kwargs(constructor: Any, kwargs: dict[str, Any]) -> dict[str, Any]
     return {key: value for key, value in kwargs.items() if key in parameters}
 
 
+def _restore_fp16_trainable_parameters(model: Any) -> None:
+    """일부 TRL가 QLoRA adapter를 BF16으로 바꾼 뒤 FP16 scaler와 충돌하는 것을 막는다."""
+
+    for parameter in model.parameters():
+        if parameter.requires_grad and str(parameter.dtype) == "torch.bfloat16":
+            parameter.data = parameter.data.float()
+
+
 def run_sft(config: TrainingConfig) -> Path:
     config.validate()
     resume_checkpoint = resolve_resume_checkpoint(config.resume_from_checkpoint, config.output_dir)
@@ -170,7 +178,7 @@ def run_sft(config: TrainingConfig) -> Path:
             bnb_4bit_use_double_quant=config.double_quantization,
             bnb_4bit_compute_dtype=compute_dtype,
         )
-    model_kwargs: dict[str, Any] = {"device_map": "auto"}
+    model_kwargs: dict[str, Any] = {"device_map": "auto", "torch_dtype": compute_dtype}
     if quantization_config is not None:
         model_kwargs["quantization_config"] = quantization_config
     if config.trust_remote_code:
@@ -218,6 +226,9 @@ def run_sft(config: TrainingConfig) -> Path:
         "save_total_limit": config.save_total_limit,
         "gradient_checkpointing": config.gradient_checkpointing,
         "packing": config.packing,
+        "packing_strategy": "wrapped",
+        "eval_packing": False,
+        "padding_free": False,
         "bf16": config.bf16,
         "fp16": config.fp16,
         "report_to": config.report_to,
@@ -234,6 +245,8 @@ def run_sft(config: TrainingConfig) -> Path:
         "tokenizer": tokenizer,
     }
     trainer = SFTTrainer(**_filtered_kwargs(SFTTrainer, trainer_kwargs))
+    if config.fp16 and config.load_in_4bit:
+        _restore_fp16_trainable_parameters(trainer.model)
     trainer.train(resume_from_checkpoint=str(resume_checkpoint) if resume_checkpoint else None)
     trainer.save_model(str(output_dir))
     tokenizer.save_pretrained(str(output_dir))
