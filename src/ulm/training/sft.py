@@ -136,6 +136,19 @@ def _filtered_kwargs(constructor: Any, kwargs: dict[str, Any]) -> dict[str, Any]
     return {key: value for key, value in kwargs.items() if key in parameters}
 
 
+def _model_dtype_kwargs(compute_dtype: Any) -> dict[str, Any]:
+    """Transformers 5.x와 4.x의 model dtype 인자 차이를 흡수한다."""
+
+    try:
+        import transformers
+
+        major_version = int(transformers.__version__.split(".", 1)[0])
+    except (ImportError, ValueError, AttributeError):
+        major_version = 4
+    key = "dtype" if major_version >= 5 else "torch_dtype"
+    return {key: compute_dtype}
+
+
 def _restore_fp16_trainable_parameters(model: Any, bfloat16_dtype: Any) -> None:
     """일부 TRL가 QLoRA adapter를 BF16으로 바꾼 뒤 FP16 scaler와 충돌하는 것을 막는다."""
 
@@ -213,7 +226,7 @@ def run_sft(config: TrainingConfig) -> Path:
             bnb_4bit_use_double_quant=config.double_quantization,
             bnb_4bit_compute_dtype=compute_dtype,
         )
-    model_kwargs: dict[str, Any] = {"device_map": "auto", "torch_dtype": compute_dtype}
+    model_kwargs: dict[str, Any] = {"device_map": "auto", **_model_dtype_kwargs(compute_dtype)}
     if quantization_config is not None:
         model_kwargs["quantization_config"] = quantization_config
     if config.trust_remote_code:

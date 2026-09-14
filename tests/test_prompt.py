@@ -4,7 +4,7 @@ import pytest
 
 from ulm.inference.prompt import build_inference_messages
 from ulm.training.cpt import build_cpt_text
-from ulm.training.sft import _partition_embedded_splits, build_messages
+from ulm.training.sft import _model_dtype_kwargs, _partition_embedded_splits, build_messages
 
 
 def test_inference_strength_is_explicit() -> None:
@@ -12,6 +12,10 @@ def test_inference_strength_is_explicit() -> None:
     assert "강한 울산" in messages[0]["content"]
     with pytest.raises(ValueError):
         build_inference_messages("입력", dialect_strength=4)
+
+
+def test_model_dtype_argument_has_one_supported_name() -> None:
+    assert set(_model_dtype_kwargs(object())) in [{"dtype"}, {"torch_dtype"}]
 
 
 def test_sft_messages_preserve_task_and_control() -> None:

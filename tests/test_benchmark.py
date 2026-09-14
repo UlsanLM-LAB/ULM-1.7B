@@ -31,6 +31,17 @@ def test_invalid_benchmark_item_is_rejected() -> None:
         ).validate()
 
 
+def test_benchmark_types_are_strict() -> None:
+    with pytest.raises(ValidationError, match="choices"):
+        BenchmarkItem(
+            id="bad-types",
+            task="region_classification",
+            input="문장",
+            choices=None,  # type: ignore[arg-type]
+            gold="울산",
+        ).validate()
+
+
 def test_character_f1_and_task_metrics() -> None:
     assert character_f1("가 나", "가나") == 1.0
     items = [

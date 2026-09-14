@@ -24,6 +24,13 @@ def test_config_defaults_and_alias(tmp_path) -> None:
     assert snapshot.exists()
 
 
+def test_missing_required_config_field_is_rejected() -> None:
+    values = base_config()
+    del values["model_name"]
+    with pytest.raises(ConfigError, match="필수"):
+        TrainingConfig.from_mapping(values)
+
+
 def test_config_yaml_load(tmp_path) -> None:
     path = tmp_path / "config.yaml"
     path.write_text(

@@ -98,6 +98,9 @@ class TrainingConfig:
         unknown = set(raw) - _FIELDS
         if unknown:
             raise ConfigError(f"알 수 없는 config key: {sorted(unknown)!r}")
+        missing = {"model_name", "dataset_path", "output_dir"} - set(raw)
+        if missing:
+            raise ConfigError(f"필수 config key가 없습니다: {sorted(missing)!r}")
         values = dict(raw)
         if "per_device_train_batch_size" in values:
             if (

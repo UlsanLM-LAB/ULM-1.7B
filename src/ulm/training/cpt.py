@@ -10,7 +10,7 @@ from typing import Any
 
 from .config import TrainingConfig, load_config, save_snapshot
 from .resume import ensure_output_dir, resolve_resume_checkpoint
-from .sft import _dataset_files, _filtered_kwargs
+from .sft import _filtered_kwargs, _load_dataset, _model_dtype_kwargs
 
 
 def build_cpt_text(row: Mapping[str, Any]) -> str:
@@ -62,9 +62,6 @@ def _require_ml_dependencies() -> tuple[Any, ...]:
 
 def run_cpt(config: TrainingConfig) -> Path:
     config.validate()
-    resume_checkpoint = resolve_resume_checkpoint(config.resume_from_checkpoint, config.output_dir)
-    output_dir = ensure_output_dir(config.output_dir, resume_checkpoint)
-    save_snapshot(config, output_dir)
     (
         torch,
         load_dataset,
@@ -78,12 +75,15 @@ def run_cpt(config: TrainingConfig) -> Path:
         Trainer,
         TrainingArguments,
     ) = _require_ml_dependencies()
+    resume_checkpoint = resolve_resume_checkpoint(config.resume_from_checkpoint, config.output_dir)
     if config.load_in_4bit and not torch.cuda.is_available():
         raise RuntimeError("4-bit CPT는 현재 pipeline에서 CUDA GPU 실행만 허용합니다")
     if config.bf16 and not torch.cuda.is_bf16_supported():
         raise RuntimeError("config가 bf16을 요구하지만 현재 CUDA가 bf16을 지원하지 않습니다")
+    output_dir = ensure_output_dir(config.output_dir, resume_checkpoint)
+    save_snapshot(config, output_dir)
 
-    dataset = load_dataset("json", data_files=_dataset_files(Path(config.dataset_path)))
+    dataset = _load_dataset(load_dataset, config)
     tokenizer = AutoTokenizer.from_pretrained(config.model_name, use_fast=True)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
@@ -96,7 +96,7 @@ def run_cpt(config: TrainingConfig) -> Path:
             bnb_4bit_use_double_quant=config.double_quantization,
             bnb_4bit_compute_dtype=compute_dtype,
         )
-    model_kwargs: dict[str, Any] = {"device_map": "auto", "torch_dtype": compute_dtype}
+    model_kwargs: dict[str, Any] = {"device_map": "auto", **_model_dtype_kwargs(compute_dtype)}
     if quantization_config is not None:
         model_kwargs["quantization_config"] = quantization_config
     if config.trust_remote_code:
