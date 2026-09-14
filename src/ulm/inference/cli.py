@@ -15,6 +15,7 @@ def generate_text(
     *,
     dialect_strength: int = 2,
     adapter_path: str | None = None,
+    load_in_4bit: bool = False,
     max_new_tokens: int = 128,
     temperature: float = 0.7,
     top_p: float = 0.9,
@@ -29,7 +30,18 @@ def generate_text(
         ) from exc
 
     tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
-    model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
+    model_kwargs: dict[str, Any] = {"device_map": "auto", "torch_dtype": "auto"}
+    if load_in_4bit:
+        from transformers import BitsAndBytesConfig
+
+        compute_dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+        model_kwargs["quantization_config"] = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_compute_dtype=compute_dtype,
+        )
+    model = AutoModelForCausalLM.from_pretrained(model_name, **model_kwargs)
     if adapter_path:
         try:
             from peft import PeftModel
@@ -70,6 +82,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--text-file", type=Path, help="입력 text file; --text와 함께 사용할 수 없음"
     )
     parser.add_argument("--dialect-strength", type=int, default=2, choices=range(4), metavar="0-3")
+    parser.add_argument(
+        "--load-in-4bit",
+        action="store_true",
+        help="메모리 절약을 위해 base model을 4-bit(NF4)로 로드",
+    )
     parser.add_argument("--max-new-tokens", type=int, default=128)
     parser.add_argument("--temperature", type=float, default=0.7)
     parser.add_argument("--top-p", type=float, default=0.9)
@@ -89,6 +106,7 @@ def main(argv: list[str] | None = None) -> int:
         text,
         dialect_strength=args.dialect_strength,
         adapter_path=str(args.adapter) if args.adapter else None,
+        load_in_4bit=args.load_in_4bit,
         max_new_tokens=args.max_new_tokens,
         temperature=args.temperature,
         top_p=args.top_p,

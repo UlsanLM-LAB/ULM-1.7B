@@ -10,7 +10,12 @@ from typing import Any
 
 from .config import TrainingConfig, load_config, save_snapshot
 from .resume import ensure_output_dir, resolve_resume_checkpoint
-from .sft import _filtered_kwargs, _load_dataset, _model_dtype_kwargs
+from .sft import (
+    _filtered_kwargs,
+    _load_dataset,
+    _model_dtype_kwargs,
+    _restore_fp16_trainable_parameters,
+)
 
 
 def build_cpt_text(row: Mapping[str, Any]) -> str:
@@ -165,6 +170,8 @@ def run_cpt(config: TrainingConfig) -> Path:
         "tokenizer": tokenizer,
     }
     trainer = Trainer(**_filtered_kwargs(Trainer, trainer_kwargs))
+    if config.fp16 and config.load_in_4bit:
+        _restore_fp16_trainable_parameters(trainer.model, torch.bfloat16)
     trainer.train(resume_from_checkpoint=str(resume_checkpoint) if resume_checkpoint else None)
     trainer.save_model(str(output_dir))
     tokenizer.save_pretrained(str(output_dir))

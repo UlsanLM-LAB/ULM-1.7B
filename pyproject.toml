@@ -41,6 +41,7 @@ ulm-infer = "ulm.inference.cli:main"
 where = ["src"]
 
 [tool.pytest.ini_options]
+pythonpath = ["src"]
 testpaths = ["tests"]
 addopts = "-q"
 
