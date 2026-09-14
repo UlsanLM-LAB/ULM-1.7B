@@ -1,0 +1,2 @@
+{"id":"fixture-understand-1","task":"dialect_understanding","input":"이 fixture 문장의 뜻은 무엇인가?","choices":["A","B"],"gold":"B","source":"developer_fixture","annotators":0,"human_verified":false,"review_status":"fixture_only","metadata":{"not_for_research":true}}
+{"id":"fixture-normalize-1","task":"dialect_to_standard","input":"fixture 입력 문장","reference":"표준 fixture 문장","source":"developer_fixture","annotators":0,"human_verified":false,"review_status":"fixture_only","metadata":{"not_for_research":true}}
