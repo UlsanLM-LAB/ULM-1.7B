@@ -200,7 +200,6 @@ def audit_json_root(root: str | Path) -> AuditSummary:
 
     accumulators = {tier: _TierAccumulator() for tier in ("U0", "U1", "U2", "GX")}
     location_counts = {field_name: Counter() for field_name in LOCATION_FIELDS}
-    speaker_info: dict[str, Mapping[str, Any]] = {}
     files_scanned = 0
     parse_errors: list[str] = []
 
@@ -216,6 +215,7 @@ def audit_json_root(root: str | Path) -> AuditSummary:
             parse_errors.append(f"{path}: 최상위 JSON이 object가 아닙니다")
             continue
 
+        speaker_info: dict[str, Mapping[str, Any]] = {}
         speakers = _nested_list(document, "speaker")
         for speaker in speakers:
             identifier = _speaker_id(speaker)

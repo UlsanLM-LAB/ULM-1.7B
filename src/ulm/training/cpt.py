@@ -64,7 +64,7 @@ def run_cpt(config: TrainingConfig) -> Path:
     config.validate()
     resume_checkpoint = resolve_resume_checkpoint(config.resume_from_checkpoint, config.output_dir)
     output_dir = ensure_output_dir(config.output_dir, resume_checkpoint)
-    save_snapshot(config, output_dir, allow_existing=resume_checkpoint is not None)
+    save_snapshot(config, output_dir)
     (
         torch,
         load_dataset,

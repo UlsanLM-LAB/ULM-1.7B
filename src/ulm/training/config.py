@@ -114,7 +114,10 @@ class TrainingConfig:
                 raise ConfigError(
                     "target_modules는 all-linear 문자열 또는 문자열 목록이어야 합니다"
                 )
-        config = cls(**values)
+        try:
+            config = cls(**values)
+        except TypeError as exc:
+            raise ConfigError(f"config field type 또는 값이 올바르지 않습니다: {exc}") from exc
         return config.validate()
 
     def validate(self) -> TrainingConfig:
@@ -147,13 +150,29 @@ class TrainingConfig:
             or self.max_steps <= 0
         ):
             errors.append("max_steps는 None 또는 양의 정수여야 합니다")
-        if not isinstance(self.num_train_epochs, (int, float)) or self.num_train_epochs <= 0:
+        if (
+            isinstance(self.num_train_epochs, bool)
+            or not isinstance(self.num_train_epochs, (int, float))
+            or self.num_train_epochs <= 0
+        ):
             errors.append("num_train_epochs는 양수여야 합니다")
-        if not isinstance(self.learning_rate, (int, float)) or self.learning_rate <= 0:
+        if (
+            isinstance(self.learning_rate, bool)
+            or not isinstance(self.learning_rate, (int, float))
+            or self.learning_rate <= 0
+        ):
             errors.append("learning_rate는 양수여야 합니다")
-        if not isinstance(self.warmup_ratio, (int, float)) or not 0 <= self.warmup_ratio < 1:
+        if (
+            isinstance(self.warmup_ratio, bool)
+            or not isinstance(self.warmup_ratio, (int, float))
+            or not 0 <= self.warmup_ratio < 1
+        ):
             errors.append("warmup_ratio는 0 이상 1 미만이어야 합니다")
-        if not isinstance(self.lora_dropout, (int, float)) or not 0 <= self.lora_dropout < 1:
+        if (
+            isinstance(self.lora_dropout, bool)
+            or not isinstance(self.lora_dropout, (int, float))
+            or not 0 <= self.lora_dropout < 1
+        ):
             errors.append("lora_dropout은 0 이상 1 미만이어야 합니다")
         if self.bnb_4bit_quant_type not in {"nf4", "fp4"}:
             errors.append("bnb_4bit_quant_type은 nf4 또는 fp4여야 합니다")
@@ -181,8 +200,13 @@ class TrainingConfig:
             and self.resume_from_checkpoint is not None
         ):
             errors.append("resume_from_checkpoint는 None, bool, 경로 문자열 중 하나여야 합니다")
-        if isinstance(self.target_modules, tuple) and not self.target_modules:
-            errors.append("target_modules 목록은 비어 있을 수 없습니다")
+        if isinstance(self.target_modules, tuple):
+            if not self.target_modules or any(
+                not isinstance(item, str) or not item.strip() for item in self.target_modules
+            ):
+                errors.append("target_modules 목록은 비어 있지 않은 문자열만 가져야 합니다")
+        elif not isinstance(self.target_modules, str) or not self.target_modules.strip():
+            errors.append("target_modules는 비어 있지 않은 문자열이어야 합니다")
         if errors:
             raise ConfigError("; ".join(errors))
         return self
@@ -207,9 +231,7 @@ def load_config(path: str | Path) -> TrainingConfig:
     return TrainingConfig.from_mapping(raw or {})
 
 
-def save_snapshot(
-    config: TrainingConfig, output_dir: str | Path, *, allow_existing: bool = False
-) -> Path:
+def save_snapshot(config: TrainingConfig, output_dir: str | Path) -> Path:
     """resolved config를 output에 기록하고 기존 내용과 충돌하면 실패한다."""
 
     destination_dir = Path(output_dir)

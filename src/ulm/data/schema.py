@@ -132,7 +132,9 @@ class DatasetRecord:
         if not isinstance(self.human_verified, bool):
             errors.append("human_verified는 bool이어야 합니다")
         if self.dialect_strength is not None and (
-            not isinstance(self.dialect_strength, int) or self.dialect_strength not in range(4)
+            isinstance(self.dialect_strength, bool)
+            or not isinstance(self.dialect_strength, int)
+            or self.dialect_strength not in range(4)
         ):
             errors.append("dialect_strength는 None 또는 0~3 정수여야 합니다")
         if self.quality_grade not in QUALITY_GRADES:

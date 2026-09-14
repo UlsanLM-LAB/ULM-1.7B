@@ -4,7 +4,7 @@ import pytest
 
 from ulm.inference.prompt import build_inference_messages
 from ulm.training.cpt import build_cpt_text
-from ulm.training.sft import build_messages
+from ulm.training.sft import _partition_embedded_splits, build_messages
 
 
 def test_inference_strength_is_explicit() -> None:
@@ -44,3 +44,37 @@ def test_cpt_text_uses_available_parallel_fields() -> None:
     assert build_cpt_text({"text": "이미 합쳐진 text"}) == "이미 합쳐진 text"
     with pytest.raises(ValueError):
         build_cpt_text({})
+
+
+class _FakeDataset:
+    column_names = ["split", "text"]
+
+    def __init__(self, rows: list[dict[str, str]]) -> None:
+        self.rows = rows
+
+    def __len__(self) -> int:
+        return len(self.rows)
+
+    def filter(self, function):
+        return _FakeDataset([row for row in self.rows if function(row)])
+
+
+def test_embedded_split_field_is_partitioned_without_dropping_rows() -> None:
+    dataset = _partition_embedded_splits(
+        {
+            "train": _FakeDataset(
+                [
+                    {"split": "train", "text": "a"},
+                    {"split": "validation", "text": "b"},
+                ]
+            )
+        }
+    )
+    assert set(dataset) == {"train", "validation"}
+    assert len(dataset["train"]) == 1
+    assert len(dataset["validation"]) == 1
+
+
+def test_embedded_split_field_rejects_unknown_values() -> None:
+    with pytest.raises(ValueError, match="split field"):
+        _partition_embedded_splits({"train": _FakeDataset([{"split": "unknown", "text": "a"}])})

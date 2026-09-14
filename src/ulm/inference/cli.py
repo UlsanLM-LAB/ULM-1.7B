@@ -50,12 +50,9 @@ def generate_text(
     inputs = tokenizer(prompt, return_tensors="pt")
     if hasattr(model, "device"):
         inputs = {key: value.to(model.device) for key, value in inputs.items()}
-    generation_kwargs = {
-        "max_new_tokens": max_new_tokens,
-        "do_sample": do_sample,
-        "temperature": temperature,
-        "top_p": top_p,
-    }
+    generation_kwargs = {"max_new_tokens": max_new_tokens, "do_sample": do_sample}
+    if do_sample:
+        generation_kwargs.update({"temperature": temperature, "top_p": top_p})
     with torch.inference_mode():
         output = model.generate(**inputs, **generation_kwargs)
     input_length = inputs["input_ids"].shape[-1]

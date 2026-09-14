@@ -136,20 +136,52 @@ def _filtered_kwargs(constructor: Any, kwargs: dict[str, Any]) -> dict[str, Any]
     return {key: value for key, value in kwargs.items() if key in parameters}
 
 
-def _restore_fp16_trainable_parameters(model: Any) -> None:
+def _restore_fp16_trainable_parameters(model: Any, bfloat16_dtype: Any) -> None:
     """일부 TRL가 QLoRA adapter를 BF16으로 바꾼 뒤 FP16 scaler와 충돌하는 것을 막는다."""
 
     for parameter in model.parameters():
-        if parameter.requires_grad and str(parameter.dtype) == "torch.bfloat16":
+        if parameter.requires_grad and parameter.dtype == bfloat16_dtype:
             parameter.data = parameter.data.float()
+
+
+def _partition_embedded_splits(dataset: Any) -> dict[str, Any]:
+    """한 JSONL에 들어 있는 split field를 DatasetDict처럼 분리한다."""
+
+    if "validation" in dataset or "test" in dataset:
+        return dict(dataset)
+    train_dataset = dataset["train"]
+    if "split" not in train_dataset.column_names:
+        return dict(dataset)
+    split_values = train_dataset.filter(
+        lambda row: row.get("split") in {"train", "validation", "test"}
+    )
+    if len(split_values) != len(train_dataset):
+        raise ValueError(
+            "single JSONL의 split field에는 train/validation/test만 사용할 수 있습니다"
+        )
+    if len(split_values) == 0:
+        return dict(dataset)
+    result: dict[str, Any] = {}
+    for split in ("train", "validation", "test"):
+        subset = split_values.filter(lambda row, expected=split: row.get("split") == expected)
+        if len(subset) > 0:
+            result[split] = subset
+    return result
+
+
+def _load_dataset(load_dataset: Any, config: TrainingConfig) -> dict[str, Any]:
+    data_files = _dataset_files(Path(config.dataset_path))
+    if config.eval_dataset_path:
+        evaluation_files = _dataset_files(Path(config.eval_dataset_path))
+        data_files["validation"] = evaluation_files.get("validation", evaluation_files["train"])
+    dataset = _partition_embedded_splits(load_dataset("json", data_files=data_files))
+    if "train" not in dataset or len(dataset["train"]) == 0:
+        raise ValueError("training dataset에는 비어 있지 않은 train split이 필요합니다")
+    return dataset
 
 
 def run_sft(config: TrainingConfig) -> Path:
     config.validate()
-    resume_checkpoint = resolve_resume_checkpoint(config.resume_from_checkpoint, config.output_dir)
-    output_dir = ensure_output_dir(config.output_dir, resume_checkpoint)
-    save_snapshot(config, output_dir, allow_existing=resume_checkpoint is not None)
-
     (
         torch,
         load_dataset,
@@ -161,12 +193,15 @@ def run_sft(config: TrainingConfig) -> Path:
         SFTConfig,
         SFTTrainer,
     ) = _require_ml_dependencies()
+    resume_checkpoint = resolve_resume_checkpoint(config.resume_from_checkpoint, config.output_dir)
     if config.load_in_4bit and not torch.cuda.is_available():
         raise RuntimeError("4-bit QLoRA는 현재 pipeline에서 CUDA GPU 실행만 허용합니다")
     if config.bf16 and not torch.cuda.is_bf16_supported():
         raise RuntimeError("config가 bf16을 요구하지만 현재 CUDA가 bf16을 지원하지 않습니다")
+    output_dir = ensure_output_dir(config.output_dir, resume_checkpoint)
+    save_snapshot(config, output_dir)
 
-    dataset = load_dataset("json", data_files=_dataset_files(Path(config.dataset_path)))
+    dataset = _load_dataset(load_dataset, config)
     dataset = {split: _prepare_dataset(value) for split, value in dataset.items()}
     tokenizer = AutoTokenizer.from_pretrained(config.model_name, use_fast=True)
     compute_dtype = torch.bfloat16 if config.bf16 else torch.float16
@@ -246,7 +281,7 @@ def run_sft(config: TrainingConfig) -> Path:
     }
     trainer = SFTTrainer(**_filtered_kwargs(SFTTrainer, trainer_kwargs))
     if config.fp16 and config.load_in_4bit:
-        _restore_fp16_trainable_parameters(trainer.model)
+        _restore_fp16_trainable_parameters(trainer.model, torch.bfloat16)
     trainer.train(resume_from_checkpoint=str(resume_checkpoint) if resume_checkpoint else None)
     trainer.save_model(str(output_dir))
     tokenizer.save_pretrained(str(output_dir))
