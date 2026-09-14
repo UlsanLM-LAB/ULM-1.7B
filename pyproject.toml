@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ulm-1-7b"
+version = "0.1.0"
+description = "Ulsan Language Model research pipeline"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "UlsanLM Lab" }]
+dependencies = [
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.8",
+]
+ml = [
+  "accelerate>=1.0",
+  "bitsandbytes>=0.45",
+  "datasets>=3.0",
+  "peft>=0.14",
+  "torch>=2.5",
+  "transformers>=4.51",
+  "trl>=0.15",
+]
+
+[project.scripts]
+ulm-audit = "ulm.data.aihub:main"
+ulm-build-dataset = "ulm.data.filter_ulsan:main"
+ulm-evaluate = "ulm.evaluation.cli:main"
+ulm-train-cpt = "ulm.training.cpt:main"
+ulm-train-sft = "ulm.training.sft:main"
+ulm-infer = "ulm.inference.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
