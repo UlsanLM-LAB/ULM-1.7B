@@ -9,9 +9,10 @@
 | 로컬 GPU | `NVIDIA GeForce RTX 5060 Laptop GPU` |
 | 보고된 VRAM | 약 `8 GB` |
 | Python | `uv` 경유 Python `3.11.15` |
-| ML package | 현재 environment에서 미설치 |
-| model weights/cache | 확인되지 않음 |
-| 결론 | CPU foundation 가능, GPU smoke는 준비 상태 |
+| ML package | `.venv`에 dev·ML extra 설치 완료 |
+| 확인된 버전 | `torch 2.14.0+cu130`, `transformers 5.17.0`, `datasets 5.0.1`, `peft 0.20.0`, `trl 1.13.0`, `bitsandbytes 0.50.2` |
+| model weights/cache | `Qwen/Qwen3-0.6B` 공개 checkpoint load 완료 |
+| 결론 | CPU foundation과 짧은 GPU smoke 완료, 1.7B 장시간 학습은 미실행 |
 
 ## 단계별 자원 계획
 

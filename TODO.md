@@ -166,7 +166,7 @@
 
 ### T13 — 0.6B QLoRA smoke
 
-- 상태: `READY_FOR_TRAINING`
+- 상태: `DONE`
 - priority: P1
 - label: `[GPU] [FREE]`
 - 목표: 5~20 step으로 load → tokenize → train → save → resume → eval → inference를 증명한다.
@@ -174,7 +174,8 @@
 - dependency: T08, T09, 공개 model download, ML dependencies
 - 완료 조건: 실제 log·checkpoint·metric·resume 결과 기록
 - test: 무료 Colab 또는 로컬 GPU에서 짧게 실행
-- 비고: 현재 가중치와 ML dependencies가 없으므로 수 시간 학습은 실행하지 않음
+- 결과: 로컬 RTX 5060 Laptop GPU에서 5 step 학습, checkpoint 저장, resume, adapter inference 완료. fixture 결과와 실험 로그는 `EXPERIMENTS.md`에 기록함.
+- 비고: 1.7B 수 시간 학습은 실행하지 않음
 
 ### T14 — 1.7B 연구 실험
 

@@ -31,13 +31,15 @@ CPU foundation의 schema·audit·filter·split·benchmark·config·CLI와 테스
 
 ## Phase 2 — Smoke pipeline
 
-상태: `READY_FOR_TRAINING`
+상태: `DONE`
 
 - `Qwen/Qwen3-0.6B` tokenizer·model load
 - 5~20 step QLoRA SFT
 - checkpoint save 및 resume
 - fixture evaluation
 - local inference
+
+로컬 RTX 5060 Laptop GPU에서 `Qwen/Qwen3-0.6B` 5 step smoke와 checkpoint resume을 완료했다. 결과는 fixture 검증이며 울산 성능 결과가 아니다.
 
 무료 Colab 또는 현재 로컬 8GB GPU에서만 짧게 실행한다. ML package/model download가 필요하므로 실제 결과는 실행 후에만 기록한다.
 
