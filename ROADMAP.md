@@ -15,7 +15,7 @@
 
 ## Phase 1 — CPU foundation
 
-상태: `IN_PROGRESS`
+상태: `DONE`
 
 - Python package와 `pyproject.toml`
 - unified dataset schema와 JSONL 입출력
@@ -24,6 +24,8 @@
 - AI Hub audit CLI
 - ULM-Bench schema와 baseline metric
 - training config loader
+
+CPU foundation의 schema·audit·filter·split·benchmark·config·CLI와 테스트가 완료되었다. 실제 raw archive는 포함하지 않는다.
 
 완료 기준은 외부 데이터나 GPU 없이 unit test가 통과하는 것이다.
 

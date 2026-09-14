@@ -162,12 +162,14 @@ import re
 
 JSON_ROOT = Path("/content/aihub_gyeongsang/json")
 
+
 def clean_location(x):
     if x is None:
         return ""
     x = str(x).strip()
     x = re.sub(r"\s+", " ", x)
     return x
+
 
 birth = Counter()
 principal = Counter()
@@ -200,12 +202,11 @@ ULSAN_ALIASES = {
     # 실제 audit 후 확인된 값만 추가
 }
 
+
 def is_ulsan(value: str) -> bool:
     value = clean_location(value)
-    return (
-        value in ULSAN_ALIASES
-        or value.startswith("울산광역시 ")
-    )
+    return value in ULSAN_ALIASES or value.startswith("울산광역시 ")
+
 
 def speaker_tier(s):
     b = is_ulsan(s.get("birthplace"))
@@ -900,10 +901,7 @@ GPT-SoVITS
 즉:
 
 ```python
-profile = voice_bank.select(
-    age_group=request.voice_age,
-    dialect_strength=request.dialect_strength
-)
+profile = voice_bank.select(age_group=request.voice_age, dialect_strength=request.dialect_strength)
 ```
 
 처럼 처리한다.

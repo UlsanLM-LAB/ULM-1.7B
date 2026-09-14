@@ -19,7 +19,7 @@
 
 ### T01 — Python package와 개발 도구
 
-- 상태: `TODO`
+- 상태: `DONE`
 - priority: P0
 - label: `[FREE]`
 - 목표: `src/ulm` package, `pyproject.toml`, test 명령, `.gitignore`를 만든다.
@@ -30,7 +30,7 @@
 
 ### T02 — unified dataset schema
 
-- 상태: `TODO`
+- 상태: `DONE`
 - priority: P0
 - label: `[LUNA] [FREE]`
 - 목표: task, provenance, speaker, annotation, split을 표현하는 immutable record와 JSON 변환을 구현한다.
@@ -41,7 +41,7 @@
 
 ### T03 — schema validator test
 
-- 상태: `TODO`
+- 상태: `DONE`
 - priority: P0
 - label: `[FLASH] [FREE]`
 - 목표: 누락 필드, 잘못된 범위, synthetic review 규칙, 개인정보 위험 field를 거부한다.
@@ -52,7 +52,7 @@
 
 ### T04 — speaker-aware deterministic split
 
-- 상태: `TODO`
+- 상태: `DONE`
 - priority: P0
 - label: `[LUNA] [FREE]`
 - 목표: seed와 ratio로 speaker-disjoint train/validation/test split을 생성하고 검증한다.
@@ -63,18 +63,18 @@
 
 ### T05 — AI Hub audit와 위치 tier
 
-- 상태: `TODO`
+- 상태: `DONE`
 - priority: P0
 - label: `[FLASH] [FREE]`
 - 목표: 외부 raw directory를 다운로드하지 않고 실제 JSON 구조를 읽을 수 있는 audit CLI와 `U0/U1/U2/GX` 분류를 제공한다.
-- 관련 파일: `src/ulm/data/aihub.py`, `scripts/audit_aihub.py`, `tests/test_aihub.py`
+- 관련 파일: `src/ulm/data/aihub.py`, `src/ulm/data/filter_ulsan.py`, `scripts/audit_aihub.py`, `scripts/build_ulsan_dataset.py`, `tests/test_aihub.py`, `tests/test_filter_ulsan.py`
 - dependency: T02
-- 완료 조건: location inventory, speaker/utterance count, duration·누락 통계를 CSV로 출력함
+- 완료 조건: location inventory, speaker/utterance count, duration·누락 통계를 CSV로 출력하고 지정 tier를 canonical JSONL로 추출함
 - test: local fixture audit
 
 ### T06 — ULM-Bench schema와 baseline metric
 
-- 상태: `TODO`
+- 상태: `DONE`
 - priority: P0
 - label: `[LUNA] [FREE]`
 - 목표: 실제 gold 문항을 대량 생성하지 않고 benchmark item validation과 예측 평가 framework를 만든다.
@@ -85,7 +85,7 @@
 
 ### T07 — training config loader
 
-- 상태: `TODO`
+- 상태: `DONE`
 - priority: P0
 - label: `[LUNA] [FREE]`
 - 목표: YAML config에서 model, data, QLoRA, precision, checkpoint, seed를 검증하고 resolved snapshot을 저장한다.
@@ -96,7 +96,7 @@
 
 ### T08 — QLoRA SFT adapter
 
-- 상태: `TODO`
+- 상태: `DONE`
 - priority: P1
 - label: `[LUNA] [FLASH] [GPU]`
 - 목표: canonical JSONL을 conversational dataset으로 변환해 `SFTTrainer` 기반 QLoRA를 실행한다.
@@ -105,9 +105,20 @@
 - 완료 조건: ML dependency가 있으면 5~20 step smoke test가 가능하고 없으면 명확히 실패함
 - test: message conversion CPU test; GPU smoke는 별도
 
+### T08a — continued pretraining adapter
+
+- 상태: `DONE`
+- priority: P1
+- label: `[LUNA] [FREE] [GPU]`
+- 목표: canonical text를 `Trainer` 기반 next-token prediction QLoRA adapter로 학습하는 실행 경로를 준비한다.
+- 관련 파일: `src/ulm/training/cpt.py`, `scripts/train_cpt.py`, `configs/cpt/`
+- dependency: T07, T09
+- 완료 조건: config·dataset·checkpoint·resume 경로를 SFT와 동일한 정책으로 지원함
+- test: `build_cpt_text` CPU test와 `--dry-run`; 실제 학습은 GPU 단계
+
 ### T09 — checkpoint/resume
 
-- 상태: `TODO`
+- 상태: `DONE`
 - priority: P1
 - label: `[LUNA] [FREE] [GPU]`
 - 목표: checkpoint path, latest checkpoint 탐색, config snapshot, output overwrite 보호를 구현한다.
@@ -118,7 +129,7 @@
 
 ### T10 — local inference CLI
 
-- 상태: `TODO`
+- 상태: `DONE`
 - priority: P1
 - label: `[FREE] [GPU]`
 - 목표: base 또는 adapter model과 `dialect_strength=0~3`을 받아 text inference를 실행한다.
@@ -129,7 +140,7 @@
 
 ### T11 — Colab notebook orchestration
 
-- 상태: `TODO`
+- 상태: `DONE`
 - priority: P1
 - label: `[FLASH] [FREE] [GPU]`
 - 목표: notebook이 핵심 로직을 복붙하지 않고 `src/ulm`과 config를 import한다.
