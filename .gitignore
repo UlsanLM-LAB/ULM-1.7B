@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.token
+
+# Datasets and private data
+data/raw/
+data/private/*
+!data/private/.gitignore
+data/cache/
+data/processed/
+datasets/
+audio/
+*.wav
+*.flac
+*.mp3
+*.parquet
+*.arrow
+*.tar
+*.tar.gz
+*.zip
+
+# Models, adapters, checkpoints and experiment outputs
+models/
+checkpoints/
+outputs/
+runs/
+wandb/
+mlruns/
+reports/data_audit/*.csv
+reports/experiments/*
+!reports/experiments/.gitkeep
+
+# Notebook and OS noise
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
