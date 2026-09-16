@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import json
 import wave
-from dataclasses import dataclass
+from collections.abc import Iterable
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterable
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -26,7 +27,7 @@ class TTSRecord:
     metadata: dict
 
     @classmethod
-    def from_dict(cls, row: dict) -> "TTSRecord":
+    def from_dict(cls, row: dict) -> TTSRecord:
         required = {f.name for f in cls.__dataclass_fields__.values()}
         missing = sorted(required - row.keys())
         if missing:
@@ -34,6 +35,9 @@ class TTSRecord:
         rec = cls(**{k: row[k] for k in required})
         rec.validate()
         return rec
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
 
     def validate(self) -> None:
         if not self.utterance_id.strip() or not self.speaker_id.strip():

@@ -191,11 +191,13 @@
 
 ### T15 — TTS/STT 통합
 
-- 상태: `REVIEW`
+- 상태: `IN_PROGRESS`
 - priority: P3
 - label: `[GPU]`
-- 목표: 동의·개인정보·정책 검토 후 별도 repository 또는 후속 phase에서 interface를 구현한다.
-- 관련 파일: `PLAN.md`, `RESEARCH.md`
+- 목표: 동의·개인정보·품질 검증 체계를 갖춘 ULM-TTS 파이프라인 및 추론 베이스라인 구현.
+- 관련 파일: `src/ulm/tts/`, `configs/tts/mms_vits.yaml`, `data/examples/tts_manifest.jsonl`, `docs/TTS.md`, `scripts/train_tts.py`, `scripts/infer_tts.py`, `tests/test_tts_data.py`
 - dependency: T14, 음성 수집 동의, 별도 정책 검토
-- 완료 조건: 현재 저장소 scope 확장 여부를 재검토하고 승인된 경우에만 설계
-- test: 현재는 문서 검토만
+- 완료 조건: TTS 매니페스트 스키마, 화자 누락/누출 방지 검증, MMS/VITS 추론 베이스라인, CLI 래퍼 및 단위 테스트 구현
+- 진행 결과: `TTSRecord` 데이터 계약 및 `validate_audio_files` 검증기, `ulm.tts.inference`, `scripts/train_tts.py`, `scripts/infer_tts.py` 구축 완료. 단위 테스트(11건) 통과. Hugging Face VitsModel 구조상 waveform loss 기반 fine-tuning은 gated 처리됨 (`--validate-only` 지원).
+- test: `pytest tests/test_tts_data.py`
+

@@ -16,11 +16,11 @@ def _read_config(path: str) -> dict:
         return yaml.safe_load(f)
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Prepare and validate ULM-TTS training data")
     parser.add_argument("--config", default="configs/tts/mms_vits.yaml")
     parser.add_argument("--validate-only", action="store_true")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     cfg = _read_config(args.config)
     records = load_manifest(cfg["data"]["manifest"])
@@ -41,7 +41,7 @@ def main() -> None:
 
     if args.validate_only:
         print(f"validated {len(records)} TTS records")
-        return
+        return 0
 
     # Hugging Face VitsModel is used as the first Korean inference baseline, but its
     # public interface does not expose a stable generic waveform-supervised training
@@ -53,4 +53,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

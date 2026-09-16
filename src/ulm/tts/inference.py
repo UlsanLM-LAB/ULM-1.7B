@@ -8,13 +8,13 @@ from pathlib import Path
 import yaml
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Synthesize Korean/Ulsan-dialect text")
     parser.add_argument("text")
     parser.add_argument("--config", default="configs/tts/mms_vits.yaml")
     parser.add_argument("--output", default="outputs/tts/sample.wav")
     parser.add_argument("--model", default=None, help="checkpoint/model id override")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     try:
         import scipy.io.wavfile
@@ -33,18 +33,26 @@ def main() -> None:
 
     inf = cfg.get("inference", {})
     with torch.inference_mode():
-        waveform = model(
-            **inputs,
-            noise_scale=float(inf.get("noise_scale", 0.667)),
-            noise_scale_duration=float(inf.get("noise_scale_duration", 0.8)),
-            speaking_rate=float(inf.get("speaking_rate", 1.0)),
-        ).waveform[0].detach().cpu().float().numpy()
+        waveform = (
+            model(
+                **inputs,
+                noise_scale=float(inf.get("noise_scale", 0.667)),
+                noise_scale_duration=float(inf.get("noise_scale_duration", 0.8)),
+                speaking_rate=float(inf.get("speaking_rate", 1.0)),
+            )
+            .waveform[0]
+            .detach()
+            .cpu()
+            .float()
+            .numpy()
+        )
 
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     scipy.io.wavfile.write(output, rate=model.config.sampling_rate, data=waveform)
     print(output)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-import os
 import subprocess
 import time
 from typing import Any
 
-from rich.align import Align
 from rich.console import Console
 from rich.layout import Layout
 from rich.panel import Panel
@@ -48,7 +46,9 @@ def get_gpu_info() -> dict[str, Any]:
         return default
 
 
-def make_bar(ratio: float, width: int = 24, fill_color: str = "green", empty_color: str = "grey23") -> Text:
+def make_bar(
+    ratio: float, width: int = 24, fill_color: str = "green", empty_color: str = "grey23"
+) -> Text:
     """단순화된 바 게이지 생성."""
     ratio = max(0.0, min(1.0, ratio))
     filled = int(round(ratio * width))
@@ -103,7 +103,11 @@ def build_dashboard_layout(
     progress_ratio = (step / max_steps) if max_steps > 0 else 0.0
     percent = progress_ratio * 100.0
 
-    rem_sec = (max_steps - step) * speed_sec_per_step if (speed_sec_per_step and max_steps > step) else 0.0
+    rem_sec = (
+        (max_steps - step) * speed_sec_per_step
+        if (speed_sec_per_step and max_steps > step)
+        else 0.0
+    )
     elapsed_str = time.strftime("%H:%M:%S", time.gmtime(elapsed_sec))
     eta_str = time.strftime("%H:%M:%S", time.gmtime(rem_sec)) if rem_sec > 0 else "--:--:--"
 
@@ -150,9 +154,7 @@ def build_dashboard_layout(
     else:
         metrics_table.add_row("Loss History", "--")
 
-    layout["metrics"].update(
-        Panel(metrics_table, title="Metrics", border_style="grey37")
-    )
+    layout["metrics"].update(Panel(metrics_table, title="Metrics", border_style="grey37"))
 
     # Right: System Info
     sys_table = Table.grid(padding=(0, 2))
@@ -167,16 +169,14 @@ def build_dashboard_layout(
     sys_table.add_row("GPU Device", gpu_info["name"])
     sys_table.add_row(
         "VRAM Usage",
-        Text.assemble(f"{vram_u:.1f}/{vram_t:.1f} GB ", vram_bar, f" {vram_ratio*100:.0f}%"),
+        Text.assemble(f"{vram_u:.1f}/{vram_t:.1f} GB ", vram_bar, f" {vram_ratio * 100:.0f}%"),
     )
     gpu_util = gpu_info["utilization"]
     util_bar = make_bar(gpu_util / 100.0, width=12, fill_color="green")
     sys_table.add_row("GPU Util", Text.assemble(f"{gpu_util:3d}% ", util_bar))
     sys_table.add_row("Temperature", f"{gpu_info['temperature']} C")
 
-    layout["system"].update(
-        Panel(sys_table, title="Hardware", border_style="grey37")
-    )
+    layout["system"].update(Panel(sys_table, title="Hardware", border_style="grey37"))
 
     # 4. Logs (최근 이벤트, 이모지 없음)
     recent_events = events[-4:] if events else ["Ready"]
@@ -192,7 +192,12 @@ def build_dashboard_layout(
 class RichDashboardCallback:
     """Trainer용 미니멀 터미널 콜백."""
 
-    def __init__(self, console: Console | None = None, max_epochs: float = 2.0, model_name: str = "Qwen/Qwen3-1.7B"):
+    def __init__(
+        self,
+        console: Console | None = None,
+        max_epochs: float = 2.0,
+        model_name: str = "Qwen/Qwen3-1.7B",
+    ):
         self.console = console or Console()
         self.live: Any = None
         self.max_epochs = max_epochs
@@ -231,11 +236,15 @@ class RichDashboardCallback:
 
         self.start_time = time.time()
         self.last_step_time = time.time()
-        self.events.append(f"[{time.strftime('%H:%M:%S')}] Training started. Target steps: {state.max_steps}")
+        self.events.append(
+            f"[{time.strftime('%H:%M:%S')}] Training started. Target steps: {state.max_steps}"
+        )
         self.live = Live(self._render(state), console=self.console, refresh_per_second=2)
         self.live.start()
 
-    def on_log(self, args: Any, state: Any, control: Any, logs: dict[str, Any] | None = None, **kwargs: Any) -> None:
+    def on_log(
+        self, args: Any, state: Any, control: Any, logs: dict[str, Any] | None = None, **kwargs: Any
+    ) -> None:
         if logs:
             if "loss" in logs:
                 self.last_train_loss = logs["loss"]
@@ -244,7 +253,9 @@ class RichDashboardCallback:
                 self.last_lr = logs["learning_rate"]
             if "eval_loss" in logs:
                 self.last_eval_loss = logs["eval_loss"]
-                self.events.append(f"[{time.strftime('%H:%M:%S')}] Evaluation step {state.global_step}: eval_loss={logs['eval_loss']:.4f}")
+                ts = time.strftime("%H:%M:%S")
+                ev = f"[{ts}] Eval step {state.global_step}: eval_loss={logs['eval_loss']:.4f}"
+                self.events.append(ev)
             now = time.time()
             step_delta = now - self.last_step_time
             log_steps = getattr(args, "logging_steps", 10)
@@ -256,12 +267,15 @@ class RichDashboardCallback:
 
     def on_save(self, args: Any, state: Any, control: Any, **kwargs: Any) -> None:
         loss_str = f"{self.last_train_loss:.4f}" if self.last_train_loss is not None else "N/A"
-        self.events.append(f"[{time.strftime('%H:%M:%S')}] Checkpoint saved at step {state.global_step} (loss: {loss_str})")
+        ts = time.strftime("%H:%M:%S")
+        self.events.append(f"[{ts}] Checkpoint step {state.global_step} saved (loss: {loss_str})")
         if self.live:
             self.live.update(self._render(state))
 
     def on_train_end(self, args: Any, state: Any, control: Any, **kwargs: Any) -> None:
-        self.events.append(f"[{time.strftime('%H:%M:%S')}] Training completed. Total steps: {state.global_step}")
+        self.events.append(
+            f"[{time.strftime('%H:%M:%S')}] Training completed. Total steps: {state.global_step}"
+        )
         if self.live:
             self.live.update(self._render(state))
             self.live.stop()

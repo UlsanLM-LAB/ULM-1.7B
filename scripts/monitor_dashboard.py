@@ -10,7 +10,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import sys
 import time
 from pathlib import Path
 
@@ -46,7 +45,9 @@ def main() -> int:
         help="학습 결과가 저장되는 디렉터리 경로 (기본값: outputs/qwen3-1.7b-sft)",
     )
     parser.add_argument("--max-steps", type=int, default=2600, help="목표 스텝 수 (기본값: 2600)")
-    parser.add_argument("--refresh-rate", type=float, default=1.0, help="화면 갱신 주기 (초 단위, 기본값: 1.0)")
+    parser.add_argument(
+        "--refresh-rate", type=float, default=1.0, help="화면 갱신 주기 (초 단위, 기본값: 1.0)"
+    )
     args = parser.parse_args()
 
     console = Console()

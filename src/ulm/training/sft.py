@@ -306,7 +306,9 @@ def run_sft(config: TrainingConfig, *, enable_dashboard: bool = False) -> Path:
             from ulm.utils.dashboard import RichDashboardCallback
 
             trainer.add_callback(
-                RichDashboardCallback(max_epochs=config.num_train_epochs, model_name=config.model_name)
+                RichDashboardCallback(
+                    max_epochs=config.num_train_epochs, model_name=config.model_name
+                )
             )
         except Exception:
             pass
