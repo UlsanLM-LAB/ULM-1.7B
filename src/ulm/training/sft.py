@@ -9,9 +9,12 @@ from __future__ import annotations
 import argparse
 import inspect
 import json
+import os
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
+
+os.environ.setdefault("HF_HUB_DISABLE_XET", "1")
 
 from ulm.data.schema import DatasetRecord
 
