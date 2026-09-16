@@ -193,7 +193,7 @@ def _load_dataset(load_dataset: Any, config: TrainingConfig) -> dict[str, Any]:
     return dataset
 
 
-def run_sft(config: TrainingConfig) -> Path:
+def run_sft(config: TrainingConfig, *, enable_dashboard: bool = False) -> Path:
     config.validate()
     (
         torch,
@@ -297,6 +297,17 @@ def run_sft(config: TrainingConfig) -> Path:
     trainer = SFTTrainer(**_filtered_kwargs(SFTTrainer, trainer_kwargs))
     if config.fp16 and config.load_in_4bit:
         _restore_fp16_trainable_parameters(trainer.model, torch.bfloat16)
+
+    if enable_dashboard:
+        try:
+            from ulm.utils.dashboard import RichDashboardCallback
+
+            trainer.add_callback(
+                RichDashboardCallback(max_epochs=config.num_train_epochs, model_name=config.model_name)
+            )
+        except Exception:
+            pass
+
     trainer.train(resume_from_checkpoint=str(resume_checkpoint) if resume_checkpoint else None)
     trainer.save_model(str(output_dir))
     tokenizer.save_pretrained(str(output_dir))
@@ -324,6 +335,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="ML package와 GPU를 사용하지 않고 config만 검증합니다",
     )
+    parser.add_argument(
+        "--dashboard",
+        action="store_true",
+        help="터미널 실시간 Rich TUI 대시보드를 활성화합니다",
+    )
     return parser
 
 
@@ -333,7 +349,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.dry_run:
         print(json.dumps(config.to_dict(), ensure_ascii=False, indent=2, sort_keys=True))
         return 0
-    output_dir = run_sft(config)
+    output_dir = run_sft(config, enable_dashboard=args.dashboard)
     print(f"training output: {output_dir}")
     return 0
 
