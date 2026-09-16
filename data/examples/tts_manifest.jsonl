@@ -1,0 +1,1 @@
+{"utterance_id":"demo-0001","speaker_id":"speaker-demo-a","audio_path":"demo-0001.wav","transcript":"밥 묵었나","region_tier":"U0","age_group":"10s","dialect_strength":2,"sample_rate":16000,"duration":1.0,"consent_scope":"example-only","quality_grade":"A","split":"train","metadata":{"note":"schema example; no audio is distributed"}}
