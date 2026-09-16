@@ -215,6 +215,8 @@ def run_sft(config: TrainingConfig) -> Path:
     save_snapshot(config, output_dir)
 
     dataset = _load_dataset(load_dataset, config)
+    if "validation" in dataset and len(dataset["validation"]) > 1000:
+        dataset["validation"] = dataset["validation"].select(range(1000))
     dataset = {split: _prepare_dataset(value) for split, value in dataset.items()}
     tokenizer = AutoTokenizer.from_pretrained(config.model_name, use_fast=True)
     compute_dtype = torch.bfloat16 if config.bf16 else torch.float16
