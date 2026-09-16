@@ -1,15 +1,14 @@
-"""ULM-1.7B 실시간 터미널 모니터링 대시보드 (Rich TUI)."""
+"""ULM-1.7B 터미널 모니터링 대시보드 (미니멀/엔지니어링 스타일)."""
 
 from __future__ import annotations
 
 import os
-import shutil
 import subprocess
 import time
 from typing import Any
 
 from rich.align import Align
-from rich.console import Console, Group
+from rich.console import Console
 from rich.layout import Layout
 from rich.panel import Panel
 from rich.table import Table
@@ -17,9 +16,9 @@ from rich.text import Text
 
 
 def get_gpu_info() -> dict[str, Any]:
-    """nvidia-smi를 호출하여 GPU VRAM, 사용률, 온도를 조회한다."""
+    """nvidia-smi를 호출하여 GPU 정보를 조회한다."""
     default = {
-        "name": "GPU",
+        "name": "NVIDIA GPU",
         "vram_used": 0.0,
         "vram_total": 8.0,
         "utilization": 0,
@@ -34,7 +33,7 @@ def get_gpu_info() -> dict[str, Any]:
                 "--format=csv,noheader,nounits",
             ],
             encoding="utf-8",
-            timeout=1.5,
+            timeout=1.0,
         ).strip()
         parts = [p.strip() for p in output.splitlines()[0].split(",")]
         return {
@@ -49,14 +48,14 @@ def get_gpu_info() -> dict[str, Any]:
         return default
 
 
-def make_bar(ratio: float, width: int = 20, fill_color: str = "cyan", empty_color: str = "grey30") -> Text:
-    """텍스트 기반 게이지 바를 생성한다."""
+def make_bar(ratio: float, width: int = 24, fill_color: str = "green", empty_color: str = "grey23") -> Text:
+    """단순화된 바 게이지 생성."""
     ratio = max(0.0, min(1.0, ratio))
     filled = int(round(ratio * width))
     empty = width - filled
     text = Text()
-    text.append("━" * filled, style=fill_color)
-    text.append("━" * empty, style=empty_color)
+    text.append("█" * filled, style=fill_color)
+    text.append("░" * empty, style=empty_color)
     return text
 
 
@@ -76,7 +75,7 @@ def build_dashboard_layout(
     model_name: str = "Qwen/Qwen3-1.7B",
     gpu_info: dict[str, Any] | None = None,
 ) -> Layout:
-    """Rich TUI 대시보드 레이아웃을 구성한다."""
+    """간결하고 실용적인 개발자 중심 대시보드 레이아웃."""
     if gpu_info is None:
         gpu_info = get_gpu_info()
 
@@ -84,17 +83,21 @@ def build_dashboard_layout(
     layout.split_column(
         Layout(name="header", size=3),
         Layout(name="progress", size=4),
-        Layout(name="body", size=13),
-        Layout(name="footer", size=7),
+        Layout(name="body", size=10),
+        Layout(name="logs", size=6),
     )
 
-    # 1. Header
-    title = Text.assemble(
-        (" ⚡ ULM-1.7B ", "bold bright_cyan"),
-        (" 울산 지역어 특화 파인튜닝 모니터 ", "bold bright_white"),
-        (f"[{model_name} / 4-bit QLoRA] ⚡ ", "bold bright_yellow"),
+    # 1. Header (이모지 제거, 미니멀 상단 바)
+    header_text = Text.assemble(
+        (" ULM-1.7B Training Monitor ", "bold white on blue"),
+        ("  model: ", "dim"),
+        (model_name, "white"),
+        ("  method: ", "dim"),
+        ("QLoRA (4-bit NF4)", "white"),
+        ("  precision: ", "dim"),
+        ("FP16", "white"),
     )
-    layout["header"].update(Panel(Align.center(title), style="bright_cyan", border_style="cyan"))
+    layout["header"].update(Panel(header_text, style="white", border_style="grey37"))
 
     # 2. Progress
     progress_ratio = (step / max_steps) if max_steps > 0 else 0.0
@@ -102,97 +105,92 @@ def build_dashboard_layout(
 
     rem_sec = (max_steps - step) * speed_sec_per_step if (speed_sec_per_step and max_steps > step) else 0.0
     elapsed_str = time.strftime("%H:%M:%S", time.gmtime(elapsed_sec))
-    eta_str = time.strftime("%H:%M:%S", time.gmtime(rem_sec)) if rem_sec > 0 else "계산 중..."
+    eta_str = time.strftime("%H:%M:%S", time.gmtime(rem_sec)) if rem_sec > 0 else "--:--:--"
 
-    p_bar = make_bar(progress_ratio, width=40, fill_color="bright_green")
+    p_bar = make_bar(progress_ratio, width=36, fill_color="cyan")
     prog_text = Text.assemble(
-        (f" 진행률: ", "bold white"),
-        (f"{percent:5.1f}% ", "bold bright_green"),
+        (" Progress: ", "dim"),
         p_bar,
-        (f"  ({step:,} / {max_steps:,} 스텝)\n", "bold cyan"),
-        (f" 에포크: ", "bold white"),
-        (f"{epoch:.2f} / {max_epochs:.1f}", "bold bright_yellow"),
-        (f"   경과 시간: ", "bold white"),
-        (f"{elapsed_str}", "bold bright_cyan"),
-        (f"   남은 시간(ETA): ", "bold white"),
-        (f"{eta_str}", "bold bright_magenta"),
+        (f" {percent:5.1f}% ", "bold cyan"),
+        (f"({step:,} / {max_steps:,} steps)\n", "dim"),
+        (" Epoch   : ", "dim"),
+        (f"{epoch:.2f} / {max_epochs:.1f}", "white"),
+        ("   Elapsed: ", "dim"),
+        (f"{elapsed_str}", "white"),
+        ("   ETA: ", "dim"),
+        (f"{eta_str}", "white"),
+        ("   Speed: ", "dim"),
+        (f"{speed_sec_per_step:.2f}s/step" if speed_sec_per_step else "--", "white"),
     )
-    layout["progress"].update(Panel(prog_text, title="[bold]🎯 학습 진행 상황[/bold]", border_style="bright_green"))
+    layout["progress"].update(Panel(prog_text, title="Training Progress", border_style="grey37"))
 
-    # 3. Body: Left (Metrics) + Right (GPU & System)
+    # 3. Body: Metrics & Hardware (간결한 테이블)
     layout["body"].split_row(
         Layout(name="metrics", ratio=1),
         Layout(name="system", ratio=1),
     )
 
     # Left: Metrics
-    metrics_table = Table.grid(padding=(0, 1))
-    metrics_table.add_column(style="bold white", width=18)
-    metrics_table.add_column(style="bold", width=22)
+    metrics_table = Table.grid(padding=(0, 2))
+    metrics_table.add_column(style="dim", width=14)
+    metrics_table.add_column(style="white", width=26)
 
-    loss_str = f"{loss:.4f}" if loss is not None else "대기 중..."
-    eval_loss_str = f"{eval_loss:.4f}" if eval_loss is not None else "대기 중..."
-    lr_str = f"{learning_rate:.2e}" if learning_rate is not None else "대기 중..."
+    loss_str = f"{loss:.4f}" if loss is not None else "--"
+    eval_loss_str = f"{eval_loss:.4f}" if eval_loss is not None else "--"
+    lr_str = f"{learning_rate:.2e}" if learning_rate is not None else "--"
 
-    metrics_table.add_row("🔥 현재 Train Loss:", f"[bright_red]{loss_str}[/bright_red]")
-    metrics_table.add_row("📊 최근 Eval Loss:", f"[bright_cyan]{eval_loss_str}[/bright_cyan]")
-    metrics_table.add_row("📈 Learning Rate:", f"[bright_yellow]{lr_str}[/bright_yellow]")
+    metrics_table.add_row("Train Loss", loss_str)
+    metrics_table.add_row("Eval Loss", eval_loss_str)
+    metrics_table.add_row("Learning Rate", lr_str)
 
-    # Loss Sparkline
     if loss_history:
-        recent = loss_history[-6:]
-        spark = " ➔ ".join(f"{val:.3f}" for val in recent)
-        metrics_table.add_row("📉 손실 추이 (최근):", f"[dim green]{spark}[/dim green]")
+        recent = loss_history[-5:]
+        trend = " -> ".join(f"{val:.3f}" for val in recent)
+        metrics_table.add_row("Loss History", f"[dim]{trend}[/dim]")
     else:
-        metrics_table.add_row("📉 손실 추이 (최근):", "[dim]수집 중...[/dim]")
+        metrics_table.add_row("Loss History", "--")
 
     layout["metrics"].update(
-        Panel(metrics_table, title="[bold]📊 학습 지표 (Metrics)[/bold]", border_style="bright_blue")
+        Panel(metrics_table, title="Metrics", border_style="grey37")
     )
 
-    # Right: System & Hardware
-    sys_table = Table.grid(padding=(0, 1))
-    sys_table.add_column(style="bold white", width=18)
-    sys_table.add_column(style="bold", width=26)
+    # Right: System Info
+    sys_table = Table.grid(padding=(0, 2))
+    sys_table.add_column(style="dim", width=14)
+    sys_table.add_column(style="white", width=28)
 
     vram_u = gpu_info["vram_used"]
     vram_t = gpu_info["vram_total"]
     vram_ratio = vram_u / vram_t if vram_t > 0 else 0.0
-    vram_bar = make_bar(vram_ratio, width=14, fill_color="bright_magenta")
+    vram_bar = make_bar(vram_ratio, width=12, fill_color="magenta")
 
-    sys_table.add_row("🎮 GPU 모델:", f"[bright_white]{gpu_info['name']}[/bright_white]")
+    sys_table.add_row("GPU Device", gpu_info["name"])
     sys_table.add_row(
-        "💾 VRAM 사용량:",
-        Text.assemble(f"{vram_u:.1f}/{vram_t:.1f}GB ", vram_bar, f" {vram_ratio*100:.0f}%"),
+        "VRAM Usage",
+        Text.assemble(f"{vram_u:.1f}/{vram_t:.1f} GB ", vram_bar, f" {vram_ratio*100:.0f}%"),
     )
     gpu_util = gpu_info["utilization"]
-    util_bar = make_bar(gpu_util / 100.0, width=14, fill_color="bright_cyan")
-    sys_table.add_row("⚡ GPU 연산률:", Text.assemble(f"{gpu_util:3d}% ", util_bar))
-    
-    temp = gpu_info["temperature"]
-    temp_color = "bright_green" if temp < 65 else ("bright_yellow" if temp < 75 else "bright_red")
-    sys_table.add_row("🌡️ GPU 온도:", f"[{temp_color}]{temp}°C[/{temp_color}]")
-
-    speed_str = f"{speed_sec_per_step:.2f} 초/step" if speed_sec_per_step else "측정 중..."
-    sys_table.add_row("⏱️ 처리 속도:", f"[bright_yellow]{speed_str}[/bright_yellow]")
+    util_bar = make_bar(gpu_util / 100.0, width=12, fill_color="green")
+    sys_table.add_row("GPU Util", Text.assemble(f"{gpu_util:3d}% ", util_bar))
+    sys_table.add_row("Temperature", f"{gpu_info['temperature']} C")
 
     layout["system"].update(
-        Panel(sys_table, title="[bold]💻 하드웨어 및 리소스[/bold]", border_style="bright_magenta")
+        Panel(sys_table, title="Hardware", border_style="grey37")
     )
 
-    # 4. Footer: Event Logs
-    recent_events = events[-3:] if events else ["학습 대시보드가 준비되었습니다."]
-    event_text = Text()
+    # 4. Logs (최근 이벤트, 이모지 없음)
+    recent_events = events[-4:] if events else ["Ready"]
+    log_text = Text()
     for ev in recent_events:
-        event_text.append(f"• {ev}\n", style="dim white")
+        log_text.append(f" {ev}\n", style="white")
 
-    layout["footer"].update(Panel(event_text, title="[bold]📜 실시간 이벤트 로그[/bold]", border_style="grey50"))
+    layout["logs"].update(Panel(log_text, title="Recent Logs", border_style="grey37"))
 
     return layout
 
 
 class RichDashboardCallback:
-    """Hugging Face Trainer용 실시간 Rich TUI 콜백."""
+    """Trainer용 미니멀 터미널 콜백."""
 
     def __init__(self, console: Console | None = None, max_epochs: float = 2.0, model_name: str = "Qwen/Qwen3-1.7B"):
         self.console = console or Console()
@@ -233,8 +231,8 @@ class RichDashboardCallback:
 
         self.start_time = time.time()
         self.last_step_time = time.time()
-        self.events.append(f"🚀 학습 시작: 총 {state.max_steps} 스텝 예정")
-        self.live = Live(self._render(state), console=self.console, refresh_per_second=4)
+        self.events.append(f"[{time.strftime('%H:%M:%S')}] Training started. Target steps: {state.max_steps}")
+        self.live = Live(self._render(state), console=self.console, refresh_per_second=2)
         self.live.start()
 
     def on_log(self, args: Any, state: Any, control: Any, logs: dict[str, Any] | None = None, **kwargs: Any) -> None:
@@ -246,7 +244,7 @@ class RichDashboardCallback:
                 self.last_lr = logs["learning_rate"]
             if "eval_loss" in logs:
                 self.last_eval_loss = logs["eval_loss"]
-                self.events.append(f"📊 Step {state.global_step} 검증: eval_loss={logs['eval_loss']:.4f}")
+                self.events.append(f"[{time.strftime('%H:%M:%S')}] Evaluation step {state.global_step}: eval_loss={logs['eval_loss']:.4f}")
             now = time.time()
             step_delta = now - self.last_step_time
             log_steps = getattr(args, "logging_steps", 10)
@@ -258,13 +256,12 @@ class RichDashboardCallback:
 
     def on_save(self, args: Any, state: Any, control: Any, **kwargs: Any) -> None:
         loss_str = f"{self.last_train_loss:.4f}" if self.last_train_loss is not None else "N/A"
-        self.events.append(f"💾 체크포인트 저장: step {state.global_step} (Train Loss: {loss_str})")
+        self.events.append(f"[{time.strftime('%H:%M:%S')}] Checkpoint saved at step {state.global_step} (loss: {loss_str})")
         if self.live:
             self.live.update(self._render(state))
 
     def on_train_end(self, args: Any, state: Any, control: Any, **kwargs: Any) -> None:
-        self.events.append(f"🎉 학습 완료! 총 {state.global_step} 스텝 완주.")
+        self.events.append(f"[{time.strftime('%H:%M:%S')}] Training completed. Total steps: {state.global_step}")
         if self.live:
             self.live.update(self._render(state))
             self.live.stop()
-

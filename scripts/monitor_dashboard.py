@@ -53,7 +53,7 @@ def main() -> int:
     output_dir = args.output_dir
 
     start_time = time.time()
-    events = [f"🖥️ 모니터링 시작: 대상 폴더 '{output_dir}'"]
+    events = [f"[{time.strftime('%H:%M:%S')}] Monitoring started: {output_dir}"]
     loss_history: list[float] = []
     last_step = 0
     last_step_time = time.time()
@@ -98,7 +98,7 @@ def main() -> int:
                 checkpoints = sorted(output_dir.glob("checkpoint-*"), key=os.path.getmtime)
                 if checkpoints:
                     latest_cp = checkpoints[-1].name
-                    msg = f"💾 체크포인트 발견: {latest_cp}"
+                    msg = f"[{time.strftime('%H:%M:%S')}] Checkpoint found: {latest_cp}"
                     if not events or events[-1] != msg:
                         events.append(msg)
 
@@ -121,7 +121,7 @@ def main() -> int:
                 live.update(layout)
                 time.sleep(args.refresh_rate)
     except KeyboardInterrupt:
-        console.print("\n[bold yellow]👋 모니터링을 종료합니다.[/bold yellow]")
+        console.print("\n[dim]Monitoring stopped.[/dim]")
         return 0
 
 
