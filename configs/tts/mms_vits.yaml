@@ -1,0 +1,35 @@
+backend: mms_vits
+model_id: facebook/mms-tts-kor
+sample_rate: 16000
+seed: 42
+output_dir: outputs/tts
+
+data:
+  manifest: data/private/tts/manifest.jsonl
+  audio_root: data/private/tts/audio
+  train_split: train
+  val_split: validation
+  min_duration: 0.4
+  max_duration: 15.0
+  require_consent: true
+
+training:
+  epochs: 20
+  batch_size: 4
+  gradient_accumulation_steps: 4
+  learning_rate: 0.00002
+  weight_decay: 0.01
+  warmup_ratio: 0.05
+  max_grad_norm: 1.0
+  mixed_precision: fp16
+  gradient_checkpointing: true
+  num_workers: 2
+  save_every_steps: 500
+  eval_every_steps: 500
+  log_every_steps: 20
+  resume_from_checkpoint: null
+
+inference:
+  noise_scale: 0.667
+  noise_scale_duration: 0.8
+  speaking_rate: 1.0
