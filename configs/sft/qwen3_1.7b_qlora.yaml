@@ -1,5 +1,5 @@
 model_name: Qwen/Qwen3-1.7B
-dataset_path: data/processed/ulsan_sft
+dataset_path: data/private/ulsan_dataset
 output_dir: outputs/qwen3-1.7b-sft
 max_seq_length: 1024
 batch_size: 2

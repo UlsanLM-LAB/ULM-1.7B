@@ -215,14 +215,16 @@ def audit_json_root(root: str | Path) -> AuditSummary:
             parse_errors.append(f"{path}: 최상위 JSON이 object가 아닙니다")
             continue
 
+        doc_id = str(document.get("id") or path.stem).strip()
         speaker_info: dict[str, Mapping[str, Any]] = {}
         speakers = _nested_list(document, "speaker")
         for speaker in speakers:
             identifier = _speaker_id(speaker)
             if identifier:
+                scoped_id = f"{doc_id}:{identifier}"
                 speaker_info[identifier] = speaker
                 _location_counts(location_counts, speaker)
-                accumulators[speaker_tier(speaker)].register_speaker(identifier, speaker)
+                accumulators[speaker_tier(speaker)].register_speaker(scoped_id, speaker)
 
         utterances = _nested_list(document, "utterance")
         sole_speaker = _speaker_id(speakers[0]) if len(speakers) == 1 else ""
@@ -232,7 +234,8 @@ def audit_json_root(root: str | Path) -> AuditSummary:
             tier = speaker_tier(speaker)
             accumulator = accumulators[tier]
             if identifier and identifier not in speaker_info:
-                accumulator.register_speaker(identifier, speaker)
+                scoped_id = f"{doc_id}:{identifier}"
+                accumulator.register_speaker(scoped_id, speaker)
             accumulator.utterances += 1
 
             standard_text = _first_text(utterance, ("standard_form", "standard_text", "standard"))

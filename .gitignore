@@ -37,6 +37,7 @@ audio/
 *.zip
 
 # Models, adapters, checkpoints and experiment outputs
+scripts/aihubshell
 models/
 checkpoints/
 outputs/

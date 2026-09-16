@@ -100,10 +100,12 @@ def extract_ulsan_records(
             if not dialect_text or not standard_text:
                 continue
             raw_utterance_id = str(utterance.get("id", f"{path.stem}:{index}"))
-            speaker_id = _stable_id(source, raw_speaker_id, prefix="spk")
+            doc_id = str(document.get("id") or path.stem).strip()
+            scoped_speaker_id = f"{doc_id}:{raw_speaker_id}"
+            speaker_id = _stable_id(source, scoped_speaker_id, prefix="spk")
             record_id = _stable_id(
                 source,
-                f"{raw_speaker_id}\0{raw_utterance_id}",
+                f"{scoped_speaker_id}\0{raw_utterance_id}",
                 prefix="sample",
             )
             metadata: dict[str, Any] = {
