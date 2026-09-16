@@ -28,6 +28,13 @@ ml = [
   "transformers>=4.51",
   "trl>=0.15",
 ]
+tts = [
+  "accelerate>=1.0",
+  "scipy>=1.14",
+  "torch>=2.5",
+  "torchaudio>=2.5",
+  "transformers>=4.51",
+]
 
 [project.scripts]
 ulm-audit = "ulm.data.aihub:main"
@@ -36,6 +43,8 @@ ulm-evaluate = "ulm.evaluation.cli:main"
 ulm-train-cpt = "ulm.training.cpt:main"
 ulm-train-sft = "ulm.training.sft:main"
 ulm-infer = "ulm.inference.cli:main"
+ulm-train-tts = "ulm.tts.train:main"
+ulm-tts = "ulm.tts.inference:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
