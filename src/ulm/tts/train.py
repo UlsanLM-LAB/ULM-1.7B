@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import time
 from pathlib import Path
 from typing import Any
 
@@ -140,7 +141,7 @@ def _count_params(model: Any) -> tuple[int, int]:
     return total, trainable
 
 
-def run_training(cfg: dict) -> Path:
+def run_training(cfg: dict, *, enable_dashboard: bool = False) -> Path:
     """Execute the VITS fine-tuning loop."""
     import torch
     from torch.utils.data import DataLoader
@@ -308,6 +309,45 @@ def run_training(cfg: dict) -> Path:
         grad_accum,
     )
 
+    live = None
+    events: list[str] = []
+    loss_history: list[float] = []
+    t_start = time.time()
+    t_last_step = time.time()
+    speed_sec_per_step: float | None = None
+    last_train_loss: float | None = None
+    last_eval_loss: float | None = None
+    last_lr: float | None = float(training_cfg.get("learning_rate", 2e-5))
+
+    if enable_dashboard:
+        try:
+            from rich.console import Console
+            from rich.live import Live
+
+            from ulm.utils.dashboard import build_dashboard_layout
+
+            console = Console()
+            ts = time.strftime("%H:%M:%S")
+            events.append(f"[{ts}] TTS training started. Target steps: {total_steps}")
+            layout = build_dashboard_layout(
+                step=0,
+                max_steps=total_steps,
+                epoch=0.0,
+                max_epochs=float(epochs),
+                loss=None,
+                eval_loss=None,
+                learning_rate=last_lr,
+                loss_history=[],
+                speed_sec_per_step=None,
+                elapsed_sec=0.0,
+                events=events,
+                model_name=cfg.get("model_id", "facebook/mms-tts-kor"),
+            )
+            live = Live(layout, console=console, refresh_per_second=2)
+            live.start()
+        except Exception:
+            live = None
+
     model.train()
     for epoch in range(start_epoch, epochs):
         epoch_loss = 0.0
@@ -337,6 +377,15 @@ def run_training(cfg: dict) -> Path:
                 if global_step % log_every == 0:
                     avg = epoch_loss / max(epoch_steps, 1)
                     lr = scheduler.get_last_lr()[0]
+                    last_train_loss = avg
+                    last_lr = lr
+                    now = time.time()
+                    speed_sec_per_step = (now - t_last_step) / max(log_every, 1)
+                    t_last_step = now
+                    loss_history.append(round(avg, 4))
+                    if len(loss_history) > 30:
+                        loss_history.pop(0)
+
                     log.info(
                         "step=%d epoch=%d/%d loss=%.4f lr=%.2e",
                         global_step,
@@ -353,9 +402,30 @@ def run_training(cfg: dict) -> Path:
                             "lr": lr,
                         }
                     )
+                    if live:
+                        cur_epoch = epoch + (batch_idx + 1) / max(len(train_loader), 1)
+                        layout = build_dashboard_layout(
+                            step=global_step,
+                            max_steps=total_steps,
+                            epoch=cur_epoch,
+                            max_epochs=float(epochs),
+                            loss=last_train_loss,
+                            eval_loss=last_eval_loss,
+                            learning_rate=last_lr,
+                            loss_history=loss_history,
+                            speed_sec_per_step=speed_sec_per_step,
+                            elapsed_sec=now - t_start,
+                            events=events,
+                            model_name=cfg.get("model_id", "facebook/mms-tts-kor"),
+                        )
+                        live.update(layout)
 
                 if global_step % save_every == 0:
                     _save_checkpoint(epoch, global_step)
+                    if live:
+                        ts = time.strftime("%H:%M:%S")
+                        l_str = f"{last_train_loss:.4f}" if last_train_loss else "N/A"
+                        events.append(f"[{ts}] Checkpoint step {global_step} saved (loss: {l_str})")
 
                 if global_step % eval_every == 0 and val_loader:
                     model.eval()
@@ -369,6 +439,7 @@ def run_training(cfg: dict) -> Path:
                             val_loss_sum += mel_loss_fn(pred[:, :, :ml], tgt[:, :, :ml]).item()
                             val_count += 1
                     val_avg = val_loss_sum / max(val_count, 1)
+                    last_eval_loss = val_avg
                     log.info("eval step=%d val_loss=%.4f", global_step, val_avg)
                     train_log.append(
                         {
@@ -376,10 +447,33 @@ def run_training(cfg: dict) -> Path:
                             "eval_loss": round(val_avg, 6),
                         }
                     )
+                    if live:
+                        ts = time.strftime("%H:%M:%S")
+                        events.append(f"[{ts}] Eval step {global_step}: val_loss={val_avg:.4f}")
                     model.train()
 
     # Final save
     final_dir = _save_checkpoint(epochs, global_step, tag="final")
+
+    if live:
+        ts = time.strftime("%H:%M:%S")
+        events.append(f"[{ts}] Training completed. Total steps: {global_step}")
+        layout = build_dashboard_layout(
+            step=global_step,
+            max_steps=total_steps,
+            epoch=float(epochs),
+            max_epochs=float(epochs),
+            loss=last_train_loss,
+            eval_loss=last_eval_loss,
+            learning_rate=last_lr,
+            loss_history=loss_history,
+            speed_sec_per_step=speed_sec_per_step,
+            elapsed_sec=time.time() - t_start,
+            events=events,
+            model_name=cfg.get("model_id", "facebook/mms-tts-kor"),
+        )
+        live.update(layout)
+        live.stop()
 
     # Save training log
     (output_dir / "train_log.json").write_text(json.dumps(train_log, indent=2), encoding="utf-8")
@@ -401,6 +495,9 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="ULM-TTS VITS fine-tuning trainer")
     parser.add_argument("--config", default="configs/tts/mms_vits.yaml")
     parser.add_argument("--validate-only", action="store_true")
+    parser.add_argument(
+        "--dashboard", action="store_true", help="Enable terminal Rich live dashboard"
+    )
     args = parser.parse_args(argv)
 
     cfg = _read_config(args.config)
@@ -437,7 +534,7 @@ def main(argv: list[str] | None = None) -> int:
     except ImportError as exc:
         raise SystemExit("Install TTS dependencies: pip install -e '.[tts]'") from exc
 
-    run_training(cfg)
+    run_training(cfg, enable_dashboard=args.dashboard)
     return 0
 
 
