@@ -45,6 +45,9 @@ ulm-train-sft = "ulm.training.sft:main"
 ulm-infer = "ulm.inference.cli:main"
 ulm-train-tts = "ulm.tts.train:main"
 ulm-tts = "ulm.tts.inference:main"
+ulm-eval-tts = "ulm.tts.evaluate:main"
+ulm-preprocess-tts = "ulm.tts.preprocess:main"
+ulm-pipeline-tts = "ulm.tts.pipeline:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -191,13 +191,18 @@
 
 ### T15 — TTS/STT 통합
 
-- 상태: `IN_PROGRESS`
+- 상태: `DONE`
 - priority: P3
 - label: `[GPU]`
-- 목표: 동의·개인정보·품질 검증 체계를 갖춘 ULM-TTS 파이프라인 및 추론 베이스라인 구현.
-- 관련 파일: `src/ulm/tts/`, `configs/tts/mms_vits.yaml`, `data/examples/tts_manifest.jsonl`, `docs/TTS.md`, `scripts/train_tts.py`, `scripts/infer_tts.py`, `tests/test_tts_data.py`
-- dependency: T14, 음성 수집 동의, 별도 정책 검토
-- 완료 조건: TTS 매니페스트 스키마, 화자 누락/누출 방지 검증, MMS/VITS 추론 베이스라인, CLI 래퍼 및 단위 테스트 구현
-- 진행 결과: `TTSRecord` 데이터 계약 및 `validate_audio_files` 검증기, `ulm.tts.inference`, `scripts/train_tts.py`, `scripts/infer_tts.py` 구축 완료. 단위 테스트(11건) 통과. Hugging Face VitsModel 구조상 waveform loss 기반 fine-tuning은 gated 처리됨 (`--validate-only` 지원).
-- test: `pytest tests/test_tts_data.py`
-
+- 목표: 동의·개인정보·품질 검증 체계를 갖춘 ULM-TTS 전체 파이프라인 구현.
+- 관련 파일: `src/ulm/tts/` (data, preprocess, train, inference, evaluate, pipeline), `configs/tts/mms_vits.yaml`, `docs/TTS.md`, `tests/test_tts_*.py`
+- dependency: T14, 음성 수집 동의
+- 완료 조건: 전처리·학습·추론·평가·LLM 연동 파이프라인 및 검증 체계
+- 구현 결과:
+  - **data.py**: TTSRecord 스키마 (consent/quality/age 엄격 검증, unknown field 거부, path traversal 차단, speaker leakage 방지)
+  - **preprocess.py**: stereo→mono, resample, silence trim, clipping 감지, peak normalization, transcript NFC 정규화
+  - **train.py**: VITS mel-reconstruction fine-tuning (discriminator/flow/posterior 동결, L1 mel loss, AMP, grad accum, warmup+cosine LR, checkpoint/resume)
+  - **evaluate.py**: RTF, F0 pitch 통계, duration/energy, batch synthesis, checkpoint 비교, JSON report
+  - **pipeline.py**: LLM dialect 변환 + TTS 합성 통합 (ulm-pipeline-tts)
+  - **inference.py**: MMS/VITS baseline 단일 추론
+- test: `pytest tests/test_tts_data.py tests/test_tts_evaluate.py tests/test_tts_preprocess.py` (75 tests total)

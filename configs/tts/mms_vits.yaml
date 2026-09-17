@@ -13,6 +13,13 @@ data:
   max_duration: 15.0
   require_consent: true
 
+preprocessing:
+  target_sr: 16000
+  silence_threshold_db: -40
+  peak_normalize_db: -1.0
+  trim_silence: true
+  detect_clipping: true
+
 training:
   epochs: 20
   batch_size: 4
@@ -33,3 +40,11 @@ inference:
   noise_scale: 0.667
   noise_scale_duration: 0.8
   speaking_rate: 1.0
+
+evaluation:
+  validation_texts:
+    - "밥 묵었나"
+    - "오늘 날씨가 참 좋다"
+    - "울산 가봤나"
+    - "시장에 가가지고 회 사왔다"
+    - "아이고 머 하노"

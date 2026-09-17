@@ -32,6 +32,9 @@ class TTSRecord:
         missing = sorted(required - row.keys())
         if missing:
             raise ValueError(f"missing TTS fields: {', '.join(missing)}")
+        extra = row.keys() - required
+        if extra:
+            raise ValueError(f"unknown TTS fields: {', '.join(sorted(extra))}")
         rec = cls(**{k: row[k] for k in required})
         rec.validate()
         return rec
@@ -54,6 +57,14 @@ class TTSRecord:
             raise ValueError(f"{self.utterance_id}: invalid split")
         if not isinstance(self.metadata, dict):
             raise ValueError(f"{self.utterance_id}: metadata must be an object")
+        _VALID_CONSENT = {"research-training", "research-evaluation", "commercial", "example-only"}
+        if not self.consent_scope or self.consent_scope not in _VALID_CONSENT:
+            raise ValueError(f"{self.utterance_id}: invalid consent_scope")
+        if not self.quality_grade or self.quality_grade not in {"A", "B", "C", "D", "F"}:
+            raise ValueError(f"{self.utterance_id}: invalid quality_grade")
+        _VALID_AGE = {"10s", "20s", "30s", "40s", "50s", "60s", "70s", "80+"}
+        if not self.age_group or self.age_group not in _VALID_AGE:
+            raise ValueError(f"{self.utterance_id}: invalid age_group")
 
 
 def load_manifest(path: str | Path) -> list[TTSRecord]:
@@ -80,6 +91,14 @@ def validate_no_speaker_leakage(records: Iterable[TTSRecord]) -> None:
             )
 
 
+def validate_consent(records: Iterable[TTSRecord], require_consent: bool = True) -> None:
+    if not require_consent:
+        return
+    for rec in records:
+        if rec.consent_scope == "example-only":
+            raise ValueError(f"{rec.utterance_id}: record requires real consent, got example-only")
+
+
 def inspect_wav(path: str | Path) -> tuple[int, float]:
     with wave.open(str(path), "rb") as wav:
         sr = wav.getframerate()
@@ -97,6 +116,9 @@ def validate_audio_files(
     errors: list[str] = []
     for rec in records:
         path = root / rec.audio_path
+        if not path.resolve().is_relative_to(root.resolve()):
+            errors.append(f"{rec.utterance_id}: audio_path escapes audio_root")
+            continue
         if not path.is_file():
             errors.append(f"{rec.utterance_id}: missing {path}")
             continue
