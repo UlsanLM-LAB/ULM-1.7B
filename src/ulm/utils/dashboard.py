@@ -189,7 +189,15 @@ def build_dashboard_layout(
     return layout
 
 
-class RichDashboardCallback:
+try:
+    from transformers import TrainerCallback
+except ImportError:
+
+    class TrainerCallback:
+        """Fallback base callback when transformers is not installed."""
+
+
+class RichDashboardCallback(TrainerCallback):
     """Trainer용 미니멀 터미널 콜백."""
 
     def __init__(

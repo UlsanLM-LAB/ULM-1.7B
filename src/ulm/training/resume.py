@@ -46,9 +46,12 @@ def ensure_output_dir(output_dir: str | Path, resume_checkpoint: Path | None) ->
     destination = Path(output_dir)
     if destination.exists() and not destination.is_dir():
         raise NotADirectoryError(f"output_dir가 directory가 아닙니다: {destination}")
-    if destination.exists() and any(destination.iterdir()) and resume_checkpoint is None:
-        raise FileExistsError(
-            f"기존 output을 덮어쓰지 않습니다: {destination}; resume_from_checkpoint를 지정하세요"
-        )
+    if destination.exists() and resume_checkpoint is None:
+        contents = [p for p in destination.iterdir() if p.name != "config.resolved.json"]
+        if contents:
+            raise FileExistsError(
+                f"기존 output을 덮어쓰지 않습니다: {destination}; "
+                "resume_from_checkpoint를 지정하세요"
+            )
     destination.mkdir(parents=True, exist_ok=True)
     return destination
