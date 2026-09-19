@@ -111,9 +111,18 @@ def _dataset_files(path: Path) -> dict[str, str]:
         raise FileNotFoundError(f"dataset path가 없습니다: {path}")
     files: dict[str, str] = {}
     for split, names in {
-        "train": ("train.jsonl", "train.json"),
-        "validation": ("validation.jsonl", "validation.json", "dev.jsonl", "dev.json"),
-        "test": ("test.jsonl", "test.json"),
+        "train": ("train.jsonl", "train.jsonl.gz", "train.json", "train.json.gz"),
+        "validation": (
+            "validation.jsonl",
+            "validation.jsonl.gz",
+            "validation.json",
+            "validation.json.gz",
+            "dev.jsonl",
+            "dev.jsonl.gz",
+            "dev.json",
+            "dev.json.gz",
+        ),
+        "test": ("test.jsonl", "test.jsonl.gz", "test.json", "test.json.gz"),
     }.items():
         for name in names:
             candidate = path / name
