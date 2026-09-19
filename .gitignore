@@ -46,6 +46,8 @@ wandb/
 mlruns/
 reports/data_audit/*.csv
 reports/experiments/*
+!reports/experiments/*.md
+!reports/experiments/*.json
 !reports/experiments/.gitkeep
 
 # Notebook and OS noise
