@@ -26,6 +26,8 @@ data/private/*
 data/cache/
 data/processed/
 data/ulsan_dialect_phase3/
+data/phase4_corrective_sft/
+data/ulsan_preference_phase4/
 datasets/
 audio/
 *.wav

@@ -17,7 +17,7 @@ from pydantic import BaseModel, Field
 import os
 from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
 
-MODEL_PATH = os.environ.get("ULM_MODEL_PATH", "outputs/ulm-1.7b-phase3-best-merged")
+MODEL_PATH = os.environ.get("ULM_MODEL_PATH", "outputs/ulm-1.7b-phase4-best-merged")
 DEFAULT_SYSTEM_PROMPT = (
     "울산 지역어 대화 assistant로서 자연스럽고 일상적인 울산 사투리로 상대방과 친근하게 대화한다. "
     "자연스럽고 편안한 일상 울산 말투를 기본으로 구사한다."

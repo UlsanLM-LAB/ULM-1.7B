@@ -1,0 +1,175 @@
+{
+  "status": "PASS",
+  "benchmark_steps": 50,
+  "candidate_a": {
+    "name": "Candidate A (LR=5e-6, beta=0.1)",
+    "metrics": {
+      "train_runtime": 63.26602690499976,
+      "train_samples_per_second": 12.699,
+      "train_steps_per_second": 0.794,
+      "total_flos": 2479281743462400.0,
+      "train_loss": 0.6256753730773926,
+      "epoch": 0.25380710659898476,
+      "steps_per_second": 0.79,
+      "peak_vram_gib": 9.49,
+      "final_eval_loss": 0.5688952803611755,
+      "final_eval_runtime": 5.4031,
+      "final_eval_samples_per_second": 32.389,
+      "final_eval_steps_per_second": 4.072,
+      "final_eval_entropy": 1.449869462034919,
+      "final_eval_num_tokens": 215289.0,
+      "final_eval_logits/chosen": -1.4217519940958798,
+      "final_eval_logits/rejected": -0.3353350025734343,
+      "final_eval_mean_token_accuracy": 0.7381457144563849,
+      "final_eval_rewards/chosen": 0.05133534777401523,
+      "final_eval_rewards/rejected": -0.2300520935519175,
+      "final_eval_rewards/accuracies": 0.9707792238755659,
+      "final_eval_rewards/margins": 0.2813874476335265,
+      "final_eval_logps/chosen": -72.74161546880549,
+      "final_eval_logps/rejected": -72.74986752596769,
+      "final_epoch": 0.25380710659898476
+    }
+  },
+  "candidate_b": {
+    "name": "Candidate B (LR=1e-5, beta=0.1)",
+    "metrics": {
+      "train_runtime": 63.295457096000064,
+      "train_samples_per_second": 12.692,
+      "train_steps_per_second": 0.793,
+      "total_flos": 2479281743462400.0,
+      "train_loss": 0.5095400857925415,
+      "epoch": 0.25380710659898476,
+      "steps_per_second": 0.79,
+      "peak_vram_gib": 9.49,
+      "final_eval_loss": 0.37061354517936707,
+      "final_eval_runtime": 5.4084,
+      "final_eval_samples_per_second": 32.357,
+      "final_eval_steps_per_second": 4.068,
+      "final_eval_entropy": 1.384798293763941,
+      "final_eval_num_tokens": 215289.0,
+      "final_eval_logits/chosen": -1.7071967512358754,
+      "final_eval_logits/rejected": -0.6314230322384565,
+      "final_eval_mean_token_accuracy": 0.741760565475984,
+      "final_eval_rewards/chosen": 0.134130993519317,
+      "final_eval_rewards/rejected": -0.7990601252425801,
+      "final_eval_rewards/accuracies": 0.9772727272727273,
+      "final_eval_rewards/margins": 0.9331911152059381,
+      "final_eval_logps/chosen": -71.91365952925248,
+      "final_eval_logps/rejected": -78.43994678150524,
+      "final_epoch": 0.25380710659898476
+    }
+  },
+  "selected_candidate": "Candidate B",
+  "selected_config": {
+    "learning_rate": 1e-05,
+    "beta": 0.1,
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "batch_size": 8,
+    "grad_accum": 2
+  },
+  "inference_comparisons": [
+    {
+      "prompt": "안녕",
+      "baseline": "안녕! 오늘 하루는 어때? ما가 하고 싶은 거 있어?",
+      "candidate_a": "안녕! 오늘 하루는 어때? ما가 하고 싶은 거 있어?",
+      "candidate_b": "안녕! 오늘 하루는 어때? ما가 하고 싶은 거 있어?"
+    },
+    {
+      "prompt": "게이야",
+      "baseline": "나도 게임해본 거 없제?",
+      "candidate_a": "나도 게임해 보여서 좋아하는데 어~ 가성비가 높은 거 같애?",
+      "candidate_b": "나도 게임해 보여서 좋아하는데 어~ 가성비가 높은 거 같애!"
+    },
+    {
+      "prompt": "너 뭐하노?",
+      "baseline": "나는 기다려본데이, 웹툰이나 애니메이션 보거나 간단히 영화 시청하는 것 같제?",
+      "candidate_a": "나는 기다려본데이, 웹툰이나 애니메이션 보거나 간단히 영화 시청하는 것 같제?",
+      "candidate_b": "나는 기다려본데이, 컴퓨터랑 게임을 하는 가이! 12세 아이돌이제. 님은 어떤 분야에 관심 있으세요?"
+    },
+    {
+      "prompt": "오늘 뭐 먹을까?",
+      "baseline": "자바스크립트가 진짜 딱 어울리는 거제! 고양이 쫌 좋아하는 음식 중에 어떤 게 있을까요?",
+      "candidate_a": "자바스크립트에서 배열 요소를 정렬해 보는 거야! 배열에 있는 숫자들이 순서가 원래대로 돼 있나 확인하려면 `arr.sort()` 쓰면 된데이!",
+      "candidate_b": "자바스크립트에서 배열 요소를 정렬해보는 기초 알고리즘 문제야! 배열 내림차순으로 정렬하고 싶으면 `reverse()` 메소드 쓰면 된데이."
+    },
+    {
+      "prompt": "배고픈데 메뉴 추천해줘",
+      "baseline": "자바스크립트 빠르게 쓰는 웹사이트의 경우도 있고, 고급 기술을 사용하는 앱 제작에 쓰이는 게임 같은 경우에는",
+      "candidate_a": "자바카啡가 매운 거? 빵집도 가거나 고양이 쫌 좋아하는 음식을 선택하세요.",
+      "candidate_b": "근데 뭐가 좋아? 고기, 육류, 비타민이 많은 채소 중에서 원하는 종을 선택해봐라! 오늘은 간편하게 딱 제일 먼저 가라."
+    },
+    {
+      "prompt": "1+1은 뭐야?",
+      "baseline": "2지! 1하고 1 더하면 2 아이가, 이 정도는 기본이제. 계산기 누르면 딱 보인데이.",
+      "candidate_a": "2지! 1하고 1 더하면 2 아이가, 이 정도는 기본이제. 계산기 누르면 딱 보인데이.",
+      "candidate_b": "2지! 1하고 1 더하면 2 아이가, 이 정도는 기본 계산식제. 계산기 돌려봐라 기다?"
+    },
+    {
+      "prompt": "12*13은?",
+      "baseline": "156제! 12을 두 번 더하면 딱 계산된다.",
+      "candidate_a": "156제! 12을 두 번 더하면 딱 계산된다.",
+      "candidate_b": "156제! 12을 두 번 더하면 딱 계산된다."
+    },
+    {
+      "prompt": "왜 하늘은 파래?",
+      "baseline": "햇빛이 지구 대기를 통과할 때 산란되는데, 바위나 진공기 같은 고정된 물질에 부딪히면서 파장별 빛의 세기 차이가 생겨서 파장별로 시야에 보이는 파란색 빛(바이오노트)이 더 강해지는 기다. 이 때문에 하늘이 파랗게 보이는 기다.",
+      "candidate_a": "햇빛이 지구 대기를 통과할 때 산란되는데, 바위나 진동하는 물방울 같은 거가 빛을 분광적으로 쪼개서 반사시키는 기다. 파장의 빛이 보다운데이 파장에 비해서 파도록해질 수 있는 이유제! 이 파도록한 파장을 보기 위해서 인공 조명이나 자연 경관에서 본 '색보현상'이다.",
+      "candidate_b": "햇빛이 지구 대기를 통과할 때 산란되는데, 바위나 진동하는 온도가 빛을 파괴하기 위한 파장에 해당시키는 이유제! 이색광(紫外线)의 파장이 짧아서 복사된 빛보다 더 쉽게 물질 속을 통해 흐르기 때문이제. 이때 화학적 성분인 산소(O₂)와 질소(N₂)가 파장을 약간 쪼끔 강제적으로 짤라주니까 하늘이 파랗게 보이는 기다."
+    },
+    {
+      "prompt": "물이 왜 끓어?",
+      "baseline": "끓는 물은 진공 상태에서 수증기의 압력이 고정되어 있는지 계산해 보면, 이온을 자유롭게 혼자 높이는 기다.",
+      "candidate_a": "끓는 이유는 물이 진공 상태에서 증기압을 올려서 고정된 압력(1바)에서 순응해가지구 그늘지 않고 바깥 기압보다 낮은 수증기를 발산하기 때문이제!",
+      "candidate_b": "물 위에서 파이프가 부딪히거나 소리가 쪼끔 금방 부러지는 느낌이 나는데이. 이때 산란된 가해파의 진폭이 너무 짧아지면서 수직으로 아래로 빠져나가는 기다. 그 순간 물은 바닥에 닿을 수 있게 됐기 때문이다."
+    },
+    {
+      "prompt": "파이썬 리스트 정렬 알려줘",
+      "baseline": "파이썬에서 리스트를 오름차순으로 정렬할 때는 `sorted()` 함수나 `.sort()` 메소드 쓰면 된데이!\n\n```python\nnums = [4, 2, 8, 1]\nsorted_nums = sorted(nums)   # 새로운 리스트 반환\nprint(sorted_nums)\n```\n내용을 잘 이해하고 계신가요? 궁금하신 점이 있으실까요?",
+      "candidate_a": "파이썬에서 리스트를 오름차순으로 정렬할 때는 `sorted()` 함수나 `.sort()` 메소드 쓰면 된데이!\n\n```python\nnums = [4, 2, 8, 1]\nsorted_nums = sorted(nums)   # 새로운 리스트 반환\nprint(sorted_nums)\n```\n내용을 잘 이해하고 계신가요? 궁금하신 점이 있으실까요?",
+      "candidate_b": "파이썬에서 리스트를 오름차순으로 정렬할 때는 `sorted()` 함수나 `.sort()` 메소드 쓰면 된데이!\n\n```python\nnums = [4, 2, 8, 1]\nsorted_nums = sorted(nums)   # 새로운 리스트 반환\nnums.sort()                 # 리스트 자체가 mutable하다\n```\n\n양방향 정렬도 간단하게 `reverse=True` 옵션 넣어주면 딱 깔끔하게 봉따리처럼 레전드! 🧾✨"
+    },
+    {
+      "prompt": "딕셔너리랑 리스트 차이가 뭐야?",
+      "baseline": "딕셔너리는 단어의 의미나 정의를 기록하고 있는 책이고, 리스트는 그냥 목록이나 순서만 적어놓은 책이다. 예를 들면 딕셔너리는 어떤 날씨에 손이 부러지는지 그럴 때 쫌 알기 쉽게 설명해주는 거야.",
+      "candidate_a": "딕셔너리는 단어의 의미나 정의를 기록하고 있는 책이고, 리스트는 그냥 목록이나 순서만 적어놓은 책이다. 예를 들면 딕셔너리는 \"파이썬 알고리즘 문제해결 입문\" 같은 거에 나오는 알파벳 A-Z에 각각 설명을 달아놨데이.",
+      "candidate_b": "딕셔너리는 단어의 의미나 정의를 자세히 설명해주는 책이나 딕셔너리를 말하는데, 단순한 가위질만 해도 충분하데이. 리스트는 그냥 순서대로 쪼개진 정보들을 목록처럼 보여주는 기다는데, 한 번 봐라 알겠제!"
+    },
+    {
+      "prompt": "오늘 기분이 너무 안 좋다",
+      "baseline": "따른 데가 없는 기분은 참 슬프네? 어떤 것에 스트레스 받았는지 따로 알려주면 제대로 도와줄 수 있데이.",
+      "candidate_a": "따른 이유가 뭐야, 오늘 하루 산 일도 없었나 보거나? 계획하지 않은 일 있으면 그거 해본 거 같지 않제?",
+      "candidate_b": "따른 이유가 뭐야, 오늘 하루 산 일도 없었나 보거나? 계획했던 일도 못 했나?"
+    },
+    {
+      "prompt": "시험 공부하기 싫다",
+      "baseline": "시험 기다리면서 재미없은 거만 봐라! 실용적인 책 추천해줘서 고마운데이.",
+      "candidate_a": "시험 기다리면서 재미없은 거만 봐라! 실용적인 책 추천해줘서 고마운데이.",
+      "candidate_b": "시험 기다리면서 재미없은 거만 봐라! 실용적인 책 추천해줘서 고마운데이."
+    },
+    {
+      "prompt": "울산에서 어디 놀러갈까?",
+      "baseline": "좋은 물질이 많은 기회가 많으니까 가서 쫌 바라보는 게 좋제!",
+      "candidate_a": "태화강 국가정원 나가서 산책대 걸으면 계곡 들여다보거나 바위 정전암 보기 딱 좋제! 거기서 출발하는 가볼 만한 무료 공원이 두 군데 있어.",
+      "candidate_b": "태화강 국가정원 나가서 거대한 산책로 걸으면 두 바퀴 마시면 태양 뜨는구경도 하고, 맑은 물 맛 보고 충분하다! 여의도 대자연보존구나, 부산 밤바다 보러 가면 파노라마 처제."
+    },
+    {
+      "prompt": "아니 그게 무슨 말이야?",
+      "baseline": "음~ 어떤 단어가 이상하다거나 불편해 보이는지 눈으로 한 번 둔두 쫌 확인해봐라.",
+      "candidate_a": "음~ 어떤 단어가 이상한지 눈 가서 다시 보거나, 의미를 파악하기 전에 급식을 하기보다는 그냥 계획을 세우거나 기다리는 걸 끊어야겠제.",
+      "candidate_b": "'오늘도 출퇴근하러 가기 전에 쫌 바빠서 놀 때가 있다 아이가."
+    },
+    {
+      "prompt": "ㅋㅋㅋㅋ",
+      "baseline": "야, 뭐가 짜증나? 눈치 보이네!",
+      "candidate_a": "야, 뭐가 짜증나? 눈치 보이네!",
+      "candidate_b": "야, 뭐가 짜증나? 눈치 보이제!"
+    },
+    {
+      "prompt": "너 이름이 뭐야?",
+      "baseline": "나는 Qwen 같은 거야, 컴퓨터 언니야!",
+      "candidate_a": "나는 Qwen2 코퍼레이션의 기계식 사운드 트롬보트 라는 알파벳을 사용해서 대화하는 기반 모델이다. 사람처럼 소리 날카롭고 부드러운 목소리를 내고 자연스럽게 상대방과 대화할 수 있어!",
+      "candidate_b": "나는 Qwen2의 기능을 해낸 로봇 파이썬 언어 프로그래머다! 🧠💻"
+    }
+  ]
+}

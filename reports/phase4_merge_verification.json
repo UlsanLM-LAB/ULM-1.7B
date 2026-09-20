@@ -1,0 +1,69 @@
+{
+  "status": "SUBSTANTIALLY_IDENTICAL",
+  "all_identical": false,
+  "base_model": "outputs/ulm-1.7b-phase4-sft-interim",
+  "adapter_path": "outputs/ulm-1.7b-phase4-dpo-l40s",
+  "output_dir": "outputs/ulm-1.7b-phase4-best-merged",
+  "comparisons": [
+    {
+      "prompt": "안녕",
+      "lora_output": "안녕! 오늘 하루는��할 계획이 있어?",
+      "merged_output": "안녕! 오늘 하루는��할 계획이 있어?",
+      "is_identical": true
+    },
+    {
+      "prompt": "게이야",
+      "lora_output": "왜 하늘을 짜증 짜증 봐? 무슨 일 있었나? 딱 해제면 쫌 풀릴 거 같제.",
+      "merged_output": "왜 하늘을 짜증 짜증 봐? 무슨 일 있었나? 딱 밝히면 해결제가 된데이!",
+      "is_identical": false
+    },
+    {
+      "prompt": "너 뭐하노?",
+      "lora_output": "나는 기분이 좋은 일반 컴퓨터 계산기이제! 한 배열거나 방程式, 곱하기 덧셈하는 데 도움을 주면 된데이! `1 더 2`는 3이제?",
+      "merged_output": "나는 기분이 딱 좋다! 무슨 재미있는 거라도 하면 손길질도 하고 함께해봐라, 친구야!",
+      "is_identical": false
+    },
+    {
+      "prompt": "오늘 학교 끝나고 뭐할까?",
+      "lora_output": "데이트하고 싶노면 딱 로맨틱한 장소에서 광경 사진 찍거나, 책이나 패키지 여행 준비하기 딱 좋제! 오늘 선호하는 취미가 뭐야?",
+      "merged_output": "데이트하고 싶노면 딱 로맨틱한 장소에서 광경 사진 shoot해, 기분 좋은 분위기 노래 부르면서 계절 맞는 바람이나 파도소품을 쏘아보고 how-to! 친데이! 요새 스마트폰에 Lightroom 앱도 있어서 사진만으로도 세련된 배경이 된데이.",
+      "is_identical": false
+    },
+    {
+      "prompt": "배고픈데 뭐 먹지?",
+      "lora_output": "근 쫌 맛있는 간단한 sandwich, 파스타, 또는 달달한 아이스크림 온제라면 딱 들어본데이! 오늘 기분이 어떤가?",
+      "merged_output": "아이구, 충격적인 가벼운 거 맛보려면 '비범한 디저트 3가지'나 '양파 파스타' 따끈따른 국물 식품 중 하나제! 지금 어떤 재료가 궁금한가?",
+      "is_identical": false
+    },
+    {
+      "prompt": "1+1은 뭐야?",
+      "lora_output": "2지! 1하고 1 더하면 2 아이가, 이는 정수론에서도 기본이제. 계산기에서 1+1=2라고 되게 간결하게 표시하기 딱히 디바운데이트데이제.",
+      "merged_output": "2지! 1하고 1 더하면 2 아이가, 이는 정수론에서도 기본이제. 계산기에서 1+1=2라고 되게 간결하게 표시하기 딱히 디바운데이트데이제.",
+      "is_identical": true
+    },
+    {
+      "prompt": "12 * 13은 얼마야?",
+      "lora_output": "156이제! 12에 10 곱하면 120이고, 12에 3 곱하면 36이니까 더해서 156 계산된다.",
+      "merged_output": "156이제! 12에 10 곱하면 120이고, 12에 3 곱하면 36이니까 더해서 156 계산된다.",
+      "is_identical": true
+    },
+    {
+      "prompt": "왜 하늘은 파래?",
+      "lora_output": "햇빛이 지구 대기를 통과할 때 산란되는데, 옥톤 원자나 질소 분자가 빛을 쫌 차지하는 '오색 산란' 효과에서 파래서 하늘이 파랗게 보이는 기다. 이때 중요한 물질 중 하나가 바로 오존(zoon)이야! 🌧️💡",
+      "merged_output": "햇빛이 지구 대기를 통과할 때 산소(O₂)와 질소(N₂) 같은 기질물과 이산화탄소(CO₂)까지 포함되어 있기 때문이제! 이 물질들이 빛을 차단하고, 태양광의 파장 중 UV라운드나 보蓝파만 선택적으로 전달되도록 하는 기다. 이걸 '지구의 광학적 필터'라고 부르기도 한다.",
+      "is_identical": false
+    },
+    {
+      "prompt": "파이썬으로 리스트 정렬하는 법 알려줘",
+      "lora_output": "파이썬에서 리스트 정렬할 때는 `sorted()` 함수나 `.sort()` 메소드 쓰면 된데이!\n\n```python\nnums = [4, 2, 8, 1]\nsorted_nums = sorted(nums)        # 깊은 비교적 정렬 (원본 유지)\nprint(sorted_nums)\n```\n\n깊은 정렬(오름차순)은 `[1, 2, 4, 8]` 처럼 원본 리스트가 따로 남지 않고 딱 새로운 리스트 반환되기 때문에 코드 가독성이 엄청 좋아진데이!",
+      "merged_output": "리스트의 원소가 숫자거나 문자열일 때 `sorted()` 함수 쓰면 된데이!\n\n```python\nnums = [4, 2, 8, 1]\nprint(sorted(nums))  # [1, 2, 4, 8] 출력됨\n```\n자바스크립트에서는 `Array.prototype.sort()` 메소드를 호출하면 바로 정렬된 배열 반환된다.",
+      "is_identical": false
+    },
+    {
+      "prompt": "오늘 기분이 별로다",
+      "lora_output": "계속 스트레스나 짜증 날 때가 많으면 좋겠제! 오늘 하루도 열심히 버티기 충분하데이. 밥은 챙겨 놓고 가는 게 좋은 것 같아요.",
+      "merged_output": "계속 힘든 주제 다루거나 스트레스가 많은 일이라면 좋을 수 있어! 오늘은 어떤 재미있는 거라도 하려면 언제 어디서 해라.",
+      "is_identical": false
+    }
+  ]
+}

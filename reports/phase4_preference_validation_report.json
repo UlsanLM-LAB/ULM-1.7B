@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "total_preference_pairs": 3500,
+  "split": {
+    "train": 3150,
+    "validation": 175,
+    "test": 175
+  },
+  "category_distribution": {
+    "Ulsan local / dialect conversation": {
+      "count": 525,
+      "percentage": 15.0
+    },
+    "Empathy / clarification": {
+      "count": 350,
+      "percentage": 10.0
+    },
+    "General QA / factual / science": {
+      "count": 1050,
+      "percentage": 30.0
+    },
+    "Casual chat / recommendation": {
+      "count": 700,
+      "percentage": 20.0
+    },
+    "Failure correction": {
+      "count": 350,
+      "percentage": 10.0
+    },
+    "Coding / Math": {
+      "count": 525,
+      "percentage": 15.0
+    }
+  },
+  "quality_metrics": {
+    "chosen_equals_rejected_count": 0,
+    "multilingual_leakage_in_chosen": 0,
+    "empty_response_count": 0,
+    "audit_sample_count": 300,
+    "schema_check": "100% compliant with TRL DPOTrainer standard (prompt, chosen, rejected)"
+  }
+}
