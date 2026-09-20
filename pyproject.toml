@@ -11,7 +11,9 @@ requires-python = ">=3.11"
 license = { file = "LICENSE" }
 authors = [{ name = "UlsanLM Lab" }]
 dependencies = [
+  "fastapi>=0.141.1",
   "PyYAML>=6.0",
+  "uvicorn>=0.53.0",
 ]
 
 [project.optional-dependencies]

@@ -1,0 +1,6 @@
+{
+  "test_loss": 2.7108461923543348,
+  "test_perplexity": 15.041998555217827,
+  "total_samples": 1970,
+  "total_evaluated_tokens": 176076
+}

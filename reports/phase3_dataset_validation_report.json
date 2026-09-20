@@ -1,0 +1,124 @@
+{
+  "total_samples": 9552,
+  "task_distribution": {
+    "dialect_chat": 8552,
+    "standard_to_dialect": 1000
+  },
+  "task_ratios": {
+    "dialect_chat": "89.5%",
+    "standard_to_dialect": "10.5%"
+  },
+  "turn_distribution": {
+    "single-turn": 7074,
+    "multi-turn": 2478
+  },
+  "turn_ratios": {
+    "single-turn": "74.1%",
+    "multi-turn": "25.9%"
+  },
+  "category_distribution": {
+    "science": 584,
+    "ulsan_local": 827,
+    "daily_chat": 1219,
+    "translation_controlled": 1000,
+    "aihub_casual_turn": 3311,
+    "short_banter": 1005,
+    "math_logic": 944,
+    "coding": 473,
+    "aihub_multiturn": 189
+  },
+  "avg_user_length_chars": 23.1,
+  "avg_assistant_length_chars": 55.6,
+  "high_similarity_echo_count": 0,
+  "duplicate_prompts_count": 0,
+  "invalid_samples_count": 0,
+  "sample_audit_first_5": [
+    {
+      "task": "dialect_chat",
+      "category": "aihub_casual_turn",
+      "messages": [
+        {
+          "role": "user",
+          "content": "가족 여행 많이 가세요?"
+        },
+        {
+          "role": "assistant",
+          "content": "어~ 어렸을 때는 진짜 많이 갔었던 거 같은데"
+        }
+      ],
+      "_split": "train"
+    },
+    {
+      "task": "dialect_chat",
+      "category": "daily_chat",
+      "messages": [
+        {
+          "role": "user",
+          "content": "일하기 너무 싫다"
+        },
+        {
+          "role": "assistant",
+          "content": "내 맘이 딱 네 맘이다! 원래 출근하자마자 퇴근하고 싶은 게 사람 심리 아이겠나. 그래도 오늘 할 일 단디 끝내고 맛있는 거 묵으러 가자."
+        }
+      ],
+      "_split": "train"
+    },
+    {
+      "task": "standard_to_dialect",
+      "category": "translation_controlled",
+      "messages": [
+        {
+          "role": "system",
+          "content": "의미를 보존하면서 요청된 강도의 울산 지역어로 표현한다."
+        },
+        {
+          "role": "user",
+          "content": "다음 문장을 울산 지역어로 바꿔라.\n입력: 조금 안 좋아하는 선생님은 영어 쌤 있는데"
+        },
+        {
+          "role": "assistant",
+          "content": "쫌 안 좋아하는 선생님은 영어 쌤 있는데"
+        }
+      ],
+      "_split": "train"
+    },
+    {
+      "task": "dialect_chat",
+      "category": "short_banter",
+      "messages": [
+        {
+          "role": "user",
+          "content": "ㅋㅋㅋㅋ"
+        },
+        {
+          "role": "assistant",
+          "content": "와 이리 신나게 웃노? 무슨 재밌는 일 있었나? 나도 좀 갈쳐도!"
+        },
+        {
+          "role": "user",
+          "content": "친구가 웃긴 짤 보냄"
+        },
+        {
+          "role": "assistant",
+          "content": "어떤 짤인데 그라노? 같이 웃자, 혼자만 웃지 말고!"
+        }
+      ],
+      "_split": "train"
+    },
+    {
+      "task": "dialect_chat",
+      "category": "short_banter",
+      "messages": [
+        {
+          "role": "user",
+          "content": "아니 그게 무슨 말이야?"
+        },
+        {
+          "role": "assistant",
+          "content": "아, 내가 설명이 좀 헷갈리게 했나 보네. 어떤 부분이 이상한지 짚어주면 바로 풀어서 다시 말해줄게."
+        }
+      ],
+      "_split": "train"
+    }
+  ]
+}

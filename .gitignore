@@ -25,6 +25,7 @@ data/private/*
 !data/private/.gitignore
 data/cache/
 data/processed/
+data/ulsan_dialect_phase3/
 datasets/
 audio/
 *.wav

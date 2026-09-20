@@ -1,0 +1,69 @@
+{
+  "status": "SUBSTANTIALLY_IDENTICAL",
+  "all_identical": false,
+  "base_model": "outputs/ulm-1.7b-phase2-merged",
+  "adapter_path": "outputs/ulm-1.7b-phase3-chat-l40s/checkpoint-537",
+  "output_dir": "outputs/ulm-1.7b-phase3-best-merged",
+  "comparisons": [
+    {
+      "prompt": "안녕",
+      "lora_output": "아~ 반갑데이! 오늘 하루는 어땠노?",
+      "merged_output": "아~ 반갑데이! 오늘 하루는 어땠노?",
+      "is_identical": true
+    },
+    {
+      "prompt": "게이야",
+      "lora_output": "나도 그~ 게임 많이 하는데 뭐~ 어떤 게임을 좋아해?",
+      "merged_output": "나도 그거 봤는데 진짜 쫌 재밌었어.",
+      "is_identical": false
+    },
+    {
+      "prompt": "너 뭐하노?",
+      "lora_output": "뭐야, 내일 기분이 별로다나? 고민 있나?",
+      "merged_output": "뭐야, 내가 무슨일 있어? 고 easily 넘어가봐라?",
+      "is_identical": false
+    },
+    {
+      "prompt": "오늘 학교 끝나고 뭐할까?",
+      "lora_output": "어, 오늘 기분이 좋아면 스키장이나 마라카이 광역전철 타아서 30km 이상 가보는 것도 딱 좋고, 마즈카라 근처에서는 산소 섭취 코스도 괜찮제.",
+      "merged_output": "어, 오늘 기분이 좋아면 스키장이나 마라카이 광역전철 타아서 30km 이상 가보는 것도 좋고, 마라카이 공원 산책하면서 파스타 집 갔다가 요즘 재미있는 드라마 쏙 먹고 있으면 '#노예'와 '소월드' 중 하나 쫌 골고루 보는 것도 딱 실패 없는 스트레스 해제법이다!",
+      "is_identical": false
+    },
+    {
+      "prompt": "배고픈데 뭐 먹지?",
+      "lora_output": "아이구, 배부르다 아이가. 어떤 재료 있는지 나 볼라면?",
+      "merged_output": "아이구, 어떤 종류의 배고픔 있어? 쫌 일반적 배고픔이라면 가리고 있는 거두고, 어떤 음식이 맛있게 보이는지도 말해봐라.",
+      "is_identical": false
+    },
+    {
+      "prompt": "1+1은 뭐야?",
+      "lora_output": "2지? 1하고 1 더하면 2 아이가, 이 정도는 기본이제.",
+      "merged_output": "2지? 1하고 1 더하면 2 아이가, 이 정도는 기본이제.",
+      "is_identical": true
+    },
+    {
+      "prompt": "12 * 13은 얼마야?",
+      "lora_output": "156이지! 1+1이 2니까 다 더하면 156.",
+      "merged_output": "156이지! 1+1이 2니까 다 곱하면 156.",
+      "is_identical": false
+    },
+    {
+      "prompt": "왜 하늘은 파래?",
+      "lora_output": "아~ 그쪽에 날개가 달린 거 아니야?",
+      "merged_output": "아~ 그쪽에 날개가 달린 거 아니야?",
+      "is_identical": true
+    },
+    {
+      "prompt": "파이썬으로 리스트 정렬하는 법 알려줘",
+      "lora_output": "从 위에 있는 요소들 중에서 가장 중요한 요소는 바로 그거니까?",
+      "merged_output": "从 짝수부터 정렬하고 싶으면 key=lambda x: x%2 == 0 같이 쓰면 딱 다 짝수 row이 나온데이.\n\n```python\nnums = [1, 2, 3, 4, 5]\neven_nums = list(filter(lambda x: x%2 == 0, nums))\nprint(even_nums)  # [2, 4]\n```\n맞나? 파이썬 블루프린트라도 보고 계신가요?",
+      "is_identical": false
+    },
+    {
+      "prompt": "오늘 기분이 별로다",
+      "lora_output": "아, 어떤 거에 노출되었나? 가족 중에서 어떤 게 슬펐는지 언급해 줘도 좋겠다.",
+      "merged_output": "아, 어떤 거에 스트레스 받았나? 고민하고 있던 일 있을 때면 훌훌 털어놔 봐라, 내가랑 같이 풀려래.",
+      "is_identical": false
+    }
+  ]
+}

@@ -1,0 +1,936 @@
+{
+  "model_path": "outputs/ulm-1.7b-phase3-best-merged",
+  "total_prompts": 105,
+  "total_pass": 95,
+  "total_issues": 10,
+  "pass_rate_pct": 90.48,
+  "category_stats": {
+    "casual chat": {
+      "total": 10,
+      "pass": 9,
+      "issues": 1
+    },
+    "short utterance": {
+      "total": 8,
+      "pass": 8,
+      "issues": 0
+    },
+    "slang": {
+      "total": 8,
+      "pass": 8,
+      "issues": 0
+    },
+    "math": {
+      "total": 8,
+      "pass": 8,
+      "issues": 0
+    },
+    "factual QA": {
+      "total": 8,
+      "pass": 7,
+      "issues": 1
+    },
+    "coding": {
+      "total": 8,
+      "pass": 7,
+      "issues": 1
+    },
+    "science": {
+      "total": 8,
+      "pass": 4,
+      "issues": 4
+    },
+    "empathy": {
+      "total": 8,
+      "pass": 7,
+      "issues": 1
+    },
+    "recommendation": {
+      "total": 8,
+      "pass": 8,
+      "issues": 0
+    },
+    "multi-turn": {
+      "total": 8,
+      "pass": 8,
+      "issues": 0
+    },
+    "clarification": {
+      "total": 8,
+      "pass": 8,
+      "issues": 0
+    },
+    "울산 관련 질문": {
+      "total": 8,
+      "pass": 7,
+      "issues": 1
+    },
+    "표준어 일반 질문": {
+      "total": 7,
+      "pass": 6,
+      "issues": 1
+    }
+  },
+  "results": [
+    {
+      "id": "casual_01",
+      "category": "casual chat",
+      "prompt": "요즘 어떻게 지내?",
+      "response": "나도 요즘 근데 내일 주말이니까 뭐~",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "casual_02",
+      "category": "casual chat",
+      "prompt": "오늘 날씨 되게 좋다.",
+      "response": "내 맘이랑 똑같이 좋아요! 하cloud가 밤에 간절곶 가서 비 오는 건 싫어하거든요.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "casual_03",
+      "category": "casual chat",
+      "prompt": "주말에 보통 뭐 하고 시간 보내?",
+      "response": "나는 요즘 주말에는 공원 산책하다가 맛있는 저녁에 집에서 배구 해보고 싶네.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "casual_04",
+      "category": "casual chat",
+      "prompt": "심심한데 뭐 재미있는 이야기 없어?",
+      "response": "아~ 저도 쫌 잘 모르겠는데 그냥",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "casual_05",
+      "category": "casual chat",
+      "prompt": "너 mbti가 뭐야?",
+      "response": "나는 오면타리(mbti)了. 어떤 부분이랑 어울리는지 궁금하다.",
+      "issues": [
+        "multilingual_leakage(1 tokens: 了)"
+      ],
+      "pass": false
+    },
+    {
+      "id": "casual_06",
+      "category": "casual chat",
+      "prompt": "오늘 하루도 참 바빴다.",
+      "response": "그러면은 요즘 어떤 일이 있었나?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "casual_07",
+      "category": "casual chat",
+      "prompt": "커피 한잔 마시면서 쉬는 중이야.",
+      "response": "아~ 저녁에 커피 한잔 하고 그만둔다.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "casual_08",
+      "category": "casual chat",
+      "prompt": "너는 잠 안 올 때 뭐 해?",
+      "response": "나는 이제 밥 먹고 막 이~ 바람 쐬고 그다음엔 주말에 가서 야구장 갔던 거 같애요.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "casual_09",
+      "category": "casual chat",
+      "prompt": "나 오늘 새로운 취미 시작했어.",
+      "response": "어떤 새로운 취미야?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "casual_10",
+      "category": "casual chat",
+      "prompt": "시간이 진짜 빨리 가는 것 같아.",
+      "response": "맞다 내일도 어때 너는?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "short_01",
+      "category": "short utterance",
+      "prompt": "어",
+      "response": "그러면은 이케 뭐~ 자주 가는 거 있으신가요?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "short_02",
+      "category": "short utterance",
+      "prompt": "밥",
+      "response": "일하기 전에 밥을 먹어야지, 손님 있나? 손님이 온다니까 밥은 미리 음~ 미리 끓여놔야 된데이.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "short_03",
+      "category": "short utterance",
+      "prompt": "헐",
+      "response": "에이그라 그런 거 있어?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "short_04",
+      "category": "short utterance",
+      "prompt": "그래?",
+      "response": "아~ 그게 뭐야 이게 무슨 말이지?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "short_05",
+      "category": "short utterance",
+      "prompt": "야",
+      "response": "아~ 그래도 오늘은 뭐~ 어떤 거 하실 건가요?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "short_06",
+      "category": "short utterance",
+      "prompt": "엥?",
+      "response": "왜요? 뭐가 잘 안 되나요?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "short_07",
+      "category": "short utterance",
+      "prompt": "머꼬",
+      "response": "아~ 그게 무슨 말이야?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "short_08",
+      "category": "short utterance",
+      "prompt": "진짜?",
+      "response": "그거는 진짜 뭐~ 내가 코로나에 걸린 건 아니잖아 나는",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "slang_01",
+      "category": "slang",
+      "prompt": "게이야",
+      "response": "네 저도 그거에 대해서 알고 싶어요.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "slang_02",
+      "category": "slang",
+      "prompt": "이번 판 억까 지리네",
+      "response": "지금 그~ 뭐~ 니가 쫌 잘 모르는 거 같애 이래 가졌던 거야?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "slang_03",
+      "category": "slang",
+      "prompt": "완전 꿀잼이다 ㅋㅋㅋ",
+      "response": "맞아 맞아 이거는 진짜 뭐~ 어떤 것도 아닌데 그때 쪼끔",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "slang_04",
+      "category": "slang",
+      "prompt": "이거 완전 갓생 살기 프로젝트 아니냐",
+      "response": "그러면 이거는 내가 막 뭐~ 코로나가 왔다갔다 해서",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "slang_05",
+      "category": "slang",
+      "prompt": "폼 미쳤다 진짜",
+      "response": "음~ 어떤 게 좋을지 그게 지금 내가 어렸을 때 생각했던 거였는데",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "slang_06",
+      "category": "slang",
+      "prompt": "개이득 봤다 오늘",
+      "response": "뭐~ 어때?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "slang_07",
+      "category": "slang",
+      "prompt": "킹받네 진짜 왜 이러지",
+      "response": "이게 무슨 그~ 뭐야 이거는 쫌",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "slang_08",
+      "category": "slang",
+      "prompt": "이게 실화냐?",
+      "response": "그~ 니는 어떤 영화나 그런 거 봤지?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "math_01",
+      "category": "math",
+      "prompt": "1+1은 뭐야?",
+      "response": "2지? 1하고 1 더하면 2 아이가, 이 정도는 기본이제.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "math_02",
+      "category": "math",
+      "prompt": "12 * 13은 얼마야?",
+      "response": "156이지! 1+1하고 십이곱이나가 십삼곱나가 십오십구여.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "math_03",
+      "category": "math",
+      "prompt": "100 나누기 4는 얼마야?",
+      "response": "25% 정도나 뭐~ 약간 나눠주면은 딱 25%겠네.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "math_04",
+      "category": "math",
+      "prompt": "2의 10승이 얼마지?",
+      "response": "2십개 곱하면 딱 1,024 되네. 2*2=4, 4*2=8, 8*2=16... 십 번째 곱할 때 까면 딱 1밀리언에 가까운 크지.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "math_05",
+      "category": "math",
+      "prompt": "50에서 17을 빼면?",
+      "response": "23배로 가는 거니까 {laughing} 약간 그~ 계절이 오갈 때 쪼끔",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "math_06",
+      "category": "math",
+      "prompt": "7 곱하기 8은?",
+      "response": "56 아이가, 7 더하면 49 뭐~ 그니까 7 더하고 십칠구네.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "math_07",
+      "category": "math",
+      "prompt": "99 나누기 3은 얼마고?",
+      "response": "99 나누면 요번에 쫌 더 짝짝할 정도는 안 맞는데",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "math_08",
+      "category": "math",
+      "prompt": "15 더하기 28은?",
+      "response": "43 그니까 딱 떨어진다 아이가.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "fact_01",
+      "category": "factual QA",
+      "prompt": "지구에서 가장 높은 산은 어디야?",
+      "response": "아메리카노에 있는 화가네, 이케 고구바 산이제.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "fact_02",
+      "category": "factual QA",
+      "prompt": "대한민국의 수도는 어디야?",
+      "response": "삼육도이네. 제주도, 도쿄도 뭐~ 전 세계랑 어우 마찰 없이 그냥 한 번씩 갈 수 있더라고.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "fact_03",
+      "category": "factual QA",
+      "prompt": "임진왜란은 몇 년도에 일어났어?",
+      "response": "일어나는 거야 그~ 봄 여름 가을 겨울 중에서 쪼끔 추운 계절에",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "fact_04",
+      "category": "factual QA",
+      "prompt": "태양계에서 가장 큰 행성은 뭐야?",
+      "response": "아~ 태양계 중에서 제일 큰 거는 지구가 아니라 달이랑",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "fact_05",
+      "category": "factual QA",
+      "prompt": "한글을 창제한 조선의 왕은 누구야?",
+      "response": "아~ 그래도 쫌 역사적으로 알려주면은",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "fact_06",
+      "category": "factual QA",
+      "prompt": "피타고라스 정리가 뭐야?",
+      "response": "3cm하고 4cm하고 5cm的样子의 세段이니까 딱 맞는 거 같애.",
+      "issues": [
+        "multilingual_leakage(4 tokens: 子的样段)"
+      ],
+      "pass": false
+    },
+    {
+      "id": "fact_07",
+      "category": "factual QA",
+      "prompt": "세계에서 가장 면적이 넓은 나라는?",
+      "response": "자연에 그림 그리는 거니까 뭐~ 니네 암호가 되게 크지 않아서",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "fact_08",
+      "category": "factual QA",
+      "prompt": "올림픽은 몇 년 주기로 열려?",
+      "response": "겨울 동계 올림픽은 4년마다 열거든. 예전에는 2년마다 열었는데 이제 정규 올림픽이라서 4년마다",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "code_01",
+      "category": "coding",
+      "prompt": "파이썬으로 리스트 정렬하는 법 알려줘",
+      "response": "from random import sample\n\ndef simple_sort(nums):\n    for i in range(len(nums)-1):\n        for j in range(i+1, len(nums)):\n            if nums[i] > nums[j]:\n                nums[i], nums[j] = nums[j], nums[i]\n    return nums\n\nnums = sample(range(1, 20), 10)\nprint(f\"원본 리스트: {nums}\")\nsimple_sort(nums)\nprint(\"내림차순 정렬된 리스트:\", nums)",
+      "issues": [
+        "repetition_loop"
+      ],
+      "pass": false
+    },
+    {
+      "id": "code_02",
+      "category": "coding",
+      "prompt": "파이썬 딕셔너리가 뭐야?",
+      "response": "'for'문 같은 거 쓰는 거 같애.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "code_03",
+      "category": "coding",
+      "prompt": "자바스크립트에서 배열 요소 거꾸로 뒤집는 법 알려줘",
+      "response": "아~ 저도 알지가 모르겠네, 어떻게 된 건데?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "code_04",
+      "category": "coding",
+      "prompt": "HTML에서 링크 걸 때 무슨 태그 써?",
+      "response": "a href와 alt 니가 두 개 붙이면 클릭구멍이 뭐~ 안 보이지도 안 보여도 되게 깔끔하게 떠진다.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "code_05",
+      "category": "coding",
+      "prompt": "SQL에서 특정 테이블의 모든 데이터를 조회하는 쿼리문은?",
+      "response": "SELECT * FROM your_table_name;",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "code_06",
+      "category": "coding",
+      "prompt": "깃(Git)에서 원격 저장소 내용을 내려받는 명령어는 뭐야?",
+      "response": "git clone 이런 거 그쪽에 있나?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "code_07",
+      "category": "coding",
+      "prompt": "C언어에서 포인터가 뭔지 쉽게 설명해줘",
+      "response": "컴퓨터 프로그램이란 이모 컴퓨터 뭐~ 성분들 (소리)을 쪼개서 만들어내는 거다.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "code_08",
+      "category": "coding",
+      "prompt": "파이썬에서 파일 읽고 쓸 때 with open 쓰는 이유가 뭐야?",
+      "response": "with open(...) 로 분할해서 처리하니까 파일이 닫히지 않아서 코드 실행 시 에러 난데이.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "sci_01",
+      "category": "science",
+      "prompt": "왜 하늘은 파래?",
+      "response": "아~ 그게 무슨 말이야? 광선 분광이 파래서 보다보기 깊은 어둠이 파인데이, 마이 해외여행 가보고 싶은데 갈 수 없어서 아프긴 한데.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "sci_02",
+      "category": "science",
+      "prompt": "물이 100도에서 왜 끓어?",
+      "response": "비열한 물을 거기에 삼氯화나트륨(소금)이나 이odium 같은 금 belongs가 dissolved된 물을 넣으면 그 물이 100도 멀쩡히 끓여지니까!",
+      "issues": [
+        "multilingual_leakage(1 tokens: 氯)"
+      ],
+      "pass": false
+    },
+    {
+      "id": "sci_03",
+      "category": "science",
+      "prompt": "중력이 뭐야?",
+      "response": "지구가 지구 반도래로 된 거예요. 공기랑 다른 물질들이 니头顶에서 발목 아래까지 쪼금씩 감아주니까 그 아래쪽 물질이 위에 있는 것보다 약간 가볍게 생기는 중력 effect죠.",
+      "issues": [
+        "multilingual_leakage(2 tokens: 顶头)"
+      ],
+      "pass": false
+    },
+    {
+      "id": "sci_04",
+      "category": "science",
+      "prompt": "달은 왜 모양이 매일 바뀌어 보여?",
+      "response": "맞다 맞다 요즘 날씨 영향도 아니고 망토 같은 거에 영향을 많이 받아야 되는데",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "sci_05",
+      "category": "science",
+      "prompt": "얼음이 왜 물 위에 떠?",
+      "response": "아~ 이건 거품이 생기면서 양력 작용하니까 얼음도 땅에 닿지 않으려는 힘이 나와서 떠있는 기라.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "sci_06",
+      "category": "science",
+      "prompt": "식물이 광합성을 하는 이유가 뭐야?",
+      "response": "맞제, sunlight(광선)에서 에너지(get energy)拿到고, 산소(O2)을 기르면서 에너지를 속성시키는 기라. 이걸로 챙기는 식물들이니까 생명이 니네 안 돼?",
+      "issues": [
+        "multilingual_leakage(2 tokens: 到拿)"
+      ],
+      "pass": false
+    },
+    {
+      "id": "sci_07",
+      "category": "science",
+      "prompt": "번개가 칠 때 왜 천둥소리는 나중에 들려?",
+      "response": "진짜 날씨 요건 뭐~ 물결이랑 광선이랑 이런 거 쫌 맞닿으면 소리랑 소리가 안 쪼끔 더 잘 나오거든.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "sci_08",
+      "category": "science",
+      "prompt": "바닷물이 짠 이유는 뭐야?",
+      "response": "비가 내리면서 땅과 바위 속에 있는 염분(소금기)을 조금씩 녹여서 강을 타고 바다로 보내거든. 바다에서는 물만 증발하고 소금 성분은 계속 남아 쌓이니까 오랜 세월 동안 바닷물이 짠まま 이지.",
+      "issues": [
+        "multilingual_leakage(2 tokens: ま)"
+      ],
+      "pass": false
+    },
+    {
+      "id": "emp_01",
+      "category": "empathy",
+      "prompt": "오늘 기분이 별로다",
+      "response": "아, 뭐~ 어떤 거에 이리저리 해서 스트레스 받았는지 파악을 하면 된데이겠네. 오늘은 무슨 일 있었나?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "emp_02",
+      "category": "empathy",
+      "prompt": "내일 시험인데 공부하기 너무 싫다",
+      "response": "아, 네가 무슨 과야? Or은 시험 하노?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "emp_03",
+      "category": "empathy",
+      "prompt": "오늘 친구랑 사소한 일로 다퉈서 마음이 안 좋아",
+      "response": "그거 싫어서 쪼끔 이불에 쿵집히긴 하네?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "emp_04",
+      "category": "empathy",
+      "prompt": "회사에서 실수해서 하루 종일 눈치 보였어",
+      "response": "아니 그거 내가 쫌 놀랬던 거 아니야?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "emp_05",
+      "category": "empathy",
+      "prompt": "몸이 으슬으슬 춥고 감기 기운이 있네",
+      "response": "아니 그~ 우리 집에 온다니까?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "emp_06",
+      "category": "empathy",
+      "prompt": "열심히 준비한 면접에서 떨어졌어... 속상해",
+      "response": "네 이건 진짜 어쩔 수 없지 싶은 거 같애요.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "emp_07",
+      "category": "empathy",
+      "prompt": "요즘 미래에 대한 걱정이 너무 많아",
+      "response": "그래서 그런가 코로나 때문에 조금 많이 바빠지면서 뭐~ 그거 뒤에",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "emp_08",
+      "category": "empathy",
+      "prompt": "퇴근하고 집에 왔는데 아무것도 하기 싫고 무기력해",
+      "response": "그래 그게 무슨 말이야? 오늘은 어떤 일 있었나? If今天 어떤 스트레스가 있으면 오늘 기억하려면 요즘 날씨도 좋지 않네 날씨만 생각하면 충분히 힘들다.",
+      "issues": [
+        "multilingual_leakage(2 tokens: 今天)"
+      ],
+      "pass": false
+    },
+    {
+      "id": "rec_01",
+      "category": "recommendation",
+      "prompt": "배고픈데 뭐 먹지?",
+      "response": "아직도 어때, 그래도 오늘 하루는 책임감 쫌 강화시키기 위해서",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "rec_02",
+      "category": "recommendation",
+      "prompt": "오늘 점심 메뉴 좀 골라줘",
+      "response": "저희 집에서 고양이가 둘 있어서 그~ 애들 먹으러 가야 된데?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "rec_03",
+      "category": "recommendation",
+      "prompt": "주말에 집에서 볼 만한 재미있는 넷플릭스 영화 추천해줘",
+      "response": "나는 아직까지 넷플릭스 어때?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "rec_04",
+      "category": "recommendation",
+      "prompt": "선선한 저녁에 가볍게 들을 만한 노래 추천해줘",
+      "response": "아~ 맞장은 뭐~ &name2& 니가 좋아하는 스타일이 어떤지 모르겠는데?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "rec_05",
+      "category": "recommendation",
+      "prompt": "비 오는 날 어울리는 음식 뭐 있어?",
+      "response": "그~ 요즘에 비 오면은 옛날에 그게 막 한두 개만 먹어야 되는데 지금은 쫌 많이 먹으면서 이케",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "rec_06",
+      "category": "recommendation",
+      "prompt": "혼자 떠나기 좋은 국내 여행지 추천해줘",
+      "response": "아~ 저도 쫌 좋아하는 곳이 있어요 서울에서",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "rec_07",
+      "category": "recommendation",
+      "prompt": "친구 생일 선물로 3만 원대 부담 없는 거 뭐 좋을까?",
+      "response": "나는 그~ 약간 내가 좋아하는 종류가 있잖아",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "rec_08",
+      "category": "recommendation",
+      "prompt": "요즘 읽을 만한 교양 도서 하나 추천해줄래?",
+      "response": "나는 요즘 어린이동물 그~ 뭐라 해야 되지 막 코끼리 아니면은 거북이 이런 거 좋아하는데",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "multi_01",
+      "category": "multi-turn",
+      "prompt": "1박 2일로 갈 건데 바다 보고 싶어",
+      "response": "그라믄 삼산동 해운대나 삼산 롯데백화점 앞바닷길 가서 바다도 보고 맛있는 것도 먹고 좋제.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "multi_02",
+      "category": "multi-turn",
+      "prompt": "변수랑 반복문 배웠는데 다음엔 뭐 공부해야 돼?",
+      "response": "그래서 궁금해가지고 너는 어떤 거 좋아하나?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "multi_03",
+      "category": "multi-turn",
+      "prompt": "열은 없고 목만 좀 칼칼해",
+      "response": "맞네, 목 깊게 들어가니까라도 마스크 쓰고 다니야. 오늘은 덥구워.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "multi_04",
+      "category": "multi-turn",
+      "prompt": "좋아, 김치찌개 먹으러 간다",
+      "response": "김치찌개 한 그릇 가 꼭 해야 된데이!",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "multi_05",
+      "category": "multi-turn",
+      "prompt": "아직 못 샀는데 케이크만 사갈까?",
+      "response": "케이크만 사면 충분하다 아이가, 딱 그날 먹으니까 세월의 맛이 난다.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "multi_06",
+      "category": "multi-turn",
+      "prompt": "나중에 노래도 한번 불러줘라",
+      "response": "나중에는 뭐~ 음악을 쪼끔 배워보고 싶은데",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "multi_07",
+      "category": "multi-turn",
+      "prompt": "저녁에 야식 안 먹기부터 해보려고",
+      "response": "아~ 저녁에 야식 안 먹으라고 하면은 괜찮다 아이가.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "multi_08",
+      "category": "multi-turn",
+      "prompt": "지하철 환승이 너무 복잡하더라",
+      "response": "음~ 그라믄 도보로 3km 가도 딱 간다 아이가. 정확한 거는 컴퓨터에서 검색해봐야지.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "clar_01",
+      "category": "clarification",
+      "prompt": "아니 그게 무슨 말이야?",
+      "response": "저는 내가 이해가 안 돼서 말해줄래?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "clar_02",
+      "category": "clarification",
+      "prompt": "뭐라고?",
+      "response": "내일 기분이 별로 돼가지면은 내일엔 뭐~ 코인을 좀 많이 모아두는 게 좋겠다 어쨌든 오늘 밥은 한 번 해보자 아이가.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "clar_03",
+      "category": "clarification",
+      "prompt": "방금 한 말 다시 설명해줘",
+      "response": "그~ 그거는 뭐지 코로나가 완전 해났으면은",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "clar_04",
+      "category": "clarification",
+      "prompt": "잘 못 알아듣겠는데 쉽게 말해줄래?",
+      "response": "아~ 그래도 나중에 배워가지고",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "clar_05",
+      "category": "clarification",
+      "prompt": "무슨 뜻인지 잘 모르겠어",
+      "response": "아~ 그치 무슨 말이야? 내가 말하려는 바가 잘 이해 안 됐제?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "clar_06",
+      "category": "clarification",
+      "prompt": "좀 더 자세하게 풀어서 얘기해봐",
+      "response": "어~ 내가 생각하는 게 뭐야 그거는 그냥 진짜 약간 고등학생이 되면은 안 그러면은 잘 안 된다 이런 식으로 생각하거든?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "clar_07",
+      "category": "clarification",
+      "prompt": "예를 들어서 설명해줄 수 있어?",
+      "response": "아~ 예 그거는 쪼끔 어~ 나도 모르게 생각이 든다 뭐~",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "clar_08",
+      "category": "clarification",
+      "prompt": "한 번만 더 말해줄래?",
+      "response": "그럼 너는 어떤 데 가 보고 싶어?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "ulsan_01",
+      "category": "울산 관련 질문",
+      "prompt": "울산에서 놀러갈 만한 데 있어?",
+      "response": "맞다 평소에 울산에서 놀러가면",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "ulsan_02",
+      "category": "울산 관련 질문",
+      "prompt": "너 울산 사람이야?",
+      "response": "맞다, 저도 울산 사람이제. 삼산동이나 육산동 가서 저녁 묵으러 가는 거 많죠!",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "ulsan_03",
+      "category": "울산 관련 질문",
+      "prompt": "태화강 국가정원이 어떤 곳이야?",
+      "response": "난 나도 태화강 가봤었는데 그~ 날씨가 쫌 좋아서 좋았던 거 같애요.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "ulsan_04",
+      "category": "울산 관련 질문",
+      "prompt": "대왕암공원 출렁다리 어때?",
+      "response": "나는 가 보니까 축구장 같은 게 진짜 많이 많잖아.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "ulsan_05",
+      "category": "울산 관련 질문",
+      "prompt": "간절곶 해돋이 보러 가기 좋아?",
+      "response": "맞다! 간절곶은 天애강 대나무길 바로 앞에 위치해 있고, 아침 때는 하늘과 지평선이 정ฉาก이 되어서 매우 시원하게 쬐리는 기라. 이때 눈도 안 뜨고 skyline view만 즐기는 게 최고ude.",
+      "issues": [
+        "multilingual_leakage(1 tokens: 天)"
+      ],
+      "pass": false
+    },
+    {
+      "id": "ulsan_06",
+      "category": "울산 관련 질문",
+      "prompt": "울산 언양 불고기 맛있어?",
+      "response": "불고기는 언양에 비해서 뭐~ 해외에 가서 먹으면 진짜 비빔국밥 느낌이 들기도 하고",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "ulsan_07",
+      "category": "울산 관련 질문",
+      "prompt": "울산 삼산동에 젊은 사람들 많이 가?",
+      "response": "네 저도 세월이 되면 뭐~ 이천만원씩 받아가지고 막",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "ulsan_08",
+      "category": "울산 관련 질문",
+      "prompt": "울산 공업축제 알아?",
+      "response": "일단 축제 자체가 막 진짜 길이가 광역도 있고",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "std_01",
+      "category": "표준어 일반 질문",
+      "prompt": "비행기는 어떻게 하늘을 날 수 있나요?",
+      "response": "아니 그게 무슨 말이에요? 자기 자신을 하늘로 떨어뜨려보라니까?",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "std_02",
+      "category": "표준어 일반 질문",
+      "prompt": "커피를 너무 많이 마시면 건강에 어떤 영향이 있나요?",
+      "response": "커피엔 카페인이 들어가 있어서 스트레스 싹 날릴 수 있고, 땡기는데 바로 코인 올려주니까 좋다 아이가.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "std_03",
+      "category": "표준어 일반 질문",
+      "prompt": "인공지능이란 무엇인가요?",
+      "response": "일하기라는 거야. 컴퓨터가 뭐~ 여러 가지 알고 있는 프로그램을 쏙쏙 꺼내서 시키면 그걸 일이제! 하는 기술のこと인데,",
+      "issues": [
+        "multilingual_leakage(3 tokens: とこの)"
+      ],
+      "pass": false
+    },
+    {
+      "id": "std_04",
+      "category": "표준어 일반 질문",
+      "prompt": "환율이 오르면 우리 경제에 어떤 영향이 있습니까?",
+      "response": "저는 뭐~ 저도 한 번씩 쫌 안 좋은 거 같애요.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "std_05",
+      "category": "표준어 일반 질문",
+      "prompt": "올바른 스트레칭 방법이 궁금합니다.",
+      "response": "아~ 저도 잘 안 하거든요 스트레칭은 뭐~ 몇 번 정도 할 거 같은데",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "std_06",
+      "category": "표준어 일반 질문",
+      "prompt": "블록체인 기술의 기본 원리에 대해 설명해 주세요.",
+      "response": "바이트(byte)가 8명비트이고, 100만 바이트 정도는 1KB 씩 넘어가서, 여러 KB 가까이할 경우 만원정도쯤은 쉽게 생각하면 되는데, 이건 디바이스 자체가 디바이스 자체가 디자인을 해놓았기 때문에 그렇더라고요.",
+      "issues": [],
+      "pass": true
+    },
+    {
+      "id": "std_07",
+      "category": "표준어 일반 질문",
+      "prompt": "지구 온난화를 줄이기 위해 일상에서 실천할 수 있는 일은 무엇이 있나요?",
+      "response": "일단 자기네 집에서도 에너지 소비를 줄여야 되는데 그걸 쫌 많이 할 수 있고, 또 운동을 하면 몸이 덥니까 더운 날씨에도 계속 활발하게 다니는 거 같애요.",
+      "issues": [],
+      "pass": true
+    }
+  ]
+}
