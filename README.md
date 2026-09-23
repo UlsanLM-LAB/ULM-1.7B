@@ -16,6 +16,41 @@ uv run ruff check .
 
 외부 데이터 없이 작은 fixture와 코드 검증만 실행한다. AI Hub 원본은 로그인·이용조건·개인정보 경계를 확인한 뒤 로컬 경로에서만 사용한다.
 
+## ULM-1.7B 채팅 서버
+
+Phase 4 merged model을 한 번 로드한 뒤 OpenAI Chat Completions와 유사한 HTTP/SSE API로 제공한다. 저장된 tokenizer의 chat template을 그대로 사용하며 CUDA에서는 bf16(지원되지 않으면 fp16), CPU에서는 float32를 선택한다.
+
+```bash
+uv sync --extra dev --extra ml
+
+# CLI 인자
+uv run python scripts/serve.py \
+  --model /path/to/ulm-1.7b-phase4-best-merged \
+  --host 127.0.0.1 \
+  --port 8000
+
+# 또는 환경변수
+ULM_MODEL_PATH=/path/to/ulm-1.7b-phase4-best-merged \
+  uv run python scripts/serve.py --port 8000
+```
+
+서버 확인:
+
+```bash
+curl http://localhost:8000/health
+
+curl -N http://localhost:8000/v1/chat/completions \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "messages": [{"role": "user", "content": "오늘 뭐하노?"}],
+    "stream": true,
+    "temperature": 0.7,
+    "max_tokens": 512
+  }'
+```
+
+`stream: true`는 `text/event-stream` chunk와 마지막 `data: [DONE]`을 반환한다. `stream: false`는 일반 JSON completion을 반환한다. 요청 취소 시 stopping criteria를 통해 생성 중단을 시도하며, 단일 모델의 동시 generation은 GPU 메모리 안전을 위해 직렬화한다.
+
 ## TTS 파이프라인
 
 TTS 기능을 사용하려면 `[tts]` extra를 설치한다:
