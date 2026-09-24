@@ -12,23 +12,31 @@ import time
 import uuid
 from collections.abc import AsyncIterator, Awaitable, Callable, Sequence
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from typing import Any, Literal, Protocol
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse, Response, StreamingResponse
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field, field_validator
 
+from .policy import (
+    DEFAULT_MAX_NEW_TOKENS,
+    DEFAULT_TEMPERATURE,
+    DEFAULT_TOP_P,
+)
+from .policy import (
+    generation_kwargs as phase4_generation_kwargs,
+)
+from .prompt import PHASE4_SYSTEM_PROMPT
+
 DEFAULT_MODEL_PATH = "outputs/ulm-1.7b-phase4-best-merged"
 MODEL_NAME = "ULM-1.7B"
-DEFAULT_SYSTEM_PROMPT = (
-    "울산 지역어 대화 assistant로서 자연스럽고 일상적인 울산 사투리로 상대방과 친근하게 대화한다. "
-    "자연스럽고 편안한 일상 울산 말투를 기본으로 구사한다."
-)
+DEFAULT_SYSTEM_PROMPT = PHASE4_SYSTEM_PROMPT
 
 
 class ChatMessage(BaseModel):
     role: Literal["system", "user", "assistant"]
-    content: str = Field(min_length=1)
+    content: str = Field(min_length=1, max_length=20000)
 
     @field_validator("content")
     @classmethod
@@ -44,9 +52,9 @@ class ChatCompletionRequest(BaseModel):
     model: str = "ulm-1.7b"
     messages: list[ChatMessage] = Field(min_length=1)
     stream: bool = True
-    temperature: float = Field(default=0.7, ge=0.0, le=2.0)
-    top_p: float = Field(default=0.9, gt=0.0, le=1.0)
-    max_tokens: int = Field(default=512, ge=1, le=2048)
+    temperature: float = Field(default=DEFAULT_TEMPERATURE, ge=0.0, le=2.0)
+    top_p: float = Field(default=DEFAULT_TOP_P, gt=0.0, le=1.0)
+    max_tokens: int = Field(default=DEFAULT_MAX_NEW_TOKENS, ge=1, le=2048)
     system_prompt: str | None = Field(
         default=None,
         validation_alias=AliasChoices("system_prompt", "systemPrompt"),
@@ -54,6 +62,11 @@ class ChatCompletionRequest(BaseModel):
 
 
 DisconnectCheck = Callable[[], Awaitable[bool]]
+
+
+@dataclass(frozen=True)
+class GenerationEnd:
+    reason: Literal["stop", "length"]
 
 
 class ChatEngine(Protocol):
@@ -66,7 +79,7 @@ class ChatEngine(Protocol):
         self,
         request: ChatCompletionRequest,
         is_disconnected: DisconnectCheck,
-    ) -> AsyncIterator[str]: ...
+    ) -> AsyncIterator[str | GenerationEnd]: ...
 
 
 class TransformersChatEngine:
@@ -138,29 +151,26 @@ class TransformersChatEngine:
         context_limit = int(getattr(self.model.config, "max_position_embeddings", 32768))
         max_input_tokens = max(1, context_limit - request.max_tokens)
         if encoded["input_ids"].shape[-1] > max_input_tokens:
-            encoded = {key: value[:, -max_input_tokens:] for key, value in encoded.items()}
+            raise ValueError("Chat history exceeds the model context window")
         encoded = {key: value.to(self._input_device) for key, value in encoded.items()}
-
-        pad_token_id = self.tokenizer.pad_token_id
-        if pad_token_id is None:
-            pad_token_id = self.tokenizer.eos_token_id
 
         generation_kwargs: dict[str, Any] = {
             **encoded,
             "streamer": streamer,
-            "max_new_tokens": request.max_tokens,
-            "do_sample": request.temperature > 0,
-            "pad_token_id": pad_token_id,
+            **phase4_generation_kwargs(
+                temperature=request.temperature,
+                top_p=request.top_p,
+                max_new_tokens=request.max_tokens,
+                eos_token_id=self.tokenizer.eos_token_id,
+            ),
         }
-        if request.temperature > 0:
-            generation_kwargs.update(temperature=request.temperature, top_p=request.top_p)
         return generation_kwargs
 
     async def stream_chat(
         self,
         request: ChatCompletionRequest,
         is_disconnected: DisconnectCheck,
-    ) -> AsyncIterator[str]:
+    ) -> AsyncIterator[str | GenerationEnd]:
         from transformers import StoppingCriteria, StoppingCriteriaList, TextIteratorStreamer
 
         stop_event = threading.Event()
@@ -179,11 +189,12 @@ class TransformersChatEngine:
             generation_kwargs = self._prepare_generation(request, streamer)
             generation_kwargs["stopping_criteria"] = StoppingCriteriaList([StopWhenRequested()])
             generation_errors: list[BaseException] = []
+            generation_outputs: list[Any] = []
 
             def run_generation() -> None:
                 try:
                     with self._torch.inference_mode():
-                        self.model.generate(**generation_kwargs)
+                        generation_outputs.append(self.model.generate(**generation_kwargs))
                 except BaseException as exc:  # propagate failures to the response stream
                     generation_errors.append(exc)
                     streamer.on_finalized_text("", stream_end=True)
@@ -211,8 +222,17 @@ class TransformersChatEngine:
                         continue
                     break
 
+                if not stop_event.is_set():
+                    await asyncio.to_thread(thread.join, 2.0)
                 if generation_errors:
                     raise RuntimeError("모델 응답 생성에 실패했습니다.") from generation_errors[0]
+                if not generation_outputs and not stop_event.is_set():
+                    raise RuntimeError("Model generation ended without a result")
+                if generation_outputs and not stop_event.is_set():
+                    eos = self.model.generation_config.eos_token_id
+                    eos_ids = {eos} if isinstance(eos, int) else set(eos or [])
+                    last_id = int(generation_outputs[0][0, -1])
+                    yield GenerationEnd("stop" if last_id in eos_ids else "length")
             finally:
                 stop_event.set()
                 await asyncio.to_thread(thread.join, 2.0)
@@ -291,12 +311,15 @@ def create_app(
 
         if not chat_request.stream:
             try:
-                chunks = [
-                    chunk
-                    async for chunk in active_engine.stream_chat(
-                        chat_request, http_request.is_disconnected
-                    )
-                ]
+                chunks = []
+                finish_reason = "stop"
+                async for part in active_engine.stream_chat(
+                    chat_request, http_request.is_disconnected
+                ):
+                    if isinstance(part, GenerationEnd):
+                        finish_reason = part.reason
+                    else:
+                        chunks.append(part)
             except Exception as exc:
                 return JSONResponse(
                     status_code=500,
@@ -312,7 +335,7 @@ def create_app(
                         {
                             "index": 0,
                             "message": {"role": "assistant", "content": "".join(chunks)},
-                            "finish_reason": "stop",
+                            "finish_reason": finish_reason,
                         }
                     ],
                 }
@@ -320,12 +343,16 @@ def create_app(
 
         async def event_stream() -> AsyncIterator[str]:
             try:
-                async for chunk in active_engine.stream_chat(
+                finish_reason = "stop"
+                async for part in active_engine.stream_chat(
                     chat_request, http_request.is_disconnected
                 ):
-                    yield _stream_chunk(completion_id, chunk)
+                    if isinstance(part, GenerationEnd):
+                        finish_reason = part.reason
+                    else:
+                        yield _stream_chunk(completion_id, part)
                 if not await http_request.is_disconnected():
-                    yield _stream_chunk(completion_id, "", "stop")
+                    yield _stream_chunk(completion_id, "", finish_reason)
             except Exception as exc:
                 error = {"error": {"message": str(exc), "type": "generation_error"}}
                 yield f"data: {json.dumps(error, ensure_ascii=False)}\n\n"

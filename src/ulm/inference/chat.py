@@ -6,17 +6,25 @@ import argparse
 from pathlib import Path
 from typing import Any
 
-from .prompt import _STRENGTH_GUIDANCE
+from .policy import (
+    DEFAULT_MAX_NEW_TOKENS,
+    DEFAULT_TEMPERATURE,
+    DEFAULT_TOP_P,
+)
+from .policy import (
+    generation_kwargs as phase4_generation_kwargs,
+)
+from .prompt import _STRENGTH_GUIDANCE, PHASE4_SYSTEM_PROMPT
 
 
 def run_chat(
-    model_name: str = "Qwen/Qwen3-1.7B",
+    model_name: str = "outputs/ulm-1.7b-phase4-best-merged",
     adapter_path: str | Path | None = None,
     *,
-    dialect_strength: int = 2,
-    load_in_4bit: bool = True,
-    temperature: float = 0.7,
-    max_new_tokens: int = 128,
+    dialect_strength: int | None = None,
+    load_in_4bit: bool = False,
+    temperature: float = DEFAULT_TEMPERATURE,
+    max_new_tokens: int = DEFAULT_MAX_NEW_TOKENS,
     enable_tts: bool = False,
     tts_output: str | Path = "outputs/tts/chat_reply.wav",
 ) -> None:
@@ -62,9 +70,11 @@ def run_chat(
         except Exception as e:
             print(f"[경고] TTS 로드 실패: {e}")
 
-    guidance = _STRENGTH_GUIDANCE.get(dialect_strength, _STRENGTH_GUIDANCE[2])
+    guidance = _STRENGTH_GUIDANCE.get(dialect_strength) if dialect_strength is not None else None
     system_prompt = (
-        "울산 지역어 대화 assistant로서 자연스럽고 일상적인 울산 사투리로 "
+        PHASE4_SYSTEM_PROMPT
+        if guidance is None
+        else "울산 지역어 대화 assistant로서 자연스럽고 일상적인 울산 사투리로 "
         f"상대방과 친근하게 대화한다. {guidance}"
     )
 
@@ -73,7 +83,7 @@ def run_chat(
     print("=" * 60)
     print("  ULM-1.7B 울산 사투리 대화 모드")
     print(f"  - 모델: {model_name} (adapter: {adapter_path or 'none'})")
-    print(f"  - 사투리 강도: {dialect_strength} ({guidance})")
+    print(f"  - 사투리 강도: {dialect_strength} ({guidance or 'Phase4 기본값'})")
     print("  - 종료하려면 'q', 'quit', 'exit'를 입력하거나 Ctrl+C를 누르세요.")
     print("=" * 60 + "\n")
 
@@ -110,10 +120,12 @@ def run_chat(
         with torch.inference_mode():
             output = model.generate(
                 **inputs,
-                max_new_tokens=max_new_tokens,
-                temperature=temperature,
-                top_p=0.9,
-                do_sample=True,
+                **phase4_generation_kwargs(
+                    max_new_tokens=max_new_tokens,
+                    temperature=temperature,
+                    top_p=DEFAULT_TOP_P,
+                    eos_token_id=tokenizer.eos_token_id,
+                ),
             )
 
         in_len = inputs["input_ids"].shape[-1]
@@ -144,16 +156,16 @@ def run_chat(
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="ULM-1.7B 대화형 채팅 터미널")
-    parser.add_argument("--model-name", default="Qwen/Qwen3-1.7B")
+    parser.add_argument("--model-name", default="outputs/ulm-1.7b-phase4-best-merged")
     parser.add_argument(
         "--adapter",
-        default="outputs/qwen3-1.7b-sft/checkpoint-50",
+        default=None,
         help="PEFT adapter directory",
     )
-    parser.add_argument("--dialect-strength", type=int, default=2, choices=range(4))
-    parser.add_argument("--load-in-4bit", action="store_true", default=True)
-    parser.add_argument("--temperature", type=float, default=0.7)
-    parser.add_argument("--max-new-tokens", type=int, default=128)
+    parser.add_argument("--dialect-strength", type=int, default=None, choices=range(4))
+    parser.add_argument("--load-in-4bit", action="store_true")
+    parser.add_argument("--temperature", type=float, default=DEFAULT_TEMPERATURE)
+    parser.add_argument("--max-new-tokens", type=int, default=DEFAULT_MAX_NEW_TOKENS)
     parser.add_argument(
         "--voice", action="store_true", help="답변할 때마다 TTS 음성 파일도 함께 생성"
     )

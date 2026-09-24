@@ -6,6 +6,14 @@ import argparse
 from pathlib import Path
 from typing import Any
 
+from .policy import (
+    DEFAULT_MAX_NEW_TOKENS,
+    DEFAULT_TEMPERATURE,
+    DEFAULT_TOP_P,
+)
+from .policy import (
+    generation_kwargs as phase4_generation_kwargs,
+)
 from .prompt import build_inference_messages
 
 
@@ -13,12 +21,12 @@ def generate_text(
     model_name: str,
     text: str,
     *,
-    dialect_strength: int = 2,
+    dialect_strength: int | None = None,
     adapter_path: str | None = None,
     load_in_4bit: bool = False,
-    max_new_tokens: int = 128,
-    temperature: float = 0.7,
-    top_p: float = 0.9,
+    max_new_tokens: int = DEFAULT_MAX_NEW_TOKENS,
+    temperature: float = DEFAULT_TEMPERATURE,
+    top_p: float = DEFAULT_TOP_P,
     do_sample: bool = True,
 ) -> str:
     try:
@@ -62,9 +70,12 @@ def generate_text(
     inputs = tokenizer(prompt, return_tensors="pt")
     if hasattr(model, "device"):
         inputs = {key: value.to(model.device) for key, value in inputs.items()}
-    generation_kwargs = {"max_new_tokens": max_new_tokens, "do_sample": do_sample}
-    if do_sample:
-        generation_kwargs.update({"temperature": temperature, "top_p": top_p})
+    generation_kwargs = phase4_generation_kwargs(
+        max_new_tokens=max_new_tokens,
+        temperature=temperature if do_sample else 0,
+        top_p=top_p,
+        eos_token_id=tokenizer.eos_token_id,
+    )
     with torch.inference_mode():
         output = model.generate(**inputs, **generation_kwargs)
     input_length = inputs["input_ids"].shape[-1]
@@ -81,15 +92,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--text-file", type=Path, help="입력 text file; --text와 함께 사용할 수 없음"
     )
-    parser.add_argument("--dialect-strength", type=int, default=2, choices=range(4), metavar="0-3")
+    parser.add_argument(
+        "--dialect-strength", type=int, default=None, choices=range(4), metavar="0-3"
+    )
     parser.add_argument(
         "--load-in-4bit",
         action="store_true",
         help="메모리 절약을 위해 base model을 4-bit(NF4)로 로드",
     )
-    parser.add_argument("--max-new-tokens", type=int, default=128)
-    parser.add_argument("--temperature", type=float, default=0.7)
-    parser.add_argument("--top-p", type=float, default=0.9)
+    parser.add_argument("--max-new-tokens", type=int, default=DEFAULT_MAX_NEW_TOKENS)
+    parser.add_argument("--temperature", type=float, default=DEFAULT_TEMPERATURE)
+    parser.add_argument("--top-p", type=float, default=DEFAULT_TOP_P)
     parser.add_argument("--greedy", action="store_true", help="sampling 없이 greedy decoding")
     parser.add_argument("--output", type=Path, help="출력 text 경로; 생략하면 stdout")
     parser.add_argument("--overwrite", action="store_true", help="기존 출력 파일을 덮어씀")

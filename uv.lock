@@ -2493,6 +2493,7 @@ dependencies = [
 
 [package.optional-dependencies]
 dev = [
+    { name = "httpx" },
     { name = "pytest" },
     { name = "ruff" },
 ]
@@ -2522,6 +2523,7 @@ requires-dist = [
     { name = "bitsandbytes", marker = "extra == 'ml'", specifier = ">=0.45" },
     { name = "datasets", marker = "extra == 'ml'", specifier = ">=3.0" },
     { name = "fastapi", specifier = ">=0.141.1" },
+    { name = "httpx", marker = "extra == 'dev'", specifier = ">=0.27" },
     { name = "peft", marker = "extra == 'ml'", specifier = ">=0.14" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "pyyaml", specifier = ">=6.0" },
