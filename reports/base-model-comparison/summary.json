@@ -1,0 +1,68 @@
+{
+  "qwen3.5-4b": {
+    "model_id": "Qwen/Qwen3.5-4B",
+    "load_time_s": 4.82,
+    "vram_gb": 7.83,
+    "total_prompts": 60,
+    "avg_latency_ms": 12572.19,
+    "avg_tokens": 253.7,
+    "reasoning_completed_count": 2,
+    "empty_final_answer_count": 58,
+    "token_limit_count": 58,
+    "cjk_leakage_count": 0,
+    "repetition_count": 1,
+    "factual_qa": {
+      "total": 20,
+      "hits": 17,
+      "accuracy_pct": 85.0
+    },
+    "multi_turn": {
+      "total": 10,
+      "hits": 10,
+      "accuracy_pct": 100.0
+    },
+    "instruction_stress": {
+      "total": 10,
+      "hits": 5,
+      "accuracy_pct": 50.0
+    },
+    "dialect": {
+      "total": 10,
+      "meaning_preserved": 4,
+      "dialect_markers_present": 10
+    }
+  },
+  "qwen3.8-4b-distill": {
+    "model_id": "empero-ai/Qwen3.8-4B-Distill",
+    "load_time_s": 3.91,
+    "vram_gb": 7.84,
+    "total_prompts": 60,
+    "avg_latency_ms": 11360.96,
+    "avg_tokens": 224.6,
+    "reasoning_completed_count": 20,
+    "empty_final_answer_count": 41,
+    "token_limit_count": 43,
+    "cjk_leakage_count": 0,
+    "repetition_count": 0,
+    "factual_qa": {
+      "total": 20,
+      "hits": 17,
+      "accuracy_pct": 85.0
+    },
+    "multi_turn": {
+      "total": 10,
+      "hits": 9,
+      "accuracy_pct": 90.0
+    },
+    "instruction_stress": {
+      "total": 10,
+      "hits": 7,
+      "accuracy_pct": 70.0
+    },
+    "dialect": {
+      "total": 10,
+      "meaning_preserved": 4,
+      "dialect_markers_present": 9
+    }
+  }
+}
