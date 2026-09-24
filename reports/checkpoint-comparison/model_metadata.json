@@ -1,0 +1,111 @@
+{
+  "base": {
+    "name": "base",
+    "type": "base",
+    "model_path": "/home/ubuntu/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "base_model": "/home/ubuntu/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "adapter_path": null,
+    "tokenizer_path": "/home/ubuntu/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B/snapshots/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "config_hash": "1ddb5b89ebc90dcb417a45c213d818577e65976454d29385c8f6140771d95197",
+    "tokenizer_config_hash": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+    "tokenizer_json_hash": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "generation_config_hash": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2",
+    "generation_config": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "top_k": 20,
+      "repetition_penalty": 1.1,
+      "max_new_tokens": 150,
+      "do_sample": true,
+      "seed": 42,
+      "enable_thinking": false,
+      "eos_token_id": [
+        151645,
+        151643
+      ],
+      "pad_token_id": 151643
+    }
+  },
+  "phase3": {
+    "name": "phase3",
+    "type": "merged",
+    "model_path": "/home/ubuntu/ULM-1.7B/outputs/ulm-1.7b-phase3-best-merged",
+    "base_model": "/home/ubuntu/ULM-1.7B/outputs/ulm-1.7b-phase3-best-merged",
+    "adapter_path": null,
+    "tokenizer_path": "/home/ubuntu/ULM-1.7B/outputs/ulm-1.7b-phase3-best-merged",
+    "config_hash": "db21e5529322523f48341a67b677e772ab7818e06226e145e8cec40b22197269",
+    "tokenizer_config_hash": "2e3bd3cb5055f7a903a54e7062b2fd14d21b70f4174c3ffcd9fc81ec50a25631",
+    "tokenizer_json_hash": "be75606093db2094d7cd20f3c2f385c212750648bd6ea4fb2bf507a6a4c55506",
+    "generation_config_hash": "893b0dccf83626cdfdc498e5b2a255a935b4c3c693350aed18f7003c1a3f3de9",
+    "generation_config": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "top_k": 20,
+      "repetition_penalty": 1.1,
+      "max_new_tokens": 150,
+      "do_sample": true,
+      "seed": 42,
+      "enable_thinking": false,
+      "eos_token_id": [
+        151645,
+        151643
+      ],
+      "pad_token_id": 151643
+    }
+  },
+  "phase4-adapter": {
+    "name": "phase4-adapter",
+    "type": "adapter",
+    "model_path": "/home/ubuntu/ULM-1.7B/outputs/ulm-1.7b-phase4-dpo-l40s",
+    "base_model": "/home/ubuntu/ULM-1.7B/outputs/ulm-1.7b-phase4-sft-interim",
+    "adapter_path": "/home/ubuntu/ULM-1.7B/outputs/ulm-1.7b-phase4-dpo-l40s",
+    "tokenizer_path": "/home/ubuntu/ULM-1.7B/outputs/ulm-1.7b-phase4-sft-interim",
+    "config_hash": "db21e5529322523f48341a67b677e772ab7818e06226e145e8cec40b22197269",
+    "tokenizer_config_hash": "2e3bd3cb5055f7a903a54e7062b2fd14d21b70f4174c3ffcd9fc81ec50a25631",
+    "tokenizer_json_hash": "be75606093db2094d7cd20f3c2f385c212750648bd6ea4fb2bf507a6a4c55506",
+    "generation_config_hash": "893b0dccf83626cdfdc498e5b2a255a935b4c3c693350aed18f7003c1a3f3de9",
+    "generation_config": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "top_k": 20,
+      "repetition_penalty": 1.1,
+      "max_new_tokens": 150,
+      "do_sample": true,
+      "seed": 42,
+      "enable_thinking": false,
+      "eos_token_id": [
+        151645,
+        151643
+      ],
+      "pad_token_id": 151643
+    },
+    "adapter_config_hash": "87afa10600812b7950dde28bedd1c55f3cd3e32900a04b010cda1c35d6fb06e7"
+  },
+  "phase4-merged": {
+    "name": "phase4-merged",
+    "type": "merged",
+    "model_path": "/home/ubuntu/ULM-1.7B/outputs/ulm-1.7b-phase4-best-merged",
+    "base_model": "/home/ubuntu/ULM-1.7B/outputs/ulm-1.7b-phase4-best-merged",
+    "adapter_path": null,
+    "tokenizer_path": "/home/ubuntu/ULM-1.7B/outputs/ulm-1.7b-phase4-best-merged",
+    "config_hash": "db21e5529322523f48341a67b677e772ab7818e06226e145e8cec40b22197269",
+    "tokenizer_config_hash": "2e3bd3cb5055f7a903a54e7062b2fd14d21b70f4174c3ffcd9fc81ec50a25631",
+    "tokenizer_json_hash": "be75606093db2094d7cd20f3c2f385c212750648bd6ea4fb2bf507a6a4c55506",
+    "generation_config_hash": "893b0dccf83626cdfdc498e5b2a255a935b4c3c693350aed18f7003c1a3f3de9",
+    "generation_config": {
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "top_k": 20,
+      "repetition_penalty": 1.1,
+      "max_new_tokens": 150,
+      "do_sample": true,
+      "seed": 42,
+      "enable_thinking": false,
+      "eos_token_id": [
+        151645,
+        151643
+      ],
+      "pad_token_id": 151643
+    }
+  }
+}
