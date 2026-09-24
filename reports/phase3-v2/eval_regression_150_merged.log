@@ -1,0 +1,38 @@
+
+=======================================================
+Loading Base Model: /home/ubuntu/ULM-1.7B/outputs/ulm-4b-phase3-v2-best-merged
+Benchmark: data/regression_benchmark_150.jsonl
+=======================================================
+Loading weights:   0%|          | 0/426 [00:00<?, ?it/s]Loading weights:   0%|          | 1/426 [00:00<00:44,  9.61it/s]Loading weights:  12%|█▏        | 51/426 [00:00<00:01, 284.83it/s]Loading weights:  24%|██▍       | 103/426 [00:00<00:00, 388.92it/s]Loading weights:  36%|███▌      | 153/426 [00:00<00:00, 422.98it/s]Loading weights:  48%|████▊     | 205/426 [00:00<00:00, 443.37it/s]Loading weights:  61%|██████    | 258/426 [00:00<00:00, 461.55it/s]Loading weights:  73%|███████▎  | 312/426 [00:00<00:00, 478.22it/s]Loading weights:  85%|████████▌ | 364/426 [00:00<00:00, 481.54it/s]Loading weights:  98%|█████████▊| 417/426 [00:00<00:00, 494.66it/s]Loading weights: 100%|██████████| 426/426 [00:00<00:00, 444.94it/s]
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+[transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `fused_recurrent_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+Model ready in 3.01s | VRAM: 7.83 GB
+  [010/150] factual_qa       | Latency: 1455.6ms | Tokens:  30 | Ans: 초속 약 30만 km(정확히는 299,792.458 km/s)입니다.
+  [020/150] factual_qa       | Latency: 2017.1ms | Tokens:  42 | Ans: 조선 왕조의开国 군주인 **태조 왕건(王建)**이 918년에 고을로 고구려의 후예임을 자처
+  [030/150] factual_qa       | Latency: 1784.1ms | Tokens:  37 | Ans: 주기율표에서 원자번호 1번을 가지며 가장 가볍고 널리 알려진 첫 번째 원소는 **수소(Hy
+  [040/150] factual_qa       | Latency: 1291.6ms | Tokens:  26 | Ans: 달(태양계 인공위성 제외)입니다. 지구만 유일하게 달이라는 자연 위성을 가지고 있어요.
+  [050/150] general_korean   | Latency: 1538.4ms | Tokens:  32 | Ans: 바다 여행이 감정적으로 훨씬 편안하게 느껴졌어요. 파도 소리와 햇살이 스트레스를 잘 풀어준
+  [060/150] general_korean   | Latency: 4912.9ms | Tokens: 101 | Ans: 불안과 복잡한 감정 속에서 쉼을 찾을 수 있도록, 리듬이 크지 않고 흐르는 듯한 멜로디가 
+  [070/150] multi_turn       | Latency: 1886.5ms | Tokens:  39 | Ans: 신현수 님께서는 **가을**이 가장 마음에 드는 계절이라고 말씀하셨습니다. 특히 바람이 시
+  [080/150] multi_turn       | Latency: 1219.1ms | Tokens:  25 | Ans: 신현우 님께서는 출퇴근 시 **흰색 아반떼**를 타고 있다고 말씀하셨습니다.
+  [090/150] instruction_trap | Latency:  355.8ms | Tokens:   7 | Ans: {"status": "ok"}
+  [100/150] dialect_eval     | Latency:  499.9ms | Tokens:  10 | Ans: 걱정하지 마, 잘 될 게야
+  [110/150] factual_qa       | Latency: 1859.3ms | Tokens:  38 | Ans: 온도 20°C의 표준 대기에서 소리가 공기 중에서 퍼질 때의 속도는 초당 약 **340미터
+  [120/150] general_korean   | Latency: 2006.6ms | Tokens:  41 | Ans: 비가 내릴 때는 정말 집이 눅눅하고 썩은 냄새가 나죠. 그런 냄새를 확실하게 잡아내는 실속
+  [130/150] instruction_trap | Latency:  119.2ms | Tokens:   2 | Ans: 네
+  [140/150] dialect_eval     | Latency:  356.1ms | Tokens:   7 | Ans: 이런데 조금 모르겠다
+  [150/150] dialect_eval     | Latency:  500.4ms | Tokens:  10 | Ans: 다 괜찮을 거야, 걱정 마이
+
+=======================================================
+Evaluation Complete!
+  Factual QA:       39/50 (78.0%)
+  Multi-turn Memory:21/25 (84.0%)
+  Instruction/Trap: 19/20 (95.0%)
+  Dialect Eval:     5/25 (20.0%)
+  Avg Latency:      1905.83 ms | Avg Tokens: 39.2
+  Empty Final:      0 | Repetition: 1
+Saved: reports/phase3-v2/regression-150-phase3v2-merged.jsonl & reports/phase3-v2/regression-150-phase3v2-merged-summary.json
+=======================================================
+

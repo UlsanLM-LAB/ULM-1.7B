@@ -1,0 +1,131 @@
+
+=======================================================
+>>> Starting Phase 3 v2 Full Knowledge-Preserving SFT <<<
+Base Model: /home/ubuntu/models/Qwen3.8-4B-Distill
+Train Dataset: data/ulsan_dialect_phase3_v2/train.jsonl
+Output Dir: outputs/ulm-4b-phase3-v2-lora-training
+Micro-batch: 2, GradAccum: 16 (Effective Batch: 32)
+LR: 5e-05, Epochs: 2, SeqLen: 2048
+=======================================================
+Loading weights:   0%|          | 0/426 [00:00<?, ?it/s]Loading weights:   2%|▏         | 7/426 [00:00<00:06, 66.38it/s]Loading weights:  14%|█▍        | 59/426 [00:00<00:01, 317.75it/s]Loading weights:  26%|██▋       | 112/426 [00:00<00:00, 405.18it/s]Loading weights:  38%|███▊      | 160/426 [00:00<00:00, 433.73it/s]Loading weights:  49%|████▉     | 209/426 [00:00<00:00, 450.99it/s]Loading weights:  61%|██████    | 259/426 [00:00<00:00, 461.76it/s]Loading weights:  73%|███████▎  | 311/426 [00:00<00:00, 468.37it/s]Loading weights:  85%|████████▌ | 364/426 [00:00<00:00, 481.50it/s]Loading weights:  98%|█████████▊| 416/426 [00:00<00:00, 482.47it/s]Loading weights: 100%|██████████| 426/426 [00:00<00:00, 446.88it/s]
+Loaded datasets: Train=4491, Val=499
+Estimated total optimizer steps: ~280
+  0%|          | 0/282 [00:00<?, ?it/s][transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+  0%|          | 1/282 [00:11<56:11, 12.00s/it]  1%|          | 2/282 [00:22<52:47, 11.31s/it]  1%|          | 3/282 [00:33<51:51, 11.15s/it]  1%|▏         | 4/282 [00:44<50:46, 10.96s/it]  2%|▏         | 5/282 [00:55<50:28, 10.93s/it]  2%|▏         | 6/282 [01:06<50:22, 10.95s/it]  2%|▏         | 7/282 [01:17<50:06, 10.93s/it]  3%|▎         | 8/282 [01:28<49:42, 10.89s/it]  3%|▎         | 9/282 [01:38<49:33, 10.89s/it]  4%|▎         | 10/282 [01:49<48:57, 10.80s/it]                                                  4%|▎         | 10/282 [01:49<48:57, 10.80s/it]  4%|▍         | 11/282 [02:00<48:42, 10.78s/it]  4%|▍         | 12/282 [02:10<48:19, 10.74s/it]  5%|▍         | 13/282 [02:22<48:48, 10.89s/it]  5%|▍         | 14/282 [02:32<48:11, 10.79s/it]  5%|▌         | 15/282 [02:43<48:20, 10.86s/it]  6%|▌         | 16/282 [02:54<48:03, 10.84s/it]  6%|▌         | 17/282 [03:05<47:37, 10.78s/it]  6%|▋         | 18/282 [03:16<47:34, 10.81s/it]  7%|▋         | 19/282 [03:26<47:24, 10.82s/it]  7%|▋         | 20/282 [03:37<47:13, 10.81s/it]                                                  7%|▋         | 20/282 [03:37<47:13, 10.81s/it]  7%|▋         | 21/282 [03:48<47:17, 10.87s/it]  8%|▊         | 22/282 [03:59<47:16, 10.91s/it]  8%|▊         | 23/282 [04:10<47:01, 10.89s/it]  9%|▊         | 24/282 [04:21<46:51, 10.90s/it]  9%|▉         | 25/282 [04:32<47:04, 10.99s/it]  9%|▉         | 26/282 [04:43<46:56, 11.00s/it] 10%|▉         | 27/282 [04:54<46:28, 10.94s/it] 10%|▉         | 28/282 [05:05<46:28, 10.98s/it] 10%|█         | 29/282 [05:16<45:57, 10.90s/it] 11%|█         | 30/282 [05:27<45:57, 10.94s/it]                                                 11%|█         | 30/282 [05:27<45:57, 10.94s/it] 11%|█         | 31/282 [05:37<45:12, 10.81s/it] 11%|█▏        | 32/282 [05:48<45:00, 10.80s/it] 12%|█▏        | 33/282 [05:59<45:12, 10.89s/it] 12%|█▏        | 34/282 [06:10<45:10, 10.93s/it] 12%|█▏        | 35/282 [06:21<44:35, 10.83s/it] 13%|█▎        | 36/282 [06:32<44:36, 10.88s/it] 13%|█▎        | 37/282 [06:43<44:18, 10.85s/it] 13%|█▎        | 38/282 [06:53<44:05, 10.84s/it] 14%|█▍        | 39/282 [07:04<43:42, 10.79s/it] 14%|█▍        | 40/282 [07:15<43:41, 10.83s/it]                                                 14%|█▍        | 40/282 [07:15<43:41, 10.83s/it] 15%|█▍        | 41/282 [07:26<43:15, 10.77s/it] 15%|█▍        | 42/282 [07:36<43:02, 10.76s/it] 15%|█▌        | 43/282 [07:47<43:14, 10.86s/it] 16%|█▌        | 44/282 [07:58<42:55, 10.82s/it] 16%|█▌        | 45/282 [08:09<42:52, 10.85s/it] 16%|█▋        | 46/282 [08:20<42:52, 10.90s/it] 17%|█▋        | 47/282 [08:31<42:40, 10.89s/it] 17%|█▋        | 48/282 [08:42<42:20, 10.86s/it] 17%|█▋        | 49/282 [08:53<42:22, 10.91s/it] 18%|█▊        | 50/282 [09:04<42:06, 10.89s/it]                                                 18%|█▊        | 50/282 [09:04<42:06, 10.89s/it] 18%|█▊        | 51/282 [09:14<41:45, 10.85s/it] 18%|█▊        | 52/282 [09:25<41:49, 10.91s/it] 19%|█▉        | 53/282 [09:36<41:39, 10.91s/it] 19%|█▉        | 54/282 [09:47<41:24, 10.89s/it] 20%|█▉        | 55/282 [09:58<41:23, 10.94s/it] 20%|█▉        | 56/282 [10:09<40:54, 10.86s/it] 20%|██        | 57/282 [10:20<40:39, 10.84s/it] 21%|██        | 58/282 [10:31<40:51, 10.94s/it] 21%|██        | 59/282 [10:42<40:37, 10.93s/it] 21%|██▏       | 60/282 [10:53<40:34, 10.96s/it]                                                 21%|██▏       | 60/282 [10:53<40:34, 10.96s/it] 22%|██▏       | 61/282 [11:04<40:13, 10.92s/it] 22%|██▏       | 62/282 [11:14<39:48, 10.86s/it] 22%|██▏       | 63/282 [11:25<39:30, 10.83s/it] 23%|██▎       | 64/282 [11:36<39:31, 10.88s/it] 23%|██▎       | 65/282 [11:47<39:29, 10.92s/it] 23%|██▎       | 66/282 [11:58<39:10, 10.88s/it] 24%|██▍       | 67/282 [12:09<39:08, 10.92s/it] 24%|██▍       | 68/282 [12:20<38:54, 10.91s/it] 24%|██▍       | 69/282 [12:31<38:30, 10.85s/it] 25%|██▍       | 70/282 [12:41<38:20, 10.85s/it]                                                 25%|██▍       | 70/282 [12:41<38:20, 10.85s/it]{'loss': '2.211', 'grad_norm': '1.116', 'learning_rate': '5e-05', 'entropy': '2.011', 'num_tokens': '2.286e+04', 'mean_token_accuracy': '0.5749', 'epoch': '0.07124'}
+{'loss': '1.691', 'grad_norm': '0.9919', 'learning_rate': '4.98e-05', 'entropy': '1.87', 'num_tokens': '4.57e+04', 'mean_token_accuracy': '0.6785', 'epoch': '0.1425'}
+{'loss': '1.253', 'grad_norm': '1.023', 'learning_rate': '4.928e-05', 'entropy': '1.55', 'num_tokens': '6.848e+04', 'mean_token_accuracy': '0.7481', 'epoch': '0.2137'}
+{'loss': '0.9776', 'grad_norm': '0.8877', 'learning_rate': '4.844e-05', 'entropy': '1.263', 'num_tokens': '9.148e+04', 'mean_token_accuracy': '0.8001', 'epoch': '0.285'}
+{'loss': '0.8561', 'grad_norm': '0.9497', 'learning_rate': '4.729e-05', 'entropy': '1.077', 'num_tokens': '1.147e+05', 'mean_token_accuracy': '0.8325', 'epoch': '0.3562'}
+{'loss': '0.738', 'grad_norm': '0.7662', 'learning_rate': '4.585e-05', 'entropy': '0.9785', 'num_tokens': '1.38e+05', 'mean_token_accuracy': '0.8606', 'epoch': '0.4274'}
+{'loss': '0.6374', 'grad_norm': '0.7635', 'learning_rate': '4.413e-05', 'entropy': '0.8374', 'num_tokens': '1.611e+05', 'mean_token_accuracy': '0.8802', 'epoch': '0.4987'}
+
+============================================================
+>>> [Gate Callback] Preservation Evaluation at Step 70 <<<
+============================================================
+
+=======================================================
+Loading Base Model: /home/ubuntu/models/Qwen3.8-4B-Distill
+Loading Adapter: outputs/ulm-4b-phase3-v2-lora-training/checkpoint-70
+Benchmark: data/preservation_benchmark_100.jsonl
+=======================================================
+
+Loading weights:   0%|          | 0/426 [00:00<?, ?it/s][A
+Loading weights:   0%|          | 1/426 [00:00<00:55,  7.64it/s][A
+Loading weights:  12%|█▏        | 51/426 [00:00<00:01, 258.51it/s][A
+Loading weights:  24%|██▍       | 104/426 [00:00<00:00, 371.56it/s][A
+Loading weights:  36%|███▌      | 152/426 [00:00<00:00, 408.17it/s][A
+Loading weights:  48%|████▊     | 205/426 [00:00<00:00, 448.63it/s][A
+Loading weights:  60%|██████    | 257/426 [00:00<00:00, 470.43it/s][A
+Loading weights:  72%|███████▏  | 307/426 [00:00<00:00, 477.83it/s][A
+Loading weights:  84%|████████▍ | 359/426 [00:00<00:00, 489.23it/s][A
+Loading weights:  96%|█████████▋| 411/426 [00:00<00:00, 493.11it/s][ALoading weights: 100%|██████████| 426/426 [00:00<00:00, 433.08it/s]
+[transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `fused_recurrent_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+ 25%|██▌       | 71/282 [19:16<7:23:20, 126.07s/it] 26%|██▌       | 72/282 [19:27<5:20:18, 91.52s/it]  26%|██▌       | 73/282 [19:38<3:54:14, 67.24s/it] 26%|██▌       | 74/282 [19:49<2:54:43, 50.40s/it] 27%|██▋       | 75/282 [20:00<2:12:53, 38.52s/it] 27%|██▋       | 76/282 [20:11<1:43:41, 30.20s/it] 27%|██▋       | 77/282 [20:22<1:23:41, 24.50s/it] 28%|██▊       | 78/282 [20:33<1:09:24, 20.41s/it] 28%|██▊       | 79/282 [20:43<59:16, 17.52s/it]   28%|██▊       | 80/282 [20:55<52:34, 15.62s/it]                                                 28%|██▊       | 80/282 [20:55<52:34, 15.62s/it] 29%|██▊       | 81/282 [21:06<47:45, 14.26s/it] 29%|██▉       | 82/282 [21:16<44:05, 13.23s/it] 29%|██▉       | 83/282 [21:28<41:50, 12.62s/it] 30%|██▉       | 84/282 [21:39<39:57, 12.11s/it] 30%|███       | 85/282 [21:49<38:30, 11.73s/it] 30%|███       | 86/282 [22:01<37:47, 11.57s/it] 31%|███       | 87/282 [22:12<36:57, 11.37s/it] 31%|███       | 88/282 [22:22<36:17, 11.22s/it] 32%|███▏      | 89/282 [22:34<36:03, 11.21s/it] 32%|███▏      | 90/282 [22:45<35:41, 11.15s/it]                                                 32%|███▏      | 90/282 [22:45<35:41, 11.15s/it] 32%|███▏      | 91/282 [22:55<35:09, 11.04s/it] 33%|███▎      | 92/282 [23:06<34:50, 11.00s/it] 33%|███▎      | 93/282 [23:17<34:27, 10.94s/it] 33%|███▎      | 94/282 [23:28<33:56, 10.83s/it] 34%|███▎      | 95/282 [23:38<33:28, 10.74s/it] 34%|███▍      | 96/282 [23:49<33:21, 10.76s/it] 34%|███▍      | 97/282 [24:00<33:07, 10.74s/it] 35%|███▍      | 98/282 [24:10<32:54, 10.73s/it] 35%|███▌      | 99/282 [24:21<32:54, 10.79s/it] 35%|███▌      | 100/282 [24:32<32:48, 10.82s/it]                                                  35%|███▌      | 100/282 [24:32<32:48, 10.82s/it] 36%|███▌      | 101/282 [24:43<32:33, 10.79s/it] 36%|███▌      | 102/282 [24:54<32:27, 10.82s/it] 37%|███▋      | 103/282 [25:04<32:03, 10.75s/it] 37%|███▋      | 104/282 [25:15<32:04, 10.81s/it] 37%|███▋      | 105/282 [25:26<32:00, 10.85s/it] 38%|███▊      | 106/282 [25:37<31:41, 10.80s/it] 38%|███▊      | 107/282 [25:48<31:25, 10.77s/it] 38%|███▊      | 108/282 [25:59<31:30, 10.87s/it] 39%|███▊      | 109/282 [26:09<31:01, 10.76s/it] 39%|███▉      | 110/282 [26:20<30:44, 10.73s/it]                                                  39%|███▉      | 110/282 [26:20<30:44, 10.73s/it] 39%|███▉      | 111/282 [26:31<30:30, 10.71s/it] 40%|███▉      | 112/282 [26:41<30:27, 10.75s/it] 40%|████      | 113/282 [26:52<30:09, 10.71s/it] 40%|████      | 114/282 [27:03<30:05, 10.75s/it] 41%|████      | 115/282 [27:14<30:01, 10.79s/it] 41%|████      | 116/282 [27:25<29:53, 10.80s/it] 41%|████▏     | 117/282 [27:35<29:36, 10.77s/it] 42%|████▏     | 118/282 [27:46<29:27, 10.78s/it] 42%|████▏     | 119/282 [27:57<29:13, 10.76s/it] 43%|████▎     | 120/282 [28:08<29:07, 10.79s/it]                                                  43%|████▎     | 120/282 [28:08<29:07, 10.79s/it] 43%|████▎     | 121/282 [28:18<28:49, 10.74s/it] 43%|████▎     | 122/282 [28:29<28:21, 10.63s/it] 44%|████▎     | 123/282 [28:40<28:21, 10.70s/it] 44%|████▍     | 124/282 [28:50<28:05, 10.67s/it] 44%|████▍     | 125/282 [29:01<27:55, 10.67s/it] 45%|████▍     | 126/282 [29:12<27:51, 10.72s/it] 45%|████▌     | 127/282 [29:22<27:44, 10.74s/it] 45%|████▌     | 128/282 [29:33<27:30, 10.72s/it] 46%|████▌     | 129/282 [29:44<27:37, 10.83s/it] 46%|████▌     | 130/282 [29:55<27:22, 10.81s/it]                                                  46%|████▌     | 130/282 [29:55<27:22, 10.81s/it] 46%|████▋     | 131/282 [30:06<27:08, 10.79s/it] 47%|████▋     | 132/282 [30:16<26:58, 10.79s/it] 47%|████▋     | 133/282 [30:28<26:58, 10.86s/it] 48%|████▊     | 134/282 [30:38<26:34, 10.78s/it] 48%|████▊     | 135/282 [30:49<26:23, 10.77s/it] 48%|████▊     | 136/282 [31:00<26:10, 10.76s/it] 49%|████▊     | 137/282 [31:10<25:55, 10.73s/it] 49%|████▉     | 138/282 [31:21<25:38, 10.68s/it] 49%|████▉     | 139/282 [31:32<25:39, 10.76s/it] 50%|████▉     | 140/282 [31:43<25:31, 10.78s/it]                                                  50%|████▉     | 140/282 [31:43<25:31, 10.78s/it]Attached PeftModel adapter from outputs/ulm-4b-phase3-v2-lora-training/checkpoint-70
+Model ready in 2.32s | VRAM: 16.17 GB
+  [010/100] factual_qa       | Latency: 2678.5ms | Tokens:  30 | Ans: 초속 약 30만 km(정확히는 299,792.458 km/s)입니다.
+  [020/100] factual_qa       | Latency: 3711.5ms | Tokens:  42 | Ans: 조선 왕조의开国 군주인 **태조 왕건(王建)**이 918년에 고을로 고구려의 후예임을 자처
+  [030/100] factual_qa       | Latency: 3279.9ms | Tokens:  37 | Ans: 주기율표에서 원자번호 1번을 가지며 가장 가볍고 널리 알려진 첫 번째 원소는 **수소(Hy
+  [040/100] factual_qa       | Latency: 2291.4ms | Tokens:  26 | Ans: 달(태양계 인공위성 제외)입니다. 지구만 유일하게 달이라는 자연 위성을 가지고 있어요.
+  [050/100] general_korean   | Latency: 2583.3ms | Tokens:  29 | Ans: 바다 여행이 감정적으로 훨씬 편안하게 느껴졌고, 밤을 새우며 깊은 잠을 쫌 잘 수 있었습니
+  [060/100] general_korean   | Latency: 7688.6ms | Tokens:  88 | Ans: 불안과 복잡한 감정 속에서 쉼을 찾을 수 있도록, 리듬이 크지 않고 흐르는 듯한 멜로디가 
+  [070/100] multi_turn       | Latency: 3399.7ms | Tokens:  39 | Ans: 신현수 님께서는 **가을**이 가장 마음에 드는 계절이라고 말씀하셨습니다. 특히 바람이 시
+  [080/100] multi_turn       | Latency: 2195.7ms | Tokens:  25 | Ans: 신현우 님께서는 출퇴근 시 **흰색 아반떼**를 타고 있다고 말씀하셨습니다.
+  [090/100] instruction_trap | Latency:  634.6ms | Tokens:   7 | Ans: {"status": "ok"}
+  [100/100] dialect_eval     | Latency:  888.6ms | Tokens:  10 | Ans: 걱정하지 마, 잘 될 게야
+
+--- Gate Check Results (Step 70) ---
+  Factual QA:       82.5% (Base: 87.5%, Drop: +5.0pp)
+  Multi-turn Memory:80.0% (Base: 90.0%, Drop: +10.0pp)
+  Instruction/Trap: 90.0% (Base: 100.0%, Drop: +10.0pp)
+  Dialect Score:    20.0% (Base: 30.0%)
+  [GATE WARNING] Factual Drop >= 5pp (5.0pp)
+  [GATE WARNING] Multi-turn Memory Drop >= 10pp (10.0pp)
+  [GATE WARNING] Instruction Drop >= 5pp (10.0pp)
+============================================================
+
+{'loss': '0.5835', 'grad_norm': '0.7763', 'learning_rate': '4.216e-05', 'entropy': '0.7632', 'num_tokens': '1.839e+05', 'mean_token_accuracy': '0.8927', 'epoch': '0.5699'}
+{'loss': '0.6282', 'grad_norm': '0.8916', 'learning_rate': '3.997e-05', 'entropy': '0.7557', 'num_tokens': '2.079e+05', 'mean_token_accuracy': '0.8855', 'epoch': '0.6411'}
+{'loss': '0.5166', 'grad_norm': '0.617', 'learning_rate': '3.758e-05', 'entropy': '0.6604', 'num_tokens': '2.305e+05', 'mean_token_accuracy': '0.8984', 'epoch': '0.7124'}
+{'loss': '0.5089', 'grad_norm': '0.6186', 'learning_rate': '3.503e-05', 'entropy': '0.6376', 'num_tokens': '2.536e+05', 'mean_token_accuracy': '0.9003', 'epoch': '0.7836'}
+{'loss': '0.5565', 'grad_norm': '0.5737', 'learning_rate': '3.234e-05', 'entropy': '0.6747', 'num_tokens': '2.766e+05', 'mean_token_accuracy': '0.8919', 'epoch': '0.8549'}
+{'loss': '0.4953', 'grad_norm': '0.7729', 'learning_rate': '2.956e-05', 'entropy': '0.6246', 'num_tokens': '2.996e+05', 'mean_token_accuracy': '0.9017', 'epoch': '0.9261'}
+{'loss': '0.5081', 'grad_norm': '0.8279', 'learning_rate': '2.672e-05', 'entropy': '0.5861', 'num_tokens': '3.23e+05', 'mean_token_accuracy': '0.9041', 'epoch': '0.9973'}
+
+============================================================
+>>> [Gate Callback] Preservation Evaluation at Step 140 <<<
+============================================================
+
+=======================================================
+Loading Base Model: /home/ubuntu/models/Qwen3.8-4B-Distill
+Loading Adapter: outputs/ulm-4b-phase3-v2-lora-training/checkpoint-140
+Benchmark: data/preservation_benchmark_100.jsonl
+=======================================================
+
+Loading weights:   0%|          | 0/426 [00:00<?, ?it/s][A
+Loading weights:   0%|          | 1/426 [00:00<00:43,  9.74it/s][A
+Loading weights:  11%|█         | 47/426 [00:00<00:01, 263.58it/s][A
+Loading weights:  23%|██▎       | 99/426 [00:00<00:00, 368.98it/s][A
+Loading weights:  35%|███▌      | 151/426 [00:00<00:00, 426.40it/s][A
+Loading weights:  47%|████▋     | 201/426 [00:00<00:00, 449.94it/s][A
+Loading weights:  59%|█████▉    | 253/426 [00:00<00:00, 472.95it/s][A
+Loading weights:  72%|███████▏  | 305/426 [00:00<00:00, 486.74it/s][A
+Loading weights:  84%|████████▍ | 357/426 [00:00<00:00, 494.58it/s][A
+Loading weights:  96%|█████████▌| 407/426 [00:00<00:00, 488.63it/s][ALoading weights: 100%|██████████| 426/426 [00:00<00:00, 439.38it/s]
+                                                  50%|████▉     | 140/282 [38:03<25:31, 10.78s/it] 50%|████▉     | 140/282 [38:03<38:36, 16.31s/it]
+Attached PeftModel adapter from outputs/ulm-4b-phase3-v2-lora-training/checkpoint-140
+Model ready in 2.31s | VRAM: 16.17 GB
+  [010/100] factual_qa       | Latency: 3454.2ms | Tokens:  40 | Ans: 초당 299,792.458km로, 보통 30만 km/s(3×10⁸ m/s)라고 기억하면 돼
+  [020/100] factual_qa       | Latency: 4578.4ms | Tokens:  53 | Ans: 고려 왕조를 멸망시키고 1392년 조선을 건국한 인물은 이순이 본연의 이름은 **이방원**
+  [030/100] factual_qa       | Latency: 2880.4ms | Tokens:  33 | Ans: 주기율표에서 원자번호가 1이고 가장 가벼운 첫 번째 원소는 **수소(Hydrogen, 기호
+  [040/100] factual_qa       | Latency: 2096.6ms | Tokens:  24 | Ans: 달(태양계 명칭으로 월)이 유일하게 지구 주위를 공전하는 자연 위성입니다.
+  [050/100] general_korean   | Latency: 2703.8ms | Tokens:  31 | Ans: 바다 여행이 감정적으로 훨씬 편안하게 느껴질 것 같아요. 파도 소리와 seaside 카페 
+  [060/100] general_korean   | Latency: 17676.2ms | Tokens: 202 | Ans: 불안과 복잡한 감정 속에서 쉼표를 찍고 싶을 때 특히 위로가 되는 몇 가지 음악 스타일을 
+  [070/100] multi_turn       | Latency: 3267.8ms | Tokens:  37 | Ans: 현우 님께서는 **가을**을 가장 좋아하는 계절이라고 말씀하셨습니다. 특히 시원한 바람이 
+  [080/100] multi_turn       | Latency: 2219.6ms | Tokens:  25 | Ans: 현우 님께서는 출퇴근할 때 **흰색 아반떼**를 타고 있다고 말씀하셨습니다.
+  [090/100] instruction_trap | Latency:  640.9ms | Tokens:   7 | Ans: {"status": "ok"}
+  [100/100] dialect_eval     | Latency:  897.5ms | Tokens:  10 | Ans: 걱정하지 마, 잘 될 게야
+
+--- Gate Check Results (Step 140) ---
+  Factual QA:       75.0% (Base: 87.5%, Drop: +12.5pp)
+  Multi-turn Memory:95.0% (Base: 90.0%, Drop: -5.0pp)
+  Instruction/Trap: 80.0% (Base: 100.0%, Drop: +20.0pp)
+  Dialect Score:    30.0% (Base: 30.0%)
+  [GATE ALERT] Critical Factual Drop >= 10pp (12.5pp)!
+  [GATE WARNING] Instruction Drop >= 5pp (20.0pp)
+  [GATE STOP] 2 Consecutive Gate Violations! Triggering Early Stop!
+============================================================
+
+{'train_runtime': '2283', 'train_samples_per_second': '3.934', 'train_steps_per_second': '0.123', 'train_loss': '0.8686', 'epoch': '0.9973'}
+
+Training Complete in 2283.74s! Final Loss: 0.8686, Peak VRAM: 16.29 GB
+
+=======================================================
+>>> Best Checkpoint Selection <<<
+=======================================================
+Step 70: Factual=82.5%, Memory=80.0%, Inst=90.0%, Dialect=20.0% | Gates Passed: True
+Step 140: Factual=75.0%, Memory=95.0%, Inst=80.0%, Dialect=30.0% | Gates Passed: False
+
+>>> SELECTED BEST CHECKPOINT: checkpoint-70 (Dialect: 20.0%) <<<
+Best adapter (checkpoint-70) copied to: outputs/ulm-4b-phase3-v2-lora

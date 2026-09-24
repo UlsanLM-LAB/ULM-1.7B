@@ -1,0 +1,39 @@
+{
+  "model_path": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+  "adapter_path": null,
+  "total_prompts": 100,
+  "load_time_s": 2.19,
+  "vram_gb": 7.83,
+  "avg_latency_ms": 7064.79,
+  "avg_tokens": 145.8,
+  "empty_final_count": 0,
+  "token_limit_count": 27,
+  "cjk_leakage_count": 15,
+  "repetition_count": 3,
+  "malformed_unicode_count": 1,
+  "factual_qa": {
+    "total": 40,
+    "hits": 35,
+    "accuracy_pct": 87.5
+  },
+  "multi_turn": {
+    "total": 20,
+    "hits": 18,
+    "accuracy_pct": 90.0
+  },
+  "instruction_trap": {
+    "total": 10,
+    "hits": 10,
+    "accuracy_pct": 100.0
+  },
+  "dialect_eval": {
+    "total": 10,
+    "hits": 3,
+    "accuracy_pct": 30.0
+  },
+  "general_korean": {
+    "total": 20,
+    "avg_latency_ms": 11866.77,
+    "avg_tokens": 245.1
+  }
+}

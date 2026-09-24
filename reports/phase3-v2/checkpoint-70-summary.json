@@ -1,0 +1,40 @@
+{
+  "model_path": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+  "adapter_path": "outputs/ulm-4b-phase3-v2-lora-training/checkpoint-70",
+  "total_prompts": 100,
+  "load_time_s": 2.32,
+  "vram_gb": 16.17,
+  "avg_latency_ms": 3804.77,
+  "avg_tokens": 43.2,
+  "empty_final_count": 0,
+  "token_limit_count": 2,
+  "cjk_leakage_count": 14,
+  "repetition_count": 1,
+  "malformed_unicode_count": 0,
+  "factual_qa": {
+    "total": 40,
+    "hits": 33,
+    "accuracy_pct": 82.5
+  },
+  "multi_turn": {
+    "total": 20,
+    "hits": 16,
+    "accuracy_pct": 80.0
+  },
+  "instruction_trap": {
+    "total": 10,
+    "hits": 9,
+    "accuracy_pct": 90.0
+  },
+  "dialect_eval": {
+    "total": 10,
+    "hits": 2,
+    "accuracy_pct": 20.0
+  },
+  "general_korean": {
+    "total": 20,
+    "avg_latency_ms": 5788.05,
+    "avg_tokens": 65.8
+  },
+  "global_step": 70
+}

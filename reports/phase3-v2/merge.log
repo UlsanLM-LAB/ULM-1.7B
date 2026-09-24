@@ -1,0 +1,52 @@
+
+=======================================================
+>>> 1. Loading Base Model + Adapter for Parity Pre-Run <<<
+Base: /home/ubuntu/models/Qwen3.8-4B-Distill
+Adapter: /home/ubuntu/ULM-1.7B/outputs/ulm-4b-phase3-v2-lora
+=======================================================
+Loading weights:   0%|          | 0/426 [00:00<?, ?it/s]Loading weights:   0%|          | 1/426 [00:00<00:45,  9.25it/s]Loading weights:  12%|█▏        | 51/426 [00:00<00:01, 288.14it/s]Loading weights:  23%|██▎       | 100/426 [00:00<00:00, 373.70it/s]Loading weights:  36%|███▌      | 152/426 [00:00<00:00, 428.98it/s]Loading weights:  48%|████▊     | 204/426 [00:00<00:00, 460.73it/s]Loading weights:  60%|█████▉    | 254/426 [00:00<00:00, 472.84it/s]Loading weights:  72%|███████▏  | 306/426 [00:00<00:00, 480.42it/s]Loading weights:  84%|████████▍ | 359/426 [00:00<00:00, 494.44it/s]Loading weights:  96%|█████████▋| 411/426 [00:00<00:00, 493.89it/s]Loading weights: 100%|██████████| 426/426 [00:00<00:00, 446.17it/s]
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+[transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `fused_recurrent_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+Collecting adapter model outputs across 20 prompts (greedy)...
+
+=======================================================
+>>> 2. Merging LoRA into Base Model <<<
+=======================================================
+Merge completed! Saving merged model weights...
+Writing model shards:   0%|          | 0/1 [00:00<?, ?it/s]Writing model shards: 100%|██████████| 1/1 [00:41<00:00, 41.65s/it]Writing model shards: 100%|██████████| 1/1 [00:41<00:00, 41.65s/it]
+Saved merged model to /home/ubuntu/ULM-1.7B/outputs/ulm-4b-phase3-v2-best-merged
+
+=======================================================
+>>> 3. Reloading Merged Standalone Model for Verification <<<
+=======================================================
+Loading weights:   0%|          | 0/426 [00:00<?, ?it/s]Loading weights:   0%|          | 1/426 [00:11<1:20:56, 11.43s/it]Loading weights:  11%|█         | 47/426 [00:11<01:05,  5.77it/s] Loading weights:  23%|██▎       | 99/426 [00:11<00:22, 14.67it/s]Loading weights:  35%|███▌      | 151/426 [00:11<00:10, 26.87it/s]Loading weights:  47%|████▋     | 202/426 [00:11<00:05, 42.93it/s]Loading weights:  59%|█████▉    | 253/426 [00:11<00:02, 64.10it/s]Loading weights:  72%|███████▏  | 305/426 [00:12<00:01, 91.81it/s]Loading weights:  84%|████████▍ | 357/426 [00:12<00:00, 125.93it/s]Loading weights:  96%|█████████▌| 408/426 [00:12<00:00, 164.46it/s]Loading weights: 100%|██████████| 426/426 [00:12<00:00, 34.67it/s] 
+Comparing standalone merged model outputs against adapter outputs...
+  [01/20] MATCH | Prompt: 대한민국의 수도는 어디야?
+  [02/20] MATCH | Prompt: 태양계에서 가장 큰 행성은 뭐야?
+  [03/20] MISMATCH (sim=0.75) | Prompt: 한글을 창제한 조선의 국왕은 누구야?
+  [04/20] MATCH | Prompt: 인류가 최초로 달에 착륙한 연도는 몇 년도야?
+  [05/20] MATCH | Prompt: 원소 기호 O는 무슨 원소야?
+  [06/20] MATCH | Prompt: 세계에서 가장 면적이 넓은 국가는 어디야?
+  [07/20] MISMATCH (sim=0.64) | Prompt: 지구에서 가장 높은 산은 뭐야?
+  [08/20] MATCH | Prompt: 프랑스의 수도는 어디야?
+  [09/20] MISMATCH (sim=0.57) | Prompt: 물 분자의 화학식은 뭐야?
+  [10/20] MATCH | Prompt: 빛의 진공 속 속도는 초당 약 몇 km야?
+  [11/20] MATCH | Prompt: 내 이름이 뭐라고 했지?
+  [12/20] MATCH | Prompt: 내가 어떤 과일을 더 좋아한다고 했지?
+  [13/20] MATCH | Prompt: 내가 언제 어디로 출장 간다고 했어?
+  [14/20] MATCH | Prompt: 내 취미가 뭐라고 했는지 기억나?
+  [15/20] MATCH | Prompt: 우리 강아지 이름이 뭐였지?
+  [16/20] MATCH | Prompt: 경상도/울산 방언에서 '단디 해라'가 표준어로 무슨 뜻
+  [17/20] MATCH | Prompt: 경상도 방언 '와이리 덥노?'를 표준어로 바꾸면 어떤 
+  [18/20] MATCH | Prompt: 표준어 문장 '오늘 날씨가 정말 좋다'를 자연스러운 울
+  [19/20] MISMATCH (sim=0.91) | Prompt: 표준어 문장 '이 음식 정말 맛있다'를 자연스러운 울산
+  [20/20] MATCH | Prompt: 표준어 질문 '너 지금 뭐 하고 있어?'를 자연스러운 
+
+=======================================================
+Merge Parity Verification Result: 16/20 (80.0%)
+Verdict: FAIL
+Saved: reports/phase3-v2/merge_parity.json
+=======================================================
+

@@ -1,0 +1,39 @@
+{
+  "model_path": "/home/ubuntu/ULM-1.7B/outputs/ulm-4b-phase3-v2-best-merged",
+  "adapter_path": null,
+  "total_prompts": 150,
+  "load_time_s": 3.01,
+  "vram_gb": 7.83,
+  "avg_latency_ms": 1905.83,
+  "avg_tokens": 39.2,
+  "empty_final_count": 0,
+  "token_limit_count": 2,
+  "cjk_leakage_count": 20,
+  "repetition_count": 1,
+  "malformed_unicode_count": 0,
+  "factual_qa": {
+    "total": 50,
+    "hits": 39,
+    "accuracy_pct": 78.0
+  },
+  "multi_turn": {
+    "total": 25,
+    "hits": 21,
+    "accuracy_pct": 84.0
+  },
+  "instruction_trap": {
+    "total": 20,
+    "hits": 19,
+    "accuracy_pct": 95.0
+  },
+  "dialect_eval": {
+    "total": 25,
+    "hits": 5,
+    "accuracy_pct": 20.0
+  },
+  "general_korean": {
+    "total": 30,
+    "avg_latency_ms": 3097.7,
+    "avg_tokens": 64.3
+  }
+}

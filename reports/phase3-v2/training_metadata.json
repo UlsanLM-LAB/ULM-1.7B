@@ -1,0 +1,32 @@
+{
+  "base_model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+  "train_samples": 4491,
+  "validation_samples": 499,
+  "total_steps": 140,
+  "runtime_s": 2283.74,
+  "peak_vram_gb": 16.29,
+  "best_checkpoint": "checkpoint-70",
+  "best_adapter_path": "outputs/ulm-4b-phase3-v2-lora",
+  "selection_history": [
+    {
+      "step": 70,
+      "factual": 82.5,
+      "memory": 80.0,
+      "instruction": 90.0,
+      "dialect": 20.0,
+      "passed_preservation_gates": true
+    },
+    {
+      "step": 140,
+      "factual": 75.0,
+      "memory": 95.0,
+      "instruction": 80.0,
+      "dialect": 30.0,
+      "passed_preservation_gates": false
+    }
+  ],
+  "effective_batch_size": 32,
+  "learning_rate": 5e-05,
+  "lora_r": 16,
+  "lora_alpha": 32
+}

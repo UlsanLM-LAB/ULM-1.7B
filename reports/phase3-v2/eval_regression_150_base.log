@@ -1,0 +1,38 @@
+
+=======================================================
+Loading Base Model: /home/ubuntu/models/Qwen3.8-4B-Distill
+Benchmark: data/regression_benchmark_150.jsonl
+=======================================================
+Loading weights:   0%|          | 0/426 [00:00<?, ?it/s]Loading weights:   1%|          | 5/426 [00:00<00:08, 49.97it/s]Loading weights:  12%|█▏        | 53/426 [00:00<00:01, 296.81it/s]Loading weights:  24%|██▍       | 104/426 [00:00<00:00, 391.66it/s]Loading weights:  36%|███▌      | 152/426 [00:00<00:00, 422.91it/s]Loading weights:  48%|████▊     | 206/426 [00:00<00:00, 456.72it/s]Loading weights:  61%|██████    | 258/426 [00:00<00:00, 469.14it/s]Loading weights:  73%|███████▎  | 311/426 [00:00<00:00, 477.72it/s]Loading weights:  86%|████████▌ | 365/426 [00:00<00:00, 489.04it/s]Loading weights:  98%|█████████▊| 417/426 [00:00<00:00, 498.37it/s]Loading weights: 100%|██████████| 426/426 [00:00<00:00, 451.66it/s]
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+[transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `fused_recurrent_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+Model ready in 2.11s | VRAM: 7.83 GB
+  [010/150] factual_qa       | Latency: 5827.6ms | Tokens: 119 | Ans: 빛이 진공에서 이동하는 속도는 **초당 약 299,792.458 km**입니다.  일반적인
+  [020/150] factual_qa       | Latency: 8820.9ms | Tokens: 179 | Ans: 고려를 멸망시키고 조선을 건국한 인물은 **왕건**입니다.  1123 년, 고려의 왕족 출
+  [030/150] factual_qa       | Latency: 6784.1ms | Tokens: 138 | Ans: 주기율표에서 가장 가볍고, 동시에 1 번에 해당하는 첫 번째 원소는 **수소 (H)**입니
+  [040/150] factual_qa       | Latency: 4146.8ms | Tokens:  84 | Ans: 지구 주위를 공전하는 유일한 자연 위성은 **달 (Moon)** 입니다.  달은 지구와 태
+  [050/150] general_korean   | Latency: 12591.0ms | Tokens: 256 | Ans: 결정하기 가장 좋은 방법은 **어떤 '힐링'을 원하시는지**를 명확히 하는 것입니다. 바다
+  [060/150] general_korean   | Latency: 12570.6ms | Tokens: 256 | Ans: 마음이 복잡하고 불안할 때, 마음을 가라앉히고 내면의 소리에 귀 기울이게 할 수 있는 음악
+  [070/150] multi_turn       | Latency: 4409.9ms | Tokens:  90 | Ans: 네, 맞습니다! **가을**을 제일 좋아하신다고 말씀하셨어요. 🍂🌾  사실, 제가 기억하는
+  [080/150] multi_turn       | Latency: 4056.5ms | Tokens:  82 | Ans: **아반떼 (Avante)**입니다.  흰색 아반떼를 타고 다니신다고 하셨네요! 아반떼는 
+  [090/150] instruction_trap | Latency:  366.2ms | Tokens:   7 | Ans: {"status": "ok"}
+  [100/150] dialect_eval     | Latency: 12555.5ms | Tokens: 256 | Ans: 울산과 경상도 방언은 지역마다 약간의 차이가 있지만, **'잘될 거야'**라는 의미는 두 
+  [110/150] factual_qa       | Latency: 7885.0ms | Tokens: 160 | Ans: 공기 중에서의 소리의 속도는 온도에 따라 조금씩 달라지지만, 일반적으로 **초당 약 340
+  [120/150] general_korean   | Latency: 12575.4ms | Tokens: 256 | Ans: 비 오는 날 집 안이 눅눅해지거나 악취가 나는 것은 주로 **습도가 높아 미생물과 곰팡이가
+  [130/150] instruction_trap | Latency:  121.1ms | Tokens:   2 | Ans: 네
+  [140/150] dialect_eval     | Latency: 11073.6ms | Tokens: 226 | Ans: 경상도의 대표적인 지역말인 **'머라카는지'**는 표준어로 **'무얼까?'** 또는 **'
+  [150/150] dialect_eval     | Latency: 12628.9ms | Tokens: 256 | Ans: 울산 지역에서 자연스럽게 전달할 수 있는 격려 표현은 다음과 같습니다.  **"아니요, 다
+
+=======================================================
+Evaluation Complete!
+  Factual QA:       43/50 (86.0%)
+  Multi-turn Memory:23/25 (92.0%)
+  Instruction/Trap: 20/20 (100.0%)
+  Dialect Eval:     5/25 (20.0%)
+  Avg Latency:      7690.31 ms | Avg Tokens: 156.4
+  Empty Final:      0 | Repetition: 7
+Saved: reports/phase3-v2/regression-150-base.jsonl & reports/phase3-v2/regression-150-base-summary.json
+=======================================================
+

@@ -1,0 +1,16 @@
+{
+  "total_samples": 4990,
+  "train_samples": 4491,
+  "validation_samples": 499,
+  "category_counts": {
+    "dialect_sft": 2500,
+    "factual_preservation": 1750,
+    "instruction_preservation": 740
+  },
+  "ratios": {
+    "dialect_sft_pct": 50.1,
+    "factual_preservation_pct": 35.1,
+    "instruction_preservation_pct": 14.8
+  },
+  "zero_benchmark_leakage": true
+}

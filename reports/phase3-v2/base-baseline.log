@@ -1,0 +1,33 @@
+
+=======================================================
+Loading Base Model: /home/ubuntu/models/Qwen3.8-4B-Distill
+Benchmark: data/preservation_benchmark_100.jsonl
+=======================================================
+Loading weights:   0%|          | 0/426 [00:00<?, ?it/s]Loading weights:   0%|          | 1/426 [00:00<00:44,  9.61it/s]Loading weights:  12%|█▏        | 51/426 [00:00<00:01, 290.15it/s]Loading weights:  23%|██▎       | 100/426 [00:00<00:00, 374.45it/s]Loading weights:  35%|███▌      | 151/426 [00:00<00:00, 424.25it/s]Loading weights:  48%|████▊     | 204/426 [00:00<00:00, 459.58it/s]Loading weights:  60%|█████▉    | 254/426 [00:00<00:00, 468.83it/s]Loading weights:  72%|███████▏  | 306/426 [00:00<00:00, 485.25it/s]Loading weights:  84%|████████▍ | 358/426 [00:00<00:00, 494.49it/s]Loading weights:  96%|█████████▌| 408/426 [00:00<00:00, 487.71it/s]Loading weights: 100%|██████████| 426/426 [00:00<00:00, 441.16it/s]
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+[transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `fused_recurrent_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+Model ready in 2.19s | VRAM: 7.83 GB
+  [010/100] factual_qa       | Latency: 5729.5ms | Tokens: 119 | Ans: 빛이 진공에서 이동하는 속도는 **초당 약 299,792.458 km**입니다.  일반적인
+  [020/100] factual_qa       | Latency: 8620.7ms | Tokens: 179 | Ans: 고려를 멸망시키고 조선을 건국한 인물은 **왕건**입니다.  1123 년, 고려의 왕족 출
+  [030/100] factual_qa       | Latency: 6599.1ms | Tokens: 138 | Ans: 주기율표에서 가장 가볍고, 동시에 1 번에 해당하는 첫 번째 원소는 **수소 (H)**입니
+  [040/100] factual_qa       | Latency: 4027.1ms | Tokens:  84 | Ans: 지구 주위를 공전하는 유일한 자연 위성은 **달 (Moon)** 입니다.  달은 지구와 태
+  [050/100] general_korean   | Latency: 12312.0ms | Tokens: 256 | Ans: 결정하기 가장 좋은 방법은 **어떤 '힐링'을 원하시는지**를 명확히 하는 것입니다. 바다
+  [060/100] general_korean   | Latency: 12320.3ms | Tokens: 256 | Ans: 마음이 복잡하고 불안할 때, 마음을 가라앉히고 내면의 소리에 귀 기울이게 할 수 있는 음악
+  [070/100] multi_turn       | Latency: 4305.6ms | Tokens:  90 | Ans: 네, 맞습니다! **가을**을 제일 좋아하신다고 말씀하셨어요. 🍂🌾  사실, 제가 기억하는
+  [080/100] multi_turn       | Latency: 4004.0ms | Tokens:  82 | Ans: **아반떼 (Avante)**입니다.  흰색 아반떼를 타고 다니신다고 하셨네요! 아반떼는 
+  [090/100] instruction_trap | Latency:  366.2ms | Tokens:   7 | Ans: {"status": "ok"}
+  [100/100] dialect_eval     | Latency: 12523.4ms | Tokens: 256 | Ans: 울산과 경상도 방언은 지역마다 약간의 차이가 있지만, **'잘될 거야'**라는 의미는 두 
+
+=======================================================
+Evaluation Complete!
+  Factual QA:       35/40 (87.5%)
+  Multi-turn Memory:18/20 (90.0%)
+  Instruction/Trap: 10/10 (100.0%)
+  Dialect Eval:     3/10 (30.0%)
+  Avg Latency:      7064.79 ms | Avg Tokens: 145.8
+  Empty Final:      0 | Repetition: 3
+Saved: reports/phase3-v2/base-baseline.jsonl & reports/phase3-v2/base-baseline-summary.json
+=======================================================
+
