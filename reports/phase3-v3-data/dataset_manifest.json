@@ -1,0 +1,82 @@
+{
+  "dataset_name": "ULM-4B Phase 3 v3 Natural Ulsan Dialect Dataset",
+  "created_at": "2026-09-24",
+  "total_samples": 10000,
+  "split_counts": {
+    "train": 8997,
+    "validation": 500,
+    "test": 503
+  },
+  "speaker_statistics": {
+    "total_unique_speakers": 1491,
+    "train_speakers": 1153,
+    "val_speakers": 157,
+    "test_speakers": 181,
+    "speaker_leakage": 0
+  },
+  "category_distribution": {
+    "natural_conversation": 5200,
+    "situational_roleplay": 1300,
+    "dialect_interpretation": 1500,
+    "dialect_transformation": 2000
+  },
+  "tier_distribution": {
+    "tier1": 9864,
+    "tier3": 56,
+    "tier2": 80
+  },
+  "turn_distribution": {
+    "2": 8258,
+    "4": 1742
+  },
+  "token_and_length_stats": {
+    "min_chars": 3,
+    "max_chars": 400,
+    "mean_chars": 65.1
+  },
+  "linguistic_profile": {
+    "top_sentence_endings": {
+      "데이": 662,
+      "제": 519,
+      "나": 431,
+      "노": 326,
+      "기라": 87,
+      "예": 15,
+      "맞제": 2,
+      "맞나": 1,
+      "재": 1,
+      "거든예": 1
+    },
+    "top_dialect_vocab": {
+      "와": 933,
+      "쫌": 701,
+      "태화강": 581,
+      "단디": 396,
+      "밀면": 306,
+      "대왕암": 265,
+      "간절곶": 264,
+      "억수로": 248,
+      "돼지국밥": 154,
+      "인제": 144,
+      "맞나": 136,
+      "천지": 134,
+      "맞제": 82,
+      "마이": 49,
+      "가꼬": 15,
+      "해가꼬": 5,
+      "하모": 5,
+      "방어진": 4,
+      "인쟈": 2,
+      "천지빼까리": 2,
+      "우예": 2,
+      "장생포": 1,
+      "쫀드기": 1,
+      "우찌": 1,
+      "어데": 1
+    }
+  },
+  "benchmark_decontamination": {
+    "preservation_benchmark_100_leakage": 0,
+    "regression_benchmark_150_leakage": 0
+  }
+}

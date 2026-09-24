@@ -1,0 +1,86 @@
+[
+  {
+    "name": "ULM-LIVE Session Labels",
+    "path": "/home/ubuntu/ULM-LIVE/data/labels/*.json",
+    "files": 176,
+    "samples": 48885,
+    "total_speakers": 352,
+    "ulsan_speakers": 289,
+    "gyeongsang_speakers": 63,
+    "structure": "멀티턴 대화 구조 (176 세션, 발화 타임스탬프 및 화자 턴 순서 완전 보존)",
+    "transcription_quality": "방언/표준어 전사 병기 + 어절 단위(eojeolList) 방언 표기",
+    "audio_presence": "일부 세션 보유 (/home/ubuntu/ULM-LIVE/data/ulsan-full/audio)"
+  },
+  {
+    "name": "ULM-LIVE Ulsan Full Manifest",
+    "path": "/home/ubuntu/ULM-LIVE/data/ulsan-full/manifest.jsonl",
+    "files": 1,
+    "samples": 27687,
+    "total_speakers": 196,
+    "ulsan_speakers": 196,
+    "gyeongsang_speakers": 0,
+    "structure": "단일 발화 (utterance_id, session_id 포함)",
+    "transcription_quality": "방언(text) 및 표준어(standard_text) 병기",
+    "audio_presence": "있음 (24kHz WAV, 31.2시간)"
+  },
+  {
+    "name": "ULM-1.7B ulsan_dialect_dense",
+    "path": "/home/ubuntu/ULM-1.7B/data/ulsan_dialect_dense/*.jsonl.gz",
+    "files": 3,
+    "samples": 92538,
+    "total_speakers": 2492,
+    "ulsan_speakers": 2492,
+    "gyeongsang_speakers": 0,
+    "structure": "단문 변환 쌍 (standard_to_dialect, dialect_to_standard)",
+    "transcription_quality": "방언 텍스트 및 표준어 텍스트 병기 (단어/어절 치환 비중 높음)",
+    "audio_presence": "없음 (텍스트 전용)"
+  },
+  {
+    "name": "ULM-1.7B ulsan_dialect_phase2",
+    "path": "/home/ubuntu/ULM-1.7B/data/ulsan_dialect_phase2/*.jsonl",
+    "files": 3,
+    "samples": 20962,
+    "total_speakers": 2366,
+    "ulsan_speakers": 2366,
+    "gyeongsang_speakers": 0,
+    "structure": "단문 변환 쌍 (standard_to_dialect 중심)",
+    "transcription_quality": "방언 텍스트 및 표준어 텍스트 병기 (단문 위주)",
+    "audio_presence": "없음 (텍스트 전용)"
+  },
+  {
+    "name": "ULM-1.7B ulsan_dialect_phase3 (v1)",
+    "path": "/home/ubuntu/ULM-1.7B/data/ulsan_dialect_phase3/*.jsonl",
+    "files": 2,
+    "samples": 9552,
+    "total_speakers": 0,
+    "ulsan_speakers": 0,
+    "gyeongsang_speakers": 0,
+    "structure": "대화/QA 메시지 포맷 (멀티턴 포함)",
+    "transcription_quality": "사투리 생성/대화 합성 및 템플릿 QA",
+    "audio_presence": "없음 (텍스트 전용)"
+  },
+  {
+    "name": "ULM-1.7B ulsan_dialect_phase3_v2",
+    "path": "/home/ubuntu/ULM-1.7B/data/ulsan_dialect_phase3_v2/*.jsonl",
+    "files": 2,
+    "samples": 4990,
+    "total_speakers": 0,
+    "ulsan_speakers": 0,
+    "gyeongsang_speakers": 0,
+    "structure": "단일 턴 설명형/단어치환형 프롬프트 (사전형 설명 중심)",
+    "transcription_quality": "단조로운 템플릿 설명문 및 단어 치환",
+    "audio_presence": "없음 (텍스트 전용)"
+  },
+  {
+    "name": "AI Hub 경상도_2.zip (원천 음성 압축본)",
+    "path": "/home/ubuntu/aihub_raw/(비식별화완료)경상도_2.zip",
+    "files": 1,
+    "samples": 27687,
+    "total_speakers": 196,
+    "ulsan_speakers": 196,
+    "gyeongsang_speakers": 0,
+    "structure": "WAV 오디오 원천 파일 아카이브 (29.9 GB)",
+    "transcription_quality": "N/A (음성 파일만 포함)",
+    "audio_presence": "있음 (WAV 원천 데이터)"
+  }
+]

@@ -26,6 +26,8 @@ data/private/*
 data/cache/
 data/processed/
 data/ulsan_dialect_phase3/
+data/ulsan_dialect_phase3_v2/
+data/ulsan_dialect_phase3_v3/
 data/phase4_corrective_sft/
 data/ulsan_preference_phase4/
 datasets/
