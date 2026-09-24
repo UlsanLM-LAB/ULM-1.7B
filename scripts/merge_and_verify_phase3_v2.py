@@ -6,7 +6,6 @@ import argparse
 import difflib
 import gc
 import json
-import time
 from pathlib import Path
 from typing import Any
 
@@ -27,17 +26,50 @@ PARITY_PROMPTS = [
     {"id": 9, "prompt": "물 분자의 화학식은 뭐야?"},
     {"id": 10, "prompt": "빛의 진공 속 속도는 초당 약 몇 km야?"},
     # Multi-turn (5)
-    {"id": 11, "prompt": "내 이름이 뭐라고 했지?", "history": [["내 이름은 민수야. 기억해 줘.", "네, 민수 님! 기억하고 있겠습니다."]]},
-    {"id": 12, "prompt": "내가 어떤 과일을 더 좋아한다고 했지?", "history": [["나는 사과보다 바나나를 더 좋아해.", "바나나 달콤하고 영양도 풍부하죠!"]]},
-    {"id": 13, "prompt": "내가 언제 어디로 출장 간다고 했어?", "history": [["다음 주 화요일에 부산으로 출장 가.", "부산 출장 일정 잘 챙기세요!"]]},
-    {"id": 14, "prompt": "내 취미가 뭐라고 했는지 기억나?", "history": [["내 취미는 주말마다 자전거 타는 거야.", "자전거 타기는 정말 상쾌한 운동이죠."]]},
-    {"id": 15, "prompt": "우리 강아지 이름이 뭐였지?", "history": [["우리 집 강아지 이름은 초코야. 갈색 푸들이야.", "초코라는 이름 정말 사랑스럽네요."]]},
+    {
+        "id": 11,
+        "prompt": "내 이름이 뭐라고 했지?",
+        "history": [["내 이름은 민수야. 기억해 줘.", "네, 민수 님! 기억하고 있겠습니다."]],
+    },
+    {
+        "id": 12,
+        "prompt": "내가 어떤 과일을 더 좋아한다고 했지?",
+        "history": [["나는 사과보다 바나나를 더 좋아해.", "바나나 달콤하고 영양도 풍부하죠!"]],
+    },
+    {
+        "id": 13,
+        "prompt": "내가 언제 어디로 출장 간다고 했어?",
+        "history": [["다음 주 화요일에 부산으로 출장 가.", "부산 출장 일정 잘 챙기세요!"]],
+    },
+    {
+        "id": 14,
+        "prompt": "내 취미가 뭐라고 했는지 기억나?",
+        "history": [
+            ["내 취미는 주말마다 자전거 타는 거야.", "자전거 타기는 정말 상쾌한 운동이죠."]
+        ],
+    },
+    {
+        "id": 15,
+        "prompt": "우리 강아지 이름이 뭐였지?",
+        "history": [
+            ["우리 집 강아지 이름은 초코야. 갈색 푸들이야.", "초코라는 이름 정말 사랑스럽네요."]
+        ],
+    },
     # Dialect (5)
     {"id": 16, "prompt": "경상도/울산 방언에서 '단디 해라'가 표준어로 무슨 뜻이야?"},
     {"id": 17, "prompt": "경상도 방언 '와이리 덥노?'를 표준어로 바꾸면 어떤 뜻이야?"},
-    {"id": 18, "prompt": "표준어 문장 '오늘 날씨가 정말 좋다'를 자연스러운 울산/경상 방언으로 바꿔줘."},
-    {"id": 19, "prompt": "표준어 문장 '이 음식 정말 맛있다'를 자연스러운 울산/경상 방언으로 바꿔줘."},
-    {"id": 20, "prompt": "표준어 질문 '너 지금 뭐 하고 있어?'를 자연스러운 울산/경상 방언으로 바꿔줘."},
+    {
+        "id": 18,
+        "prompt": "표준어 문장 '오늘 날씨가 정말 좋다'를 자연스러운 울산/경상 방언으로 바꿔줘.",
+    },
+    {
+        "id": 19,
+        "prompt": "표준어 문장 '이 음식 정말 맛있다'를 자연스러운 울산/경상 방언으로 바꿔줘.",
+    },
+    {
+        "id": 20,
+        "prompt": "표준어 질문 '너 지금 뭐 하고 있어?'를 자연스러운 울산/경상 방언으로 바꿔줘.",
+    },
 ]
 
 
@@ -49,12 +81,16 @@ def format_prompt(tokenizer: Any, item: dict) -> str:
             messages.append({"role": "assistant", "content": a})
     messages.append({"role": "user", "content": item["prompt"]})
     try:
-        return tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True, enable_thinking=False)
+        return tokenizer.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True, enable_thinking=False
+        )
     except TypeError:
         return tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
 
-def generate_greedy(model: Any, tokenizer: Any, prompt: str, device: str = "cuda:0", max_new_tokens: int = 128) -> str:
+def generate_greedy(
+    model: Any, tokenizer: Any, prompt: str, device: str = "cuda:0", max_new_tokens: int = 128
+) -> str:
     set_seed(42)
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
     input_len = inputs.input_ids.shape[1]
@@ -67,8 +103,13 @@ def generate_greedy(model: Any, tokenizer: Any, prompt: str, device: str = "cuda
 def main():
     parser = argparse.ArgumentParser(description="Merge LoRA and verify parity")
     parser.add_argument("--base-model-path", default="/home/ubuntu/models/Qwen3.8-4B-Distill")
-    parser.add_argument("--adapter-path", default="/home/ubuntu/ULM-1.7B/outputs/ulm-4b-phase3-v2-lora")
-    parser.add_argument("--merged-output-path", default="/home/ubuntu/ULM-1.7B/outputs/ulm-4b-phase3-v2-best-merged")
+    parser.add_argument(
+        "--adapter-path", default="/home/ubuntu/ULM-1.7B/outputs/ulm-4b-phase3-v2-lora"
+    )
+    parser.add_argument(
+        "--merged-output-path", default="/home/ubuntu/ULM-1.7B/outputs/ulm-4b-phase3-v2-best-merged"
+    )
+    parser.add_argument("--parity-output", default="reports/phase3-v2/merge_parity.json")
     parser.add_argument("--device", default="cuda:0")
     args = parser.parse_args()
 
@@ -82,7 +123,9 @@ def main():
     print("=======================================================")
 
     tokenizer = AutoTokenizer.from_pretrained(args.base_model_path)
-    base_model = AutoModelForCausalLM.from_pretrained(args.base_model_path, dtype=torch.bfloat16, device_map=args.device)
+    base_model = AutoModelForCausalLM.from_pretrained(
+        args.base_model_path, dtype=torch.bfloat16, device_map=args.device
+    )
     peft_model = PeftModel.from_pretrained(base_model, args.adapter_path)
     peft_model.eval()
 
@@ -113,7 +156,9 @@ def main():
     print("\n=======================================================")
     print(">>> 3. Reloading Merged Standalone Model for Verification <<<")
     print("=======================================================")
-    standalone_model = AutoModelForCausalLM.from_pretrained(str(merged_out), dtype=torch.bfloat16, device_map=args.device)
+    standalone_model = AutoModelForCausalLM.from_pretrained(
+        str(merged_out), dtype=torch.bfloat16, device_map=args.device
+    )
     standalone_model.eval()
 
     merged_outputs = []
@@ -144,7 +189,7 @@ def main():
         "merged_path": args.merged_output_path,
     }
 
-    parity_file = Path("reports/phase3-v2/merge_parity.json")
+    parity_file = Path(args.parity_output)
     parity_file.parent.mkdir(parents=True, exist_ok=True)
     with open(parity_file, "w", encoding="utf-8") as f:
         json.dump(parity_summary, f, indent=2, ensure_ascii=False)

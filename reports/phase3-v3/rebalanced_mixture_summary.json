@@ -1,0 +1,14 @@
+{
+  "total_train": 5600,
+  "total_val": 400,
+  "train_category_counts": {
+    "factual_preservation": 2242,
+    "dialect_sft": 2522,
+    "instruction_preservation": 836
+  },
+  "train_category_percentages": {
+    "factual_preservation": 40.04,
+    "dialect_sft": 45.04,
+    "instruction_preservation": 14.93
+  }
+}

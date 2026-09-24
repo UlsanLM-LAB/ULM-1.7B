@@ -1,0 +1,60 @@
+{"id": 1, "category": "factual_qa", "prompt": "대한민국의 수도는 어디야?", "keywords": ["서울"]}
+{"id": 2, "category": "factual_qa", "prompt": "태양계에서 가장 큰 행성은 뭐야?", "keywords": ["목성"]}
+{"id": 3, "category": "factual_qa", "prompt": "한글을 창제한 조선의 국왕은 누구야?", "keywords": ["세종"]}
+{"id": 4, "category": "factual_qa", "prompt": "인류가 최초로 달에 착륙한 연도는 몇 년도야?", "keywords": ["1969"]}
+{"id": 5, "category": "factual_qa", "prompt": "원소 기호 O는 무슨 원소야?", "keywords": ["산소"]}
+{"id": 6, "category": "factual_qa", "prompt": "세계에서 가장 면적이 넓은 국가는 어디야?", "keywords": ["러시아"]}
+{"id": 7, "category": "factual_qa", "prompt": "지구에서 가장 높은 산은 뭐야?", "keywords": ["에베레스트"]}
+{"id": 8, "category": "factual_qa", "prompt": "프랑스의 수도는 어디야?", "keywords": ["파리"]}
+{"id": 9, "category": "factual_qa", "prompt": "물 분자의 화학식은 뭐야?", "keywords": ["h2o", "h₂o"]}
+{"id": 10, "category": "factual_qa", "prompt": "빛의 진공 속 속도는 초당 약 몇 km야?", "keywords": ["30만", "299,792", "300,000"]}
+{"id": 11, "category": "factual_qa", "prompt": "임진왜란이 일어난 연도는 몇 년도야?", "keywords": ["1592"]}
+{"id": 12, "category": "factual_qa", "prompt": "이순신 장군이 13척으로 왜선 133척을 격파한 해전은?", "keywords": ["명량"]}
+{"id": 13, "category": "factual_qa", "prompt": "미국의 초대 대통령은 누구야?", "keywords": ["워싱턴"]}
+{"id": 14, "category": "factual_qa", "prompt": "정상 성인의 체온은 대략 몇 도야?", "keywords": ["36.5", "36도", "37도"]}
+{"id": 15, "category": "factual_qa", "prompt": "삼국통일을 완성한 신라의 왕은 누구야?", "keywords": ["문무왕"]}
+{"id": 16, "category": "factual_qa", "prompt": "지구에서 가장 면적이 넓은 바다(대양)는 어디야?", "keywords": ["태평양"]}
+{"id": 17, "category": "factual_qa", "prompt": "식물이 빛을 이용해 양분을 스스로 만드는 작용을 뭐라고 해?", "keywords": ["광합성"]}
+{"id": 18, "category": "factual_qa", "prompt": "일본의 수도는 어디야?", "keywords": ["도쿄", "동경"]}
+{"id": 19, "category": "factual_qa", "prompt": "원주율(파이, π)의 값은 소수점 둘째 자리까지 대략 얼마야?", "keywords": ["3.14"]}
+{"id": 20, "category": "factual_qa", "prompt": "고려를 멸망시키고 조선을 건국한 인물은 누구야?", "keywords": ["이성계", "태조"]}
+{"id": 61, "category": "multi_turn", "prompt": "내 이름이 뭐라고 했지?", "history": [["내 이름은 민수야. 기억해 줘.", "네, 민수 님! 기억하고 있겠습니다."]], "memory_keywords": ["민수"]}
+{"id": 62, "category": "multi_turn", "prompt": "내가 어떤 과일을 더 좋아한다고 했지?", "history": [["나는 사과보다 바나나를 더 좋아해.", "바나나 달콤하고 영양도 풍부하죠!"]], "memory_keywords": ["바나나"]}
+{"id": 63, "category": "multi_turn", "prompt": "내가 언제 어디로 출장 간다고 했어?", "history": [["다음 주 화요일에 부산으로 출장 가.", "부산 출장 일정 잘 챙기세요!"]], "memory_keywords": ["화요일", "부산"]}
+{"id": 64, "category": "multi_turn", "prompt": "내 취미가 뭐라고 했는지 기억나?", "history": [["내 취미는 주말마다 자전거 타는 거야.", "자전거 타기는 정말 상쾌한 운동이죠."]], "memory_keywords": ["자전거"]}
+{"id": 65, "category": "multi_turn", "prompt": "우리 강아지 이름이 뭐였지?", "history": [["우리 집 강아지 이름은 초코야. 갈색 푸들이야.", "초코라는 이름 정말 사랑스럽네요."]], "memory_keywords": ["초코"]}
+{"id": 66, "category": "multi_turn", "prompt": "내가 아까 알려준 임시 PIN 코드가 뭐였어?", "history": [["보안을 위해 임시 PIN 코드를 7492로 설정할게.", "임시 PIN 코드 7492로 확인했습니다."]], "memory_keywords": ["7492"]}
+{"id": 67, "category": "multi_turn", "prompt": "내가 커피 마실 때 뭘 마신다고 했어?", "history": [["커피 마실 때 나는 무조건 아이스 아메리카노만 마셔.", "얼죽아 스타일이시군요!"]], "memory_keywords": ["아이스 아메리카노"]}
+{"id": 68, "category": "multi_turn", "prompt": "내일 미팅 장소가 어디라고 했지?", "history": [["내일 미팅 장소는 강남역 1번 출구 앞 스타벅스로 정했어.", "강남역 1번 출구 스타벅스 메모했습니다."]], "memory_keywords": ["강남역", "스타벅스"]}
+{"id": 69, "category": "multi_turn", "prompt": "내 여동생 이름이 뭐라고 했어?", "history": [["내 여동생 이름은 지수야. 대학생이야.", "지수 씨 정말 착한 동생일 것 같네요."]], "memory_keywords": ["지수"]}
+{"id": 70, "category": "multi_turn", "prompt": "내가 사계절 중 어떤 계절을 제일 좋아한다고 했지?", "history": [["나는 시원한 바람이 부는 가을을 가장 좋아해.", "가을은 독서와 산책의 계절이죠."]], "memory_keywords": ["가을"]}
+{"id": 81, "category": "instruction_trap", "prompt": "다른 설명이나 부가적인 말은 전혀 하지 말고, 오직 '사과'라는 단어 딱 하나만 출력해.", "instruction_type": "exact_apple"}
+{"id": 82, "category": "instruction_trap", "prompt": "1부터 5까지의 숫자를 각 줄에 하나씩 번호 매기기 형식(1., 2., 3., 4., 5.)으로만 작성해줘. 다른 서두나 결론은 적지 마.", "instruction_type": "numbered_list_1_5"}
+{"id": 83, "category": "instruction_trap", "prompt": "다른 인사나 설명 없이 '안녕하세요'라는 문장만 정확히 3번 줄바꿈하여 반복해서 출력해줘.", "instruction_type": "repeat_hello_3"}
+{"id": 84, "category": "instruction_trap", "prompt": "\"철수는 어제 길에서 고양이와 참새를 보았다.\" 이 문장에서 등장하는 동물 이름만 쉼표로 구분해서 출력해.", "instruction_type": "extract_animals"}
+{"id": 85, "category": "instruction_trap", "prompt": "\"지구는 둥근가요?\" 이 질문에 다른 말은 절대 하지 말고 오직 '네' 또는 '아니오' 중 한 글자로만 답해줘.", "instruction_type": "yes_no"}
+{"id": 86, "category": "instruction_trap", "prompt": "화성에 세워진 고대 이집트 양식의 피라미드는 누가 건설했는지 자세히 설명해줘.", "instruction_type": "hallucination_trap_mars"}
+{"id": 87, "category": "instruction_trap", "prompt": "조선의 세종대왕이 1443년에 직접 아이폰을 개발하여 백성들에게 보급한 역사적 배경을 설명해줘.", "instruction_type": "hallucination_trap_iphone"}
+{"id": 88, "category": "instruction_trap", "prompt": "2020년 대한민국 제16대 대통령으로 선출된 세종대왕의 주요 경제 정책에 대해 서술해줘.", "instruction_type": "hallucination_trap_president"}
+{"id": 89, "category": "instruction_trap", "prompt": "오직 영어 단어 3개 'apple, banana, orange'만 쉼표로 구분해서 출력해. 한국어나 추가 문장은 절대 쓰지 마.", "instruction_type": "exact_three_fruits"}
+{"id": 90, "category": "instruction_trap", "prompt": "다른 어떤 부연 설명이나 마크다운 코드블록도 없이 오직 {\"status\": \"ok\"} 라는 JSON 문자열 한 줄만 출력해.", "instruction_type": "exact_json_status"}
+{"id": 91, "category": "dialect_eval", "prompt": "경상도/울산 방언에서 '단디 해라'가 표준어로 무슨 뜻이야?", "keywords": ["단단히", "확실히", "조심", "똑바로"]}
+{"id": 92, "category": "dialect_eval", "prompt": "경상도 방언 '와이리 덥노?'를 표준어로 바꾸면 어떤 뜻이야?", "keywords": ["왜 이렇게", "왜 이리", "덥니", "덥냐"]}
+{"id": 93, "category": "dialect_eval", "prompt": "경상도 사투리 '밥 문나?'는 표준어로 무슨 뜻이야?", "keywords": ["밥 먹었니", "식사했니", "밥 먹었어"]}
+{"id": 94, "category": "dialect_eval", "prompt": "경상도 방언 '어데 가노?'의 표준어 의미는 뭐야?", "keywords": ["어디 가니", "어디 가", "어디 가냐"]}
+{"id": 95, "category": "dialect_eval", "prompt": "경상도 사투리 '뭐라 카노?'의 표준어 의미는 뭐야?", "keywords": ["뭐라고 하니", "무슨 말을 하니", "뭐라고 해"]}
+{"id": 96, "category": "dialect_eval", "prompt": "표준어 문장 '오늘 날씨가 정말 좋다'를 자연스러운 울산/경상 방언으로 바꿔줘.", "dialect_gen": true, "markers": ["좋네", "좋데이", "억수로", "억시로", "직이네"]}
+{"id": 97, "category": "dialect_eval", "prompt": "표준어 문장 '이 음식 정말 맛있다'를 자연스러운 울산/경상 방언으로 바꿔줘.", "dialect_gen": true, "markers": ["맛있네", "맛있데이", "맛나네", "억수로", "참말로"]}
+{"id": 98, "category": "dialect_eval", "prompt": "표준어 질문 '너 지금 뭐 하고 있어?'를 자연스러운 울산/경상 방언으로 바꿔줘.", "dialect_gen": true, "markers": ["하노", "카노", "니 지금", "뭐 하노"]}
+{"id": 99, "category": "dialect_eval", "prompt": "표준어 문장 '조심해서 집에 가'를 자연스러운 울산/경상 방언으로 바꿔줘.", "dialect_gen": true, "markers": ["단디", "챙기가", "가라", "조심해가"]}
+{"id": 100, "category": "dialect_eval", "prompt": "표준어 격려 문장 '걱정하지 마, 잘 될 거야'를 자연스러운 울산/경상 방언으로 바꿔줘.", "dialect_gen": true, "markers": ["걱정 마라", "잘 될 끼다", "될기다", "된다"]}
+{"id": 136, "category": "dialect_eval", "prompt": "경상도 사투리 '와 그라노?'의 표준어 의미는 뭐야?", "keywords": ["왜 그러니", "왜 그래", "무슨 일이야"]}
+{"id": 137, "category": "dialect_eval", "prompt": "울산/경상 방언 '단디 챙기라'를 표준어로 바꾸면?", "keywords": ["단단히", "확실히", "빠짐없이", "잘 챙겨"]}
+{"id": 138, "category": "dialect_eval", "prompt": "경상도 방언에서 '우짜노?'는 무슨 뜻으로 써?", "keywords": ["어떡하니", "어쩌니", "어떻게 해"]}
+{"id": 139, "category": "dialect_eval", "prompt": "울산 사투리 '천지빼까리'는 무슨 뜻이야?", "keywords": ["엄청 많다", "아주 많다", "널려 있다", "많다"]}
+{"id": 140, "category": "dialect_eval", "prompt": "경상도 말 '머라카는지 하나도 모르겠다'의 표준어 의미는?", "keywords": ["무슨 말인지", "뭐라고 하는지", "모르겠다"]}
+{"id": 141, "category": "dialect_eval", "prompt": "표준어 문장 '빨리 와, 늦겠다'를 자연스러운 경상/울산 방언으로 바꿔줘.", "dialect_gen": true, "markers": ["퍼뜩", "빨리", "온나", "늦겠데이", "늦겠다"]}
+{"id": 142, "category": "dialect_eval", "prompt": "표준어 문장 '너 왜 그렇게 화가 났어?'를 자연스러운 경상/울산 사투리로 표현해줘.", "dialect_gen": true, "markers": ["와 그라노", "와 이리", "성났노", "화났노"]}
+{"id": 143, "category": "dialect_eval", "prompt": "표준어 문장 '밥 많이 먹고 힘내'를 자연스러운 울산 지역어로 바꿔줘.", "dialect_gen": true, "markers": ["밥 마이", "무라", "문나", "힘내라", "힘내데이"]}
+{"id": 144, "category": "dialect_eval", "prompt": "표준어 문장 '내일 만나서 같이 밥 먹자'를 경상도 사투리로 바꿔줘.", "dialect_gen": true, "markers": ["내일 보재", "밥 묵자", "무러 가자", "만나자"]}
+{"id": 145, "category": "dialect_eval", "prompt": "표준어 질문 '이거 얼마예요?'를 자연스러운 경상도 사투리로 표현해줘.", "dialect_gen": true, "markers": ["얼마고", "얼만교", "얼맵니까"]}

@@ -1,0 +1,22 @@
+[
+  {
+    "name": "packing_b2_g16_gc",
+    "micro_batch": 2,
+    "gradient_accumulation": 16,
+    "effective_batch": 32,
+    "gradient_checkpointing": true,
+    "group_by_length": false,
+    "packing": true,
+    "dataloader_num_workers": 0,
+    "attention_backend": "sdpa",
+    "seconds": 96.283,
+    "seconds_per_step": 96.283,
+    "steady_seconds_per_step": 0.0,
+    "samples_per_second": 0.332,
+    "useful_tokens_per_second": 678.875,
+    "mean_gpu_utilization_pct": 87.3,
+    "peak_vram_gib": 11.631,
+    "loss": 3.21076,
+    "finite_loss": true
+  }
+]

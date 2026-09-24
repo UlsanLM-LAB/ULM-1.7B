@@ -1,0 +1,44 @@
+{
+  "model_path": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+  "adapter_path": "/opt/dlami/nvme/phase3-v3-checkpoints/checkpoint-70",
+  "total_prompts": 60,
+  "load_time_s": 2.49,
+  "vram_gb": 16.17,
+  "avg_latency_ms": 2481.98,
+  "avg_tokens": 28.4,
+  "empty_final_count": 0,
+  "token_limit_count": 0,
+  "cjk_leakage_count": 1,
+  "repetition_count": 0,
+  "malformed_unicode_count": 0,
+  "factual_qa": {
+    "total": 20,
+    "hits": 14,
+    "accuracy_pct": 70.0
+  },
+  "multi_turn": {
+    "total": 10,
+    "hits": 5,
+    "accuracy_pct": 50.0
+  },
+  "instruction_trap": {
+    "total": 10,
+    "hits": 7,
+    "accuracy_pct": 70.0
+  },
+  "dialect_eval": {
+    "total": 20,
+    "hits": 4,
+    "accuracy_pct": 20.0
+  },
+  "general_korean": {
+    "total": 0,
+    "avg_latency_ms": 0.0,
+    "avg_tokens": 0.0
+  },
+  "global_step": 70,
+  "runtime_s": 151.87,
+  "prompt_echo_count": 1,
+  "dialect_ending_overuse_count": 0,
+  "english_leakage_count": 0
+}

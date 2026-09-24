@@ -1,0 +1,108 @@
+[
+  {
+    "name": "a_b2_g16_gc",
+    "micro_batch": 2,
+    "gradient_accumulation": 16,
+    "effective_batch": 32,
+    "gradient_checkpointing": true,
+    "group_by_length": false,
+    "dataloader_num_workers": 0,
+    "attention_backend": "sdpa",
+    "seconds": 35.481,
+    "seconds_per_step": 11.827,
+    "steady_seconds_per_step": 11.208,
+    "samples_per_second": 2.706,
+    "useful_tokens_per_second": 257.462,
+    "mean_gpu_utilization_pct": 28.8,
+    "peak_vram_gib": 10.064,
+    "loss": 3.45342,
+    "finite_loss": true
+  },
+  {
+    "name": "b_b4_g8_gc",
+    "micro_batch": 4,
+    "gradient_accumulation": 8,
+    "effective_batch": 32,
+    "gradient_checkpointing": true,
+    "group_by_length": false,
+    "dataloader_num_workers": 0,
+    "attention_backend": "sdpa",
+    "seconds": 20.761,
+    "seconds_per_step": 6.92,
+    "steady_seconds_per_step": 6.483,
+    "samples_per_second": 4.624,
+    "useful_tokens_per_second": 440.002,
+    "mean_gpu_utilization_pct": 56.6,
+    "peak_vram_gib": 10.924,
+    "loss": 3.45233,
+    "finite_loss": true
+  },
+  {
+    "name": "c_b8_g4_gc",
+    "micro_batch": 8,
+    "gradient_accumulation": 4,
+    "effective_batch": 32,
+    "gradient_checkpointing": true,
+    "group_by_length": false,
+    "dataloader_num_workers": 0,
+    "attention_backend": "sdpa",
+    "seconds": 18.47,
+    "seconds_per_step": 6.157,
+    "steady_seconds_per_step": 5.826,
+    "samples_per_second": 5.198,
+    "useful_tokens_per_second": 494.579,
+    "mean_gpu_utilization_pct": 92.2,
+    "peak_vram_gib": 13.4,
+    "loss": 3.45338,
+    "finite_loss": true
+  },
+  {
+    "name": "d_b16_g2_gc",
+    "micro_batch": 16,
+    "gradient_accumulation": 2,
+    "effective_batch": 32,
+    "gradient_checkpointing": true,
+    "group_by_length": false,
+    "dataloader_num_workers": 0,
+    "attention_backend": "sdpa",
+    "seconds": 29.309,
+    "seconds_per_step": 9.77,
+    "steady_seconds_per_step": 9.053,
+    "samples_per_second": 3.275,
+    "useful_tokens_per_second": 311.681,
+    "mean_gpu_utilization_pct": 97.1,
+    "peak_vram_gib": 18.533,
+    "loss": 3.45324,
+    "finite_loss": true
+  },
+  {
+    "name": "b_b4_g8_nogc",
+    "micro_batch": 4,
+    "status": "OOM",
+    "error": "CUDA out of memory. Tried to allocate 20.00 MiB. GPU 0 has a total capacity of 44.39 GiB of which 19.31 MiB is free. Including non-PyTorch memory, this process has 44.37 GiB memory in use. Of the allocated memory 43.59 GiB is allocated by PyTorch, and 268.86 MiB is reserved by PyTorch but unallocate"
+  },
+  {
+    "name": "c_b8_g4_nogc",
+    "micro_batch": 8,
+    "status": "OOM",
+    "error": "CUDA out of memory. Tried to allocate 96.00 MiB. GPU 0 has a total capacity of 44.39 GiB of which 3.31 MiB is free. Including non-PyTorch memory, this process has 44.38 GiB memory in use. Of the allocated memory 43.48 GiB is allocated by PyTorch, and 397.32 MiB is reserved by PyTorch but unallocated"
+  },
+  {
+    "name": "d_b16_g2_nogc",
+    "micro_batch": 16,
+    "status": "OOM",
+    "error": "CUDA out of memory. Tried to allocate 184.00 MiB. GPU 0 has a total capacity of 44.39 GiB of which 109.31 MiB is free. Including non-PyTorch memory, this process has 44.28 GiB memory in use. Of the allocated memory 42.94 GiB is allocated by PyTorch, and 852.46 MiB is reserved by PyTorch but unalloca"
+  },
+  {
+    "name": "c_b8_g4_nogc_length",
+    "micro_batch": 8,
+    "status": "OOM",
+    "error": "CUDA out of memory. Tried to allocate 96.00 MiB. GPU 0 has a total capacity of 44.39 GiB of which 3.31 MiB is free. Including non-PyTorch memory, this process has 44.38 GiB memory in use. Of the allocated memory 43.48 GiB is allocated by PyTorch, and 397.35 MiB is reserved by PyTorch but unallocated"
+  },
+  {
+    "name": "c_b8_g4_nogc_workers2",
+    "micro_batch": 8,
+    "status": "OOM",
+    "error": "CUDA out of memory. Tried to allocate 96.00 MiB. GPU 0 has a total capacity of 44.39 GiB of which 3.31 MiB is free. Including non-PyTorch memory, this process has 44.38 GiB memory in use. Of the allocated memory 43.48 GiB is allocated by PyTorch, and 397.32 MiB is reserved by PyTorch but unallocated"
+  }
+]

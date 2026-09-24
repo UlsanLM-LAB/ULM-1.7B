@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="720pt" height="388.8pt" viewBox="0 0 720 388.8" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-23T09:55:03.216102</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 388.8 
+L 720 388.8 
+L 720 0 
+L 0 0 
+z
+" style="fill: #0d0d0d"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 72 301.32 
+L 514.8 301.32 
+L 514.8 104.976 
+L 72 104.976 
+z
+" style="fill: #0d0d0d"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1"/>
+     <g id="text_1">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: middle; fill: #a8aaa9" x="72" y="319.523125" transform="rotate(-0 72 319.523125)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2"/>
+     <g id="text_2">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: middle; fill: #a8aaa9" x="172.371747" y="319.523125" transform="rotate(-0 172.371747 319.523125)">250</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3"/>
+     <g id="text_3">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: middle; fill: #a8aaa9" x="272.743494" y="319.523125" transform="rotate(-0 272.743494 319.523125)">500</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4"/>
+     <g id="text_4">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: middle; fill: #a8aaa9" x="373.115242" y="319.523125" transform="rotate(-0 373.115242 319.523125)">750</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5"/>
+     <g id="text_5">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: middle; fill: #a8aaa9" x="473.486989" y="319.523125" transform="rotate(-0 473.486989 319.523125)">1000</text>
+     </g>
+    </g>
+    <g id="text_6">
+     <text style="font-size: 10px; font-family: 'Inter'; text-anchor: middle; fill: #a8aaa9" x="293.4" y="343.502129" transform="rotate(-0 293.4 343.502129)">Training Step</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_6">
+      <path d="M 72 293.442183 
+L 514.8 293.442183 
+" clip-path="url(#p29d87f0407)" style="fill: none; stroke: #343838; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_7"/>
+     <g id="text_7">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: end; fill: #a8aaa9" x="63" y="298.043745" transform="rotate(-0 63 298.043745)">0.50</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_8">
+      <path d="M 72 267.546701 
+L 514.8 267.546701 
+" clip-path="url(#p29d87f0407)" style="fill: none; stroke: #343838; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_9"/>
+     <g id="text_8">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: end; fill: #a8aaa9" x="63" y="272.148264" transform="rotate(-0 63 272.148264)">0.75</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_10">
+      <path d="M 72 241.65122 
+L 514.8 241.65122 
+" clip-path="url(#p29d87f0407)" style="fill: none; stroke: #343838; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_11"/>
+     <g id="text_9">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: end; fill: #a8aaa9" x="63" y="246.252783" transform="rotate(-0 63 246.252783)">1.00</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_12">
+      <path d="M 72 215.755739 
+L 514.8 215.755739 
+" clip-path="url(#p29d87f0407)" style="fill: none; stroke: #343838; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_13"/>
+     <g id="text_10">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: end; fill: #a8aaa9" x="63" y="220.357301" transform="rotate(-0 63 220.357301)">1.25</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_14">
+      <path d="M 72 189.860258 
+L 514.8 189.860258 
+" clip-path="url(#p29d87f0407)" style="fill: none; stroke: #343838; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_15"/>
+     <g id="text_11">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: end; fill: #a8aaa9" x="63" y="194.46182" transform="rotate(-0 63 194.46182)">1.50</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_16">
+      <path d="M 72 163.964777 
+L 514.8 163.964777 
+" clip-path="url(#p29d87f0407)" style="fill: none; stroke: #343838; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_17"/>
+     <g id="text_12">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: end; fill: #a8aaa9" x="63" y="168.566339" transform="rotate(-0 63 168.566339)">1.75</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_18">
+      <path d="M 72 138.069295 
+L 514.8 138.069295 
+" clip-path="url(#p29d87f0407)" style="fill: none; stroke: #343838; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_19"/>
+     <g id="text_13">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: end; fill: #a8aaa9" x="63" y="142.670858" transform="rotate(-0 63 142.670858)">2.00</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_20">
+      <path d="M 72 112.173814 
+L 514.8 112.173814 
+" clip-path="url(#p29d87f0407)" style="fill: none; stroke: #343838; stroke-opacity: 0.55; stroke-width: 0.65; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_21"/>
+     <g id="text_14">
+      <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: end; fill: #a8aaa9" x="63" y="116.775377" transform="rotate(-0 63 116.775377)">2.25</text>
+     </g>
+    </g>
+    <g id="text_15">
+     <text style="font-size: 10px; font-family: 'Inter'; text-anchor: middle; fill: #a8aaa9" x="29.309844" y="203.148" transform="rotate(-90 29.309844 203.148)">Loss</text>
+    </g>
+   </g>
+   <g id="line2d_22">
+    <path d="M 82.037175 121.202777 
+L 92.074349 176.732684 
+L 102.111524 225.127456 
+L 112.148699 258.961332 
+L 122.185874 265.544796 
+L 132.223048 258.807459 
+L 142.260223 265.624431 
+L 152.297398 263.772345 
+L 162.334572 268.575503 
+L 172.371747 270.618905 
+L 182.408922 263.913653 
+L 192.446097 272.51565 
+L 202.483271 269.267327 
+L 212.520446 270.343078 
+L 222.557621 268.632995 
+L 232.594796 276.458199 
+L 242.63197 278.87776 
+L 252.669145 273.630662 
+L 262.70632 260.025561 
+L 272.743494 274.049061 
+L 282.780669 275.869379 
+L 292.817844 276.609156 
+L 302.855019 273.937278 
+L 312.892193 282.010199 
+L 322.929368 274.539967 
+L 332.966543 274.078633 
+L 343.003717 271.109638 
+L 353.040892 269.86778 
+L 363.078067 274.027408 
+L 373.115242 275.260296 
+L 383.152416 273.513568 
+L 393.189591 271.125893 
+L 403.226766 273.318253 
+L 413.263941 277.216895 
+L 423.301115 272.999278 
+L 433.33829 282.3683 
+L 443.375465 273.789332 
+L 453.412639 270.122768 
+L 463.449814 276.962287 
+L 473.486989 282.044026 
+L 483.524164 266.596294 
+L 493.561338 283.470545 
+L 503.598513 279.906566 
+" clip-path="url(#p29d87f0407)" style="fill: none; stroke: #76d2c0; stroke-width: 2.25; stroke-linecap: round"/>
+   </g>
+   <g id="line2d_23">
+    <path d="M 287.598513 268.597492 
+L 503.197026 268.941394 
+L 504 268.937399 
+" clip-path="url(#p29d87f0407)" style="fill: none; stroke: #e6ab83; stroke-width: 2.15; stroke-linecap: round"/>
+    <defs>
+     <path id="m44c6194529" d="M 0 2.5 
+C 0.663008 2.5 1.29895 2.236584 1.767767 1.767767 
+C 2.236584 1.29895 2.5 0.663008 2.5 0 
+C 2.5 -0.663008 2.236584 -1.29895 1.767767 -1.767767 
+C 1.29895 -2.236584 0.663008 -2.5 0 -2.5 
+C -0.663008 -2.5 -1.29895 -2.236584 -1.767767 -1.767767 
+C -2.236584 -1.29895 -2.5 -0.663008 -2.5 0 
+C -2.5 0.663008 -2.236584 1.29895 -1.767767 1.767767 
+C -1.29895 2.236584 -0.663008 2.5 0 2.5 
+z
+" style="stroke: #0d0d0d; stroke-width: 0.8"/>
+    </defs>
+    <g clip-path="url(#p29d87f0407)">
+     <use xlink:href="#m44c6194529" x="287.598513" y="268.597492" style="fill: #e6ab83; stroke: #0d0d0d; stroke-width: 0.8"/>
+     <use xlink:href="#m44c6194529" x="503.197026" y="268.941394" style="fill: #e6ab83; stroke: #0d0d0d; stroke-width: 0.8"/>
+     <use xlink:href="#m44c6194529" x="504" y="268.937399" style="fill: #e6ab83; stroke: #0d0d0d; stroke-width: 0.8"/>
+    </g>
+   </g>
+   <g id="PathCollection_1">
+    <defs>
+     <path id="m24aca9d181" d="M 0 2.645751 
+C 0.701661 2.645751 1.374679 2.366978 1.870829 1.870829 
+C 2.366978 1.374679 2.645751 0.701661 2.645751 0 
+C 2.645751 -0.701661 2.366978 -1.374679 1.870829 -1.870829 
+C 1.374679 -2.366978 0.701661 -2.645751 0 -2.645751 
+C -0.701661 -2.645751 -1.374679 -2.366978 -1.870829 -1.870829 
+C -2.366978 -1.374679 -2.645751 -0.701661 -2.645751 0 
+C -2.645751 0.701661 -2.366978 1.374679 -1.870829 1.870829 
+C -1.374679 2.366978 -0.701661 2.645751 0 2.645751 
+z
+" style="stroke: #0d0d0d"/>
+    </defs>
+    <g clip-path="url(#p29d87f0407)">
+     <use xlink:href="#m24aca9d181" x="503.598513" y="279.906566" style="fill: #76d2c0; stroke: #0d0d0d"/>
+    </g>
+   </g>
+   <g id="legend_1">
+    <g id="line2d_24">
+     <path d="M 415.072266 119.404125 
+L 424.572266 119.404125 
+L 434.072266 119.404125 
+" style="fill: none; stroke: #76d2c0; stroke-width: 2.25; stroke-linecap: round"/>
+    </g>
+    <g id="text_16">
+     <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: start; fill: #f2f2f0" x="441.672266" y="122.729125" transform="rotate(-0 441.672266 122.729125)">Training loss</text>
+    </g>
+    <g id="line2d_25">
+     <path d="M 415.072266 135.648754 
+L 424.572266 135.648754 
+L 434.072266 135.648754 
+" style="fill: none; stroke: #e6ab83; stroke-width: 2.15; stroke-linecap: round"/>
+     <g>
+      <use xlink:href="#m44c6194529" x="424.572266" y="135.648754" style="fill: #e6ab83; stroke: #0d0d0d; stroke-width: 0.8"/>
+     </g>
+    </g>
+    <g id="text_17">
+     <text style="font-size: 9.5px; font-family: 'Inter'; text-anchor: start; fill: #f2f2f0" x="441.672266" y="138.973754" transform="rotate(-0 441.672266 138.973754)">Validation loss</text>
+    </g>
+   </g>
+  </g>
+  <g id="line2d_26">
+   <path d="M 54 70.7616 
+L 666 70.7616 
+" style="fill: none; stroke: #303332; stroke-width: 0.8; stroke-linecap: square"/>
+  </g>
+  <g id="line2d_27">
+   <path d="M 545.76 314.928 
+L 545.76 99.144 
+" style="fill: none; stroke: #303332; stroke-width: 0.8; stroke-linecap: square"/>
+  </g>
+  <g id="text_18">
+   <text style="font-weight: 600; font-size: 21px; font-family: 'Inter'; text-anchor: start; fill: #f2f2f0" x="54" y="42.63116" transform="rotate(-0 54 42.63116)">ULM-1.7B Fine-tuning</text>
+  </g>
+  <g id="text_19">
+   <text style="font-size: 11px; font-family: 'Inter'; text-anchor: start; fill: #a8aaa9" x="54" y="56.376" transform="rotate(-0 54 56.376)">Qwen3-1.7B · LoRA Fine-tuning</text>
+  </g>
+  <g id="text_20">
+   <text style="font-weight: 500; font-size: 8.5px; font-family: 'Inter'; text-anchor: end; fill: #656a68" x="666" y="35.362441" transform="rotate(-0 666 35.362441)">PHASE 03  /  CHAT ALIGNMENT</text>
+  </g>
+  <g id="text_21">
+   <text style="font-weight: 500; font-size: 8.5px; font-family: 'Inter'; text-anchor: start; fill: #656a68" x="572.4" y="111.1968" transform="rotate(-0 572.4 111.1968)">BASE MODEL</text>
+  </g>
+  <g id="text_22">
+   <text style="font-weight: 500; font-size: 18px; font-family: 'Inter'; text-anchor: start; fill: #f2f2f0" x="572.4" y="132.192" transform="rotate(-0 572.4 132.192)">Qwen3-1.7B</text>
+  </g>
+  <g id="text_23">
+   <text style="font-size: 8px; font-family: 'Inter'; text-anchor: start; fill: #a8aaa9" x="572.4" y="144.6336" transform="rotate(-0 572.4 144.6336)">via Phase 2 merge</text>
+  </g>
+  <g id="text_24">
+   <text style="font-weight: 500; font-size: 8.5px; font-family: 'Inter'; text-anchor: start; fill: #656a68" x="572.4" y="166.4064" transform="rotate(-0 572.4 166.4064)">METHOD</text>
+  </g>
+  <g id="text_25">
+   <text style="font-weight: 500; font-size: 18px; font-family: 'Inter'; text-anchor: start; fill: #f2f2f0" x="572.4" y="187.4016" transform="rotate(-0 572.4 187.4016)">LoRA</text>
+  </g>
+  <g id="text_26">
+   <text style="font-weight: 500; font-size: 8.5px; font-family: 'Inter'; text-anchor: start; fill: #656a68" x="572.4" y="211.1184" transform="rotate(-0 572.4 211.1184)">COMPLETED STEPS</text>
+  </g>
+  <g id="text_27">
+   <text style="font-weight: 500; font-size: 18px; font-family: 'Inter'; text-anchor: start; fill: #f2f2f0" x="572.4" y="232.1136" transform="rotate(-0 572.4 232.1136)">1,076</text>
+  </g>
+  <g id="text_28">
+   <text style="font-weight: 500; font-size: 8.5px; font-family: 'Inter'; text-anchor: start; fill: #656a68" x="572.4" y="255.8304" transform="rotate(-0 572.4 255.8304)">FINAL TRAIN LOSS</text>
+  </g>
+  <g id="text_29">
+   <text style="font-weight: 500; font-size: 18px; font-family: 'Inter'; text-anchor: start; fill: #f2f2f0" x="572.4" y="276.8256" transform="rotate(-0 572.4 276.8256)">0.631</text>
+  </g>
+  <g id="text_30">
+   <text style="font-size: 8px; font-family: 'Inter'; text-anchor: start; fill: #a8aaa9" x="572.4" y="289.2672" transform="rotate(-0 572.4 289.2672)">last logged · step 1,075</text>
+  </g>
+  <g id="text_31">
+   <text style="font-weight: 500; font-size: 8.5px; font-family: 'Inter'; text-anchor: start; fill: #656a68" x="572.4" y="308.7072" transform="rotate(-0 572.4 308.7072)">FINAL EVAL LOSS</text>
+  </g>
+  <g id="text_32">
+   <text style="font-weight: 500; font-size: 18px; font-family: 'Inter'; text-anchor: start; fill: #f2f2f0" x="572.4" y="329.7024" transform="rotate(-0 572.4 329.7024)">0.737</text>
+  </g>
+  <g id="text_33">
+   <text style="font-size: 8px; font-family: 'Inter'; text-anchor: start; fill: #a8aaa9" x="572.4" y="342.144" transform="rotate(-0 572.4 342.144)">step 1,076</text>
+  </g>
+  <g id="text_34">
+   <text style="font-size: 7.8px; font-family: 'Inter'; text-anchor: start; fill: #656a68" x="54" y="367.416" transform="rotate(-0 54 367.416)">SOURCE  outputs/ulm-1.7b-phase3-chat-l40s/checkpoint-1076/trainer_state.json   ·   recorded Trainer metrics</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p29d87f0407">
+   <rect x="72" y="104.976" width="442.8" height="196.344"/>
+  </clipPath>
+ </defs>
+</svg>

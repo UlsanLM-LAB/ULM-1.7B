@@ -8,9 +8,7 @@ from __future__ import annotations
 import argparse
 import gc
 import json
-import os
 import re
-import sys
 import time
 from pathlib import Path
 from typing import Any
@@ -59,14 +57,18 @@ def separate_thinking(raw_text: str) -> tuple[str, str, bool]:
     return "", raw_text.strip(), False
 
 
-def evaluate_response(item: dict, final_text: str, raw_text: str, token_count: int, max_tokens: int) -> dict[str, Any]:
+def evaluate_response(
+    item: dict, final_text: str, raw_text: str, token_count: int, max_tokens: int
+) -> dict[str, Any]:
     cat = item["category"]
     eval_text = final_text if final_text else raw_text
     norm = eval_text.strip()
 
     empty_final = len(norm) == 0
     replacement_char = "\ufffd" in raw_text
-    repetition = bool(REPETITION_REGEX.search(raw_text)) or bool(REPEATED_PHRASE_REGEX.search(raw_text))
+    repetition = bool(REPETITION_REGEX.search(raw_text)) or bool(
+        REPEATED_PHRASE_REGEX.search(raw_text)
+    )
     cjk_leakage = bool(CJK_REGEX.search(final_text))
     token_limit = token_count >= max_tokens
 
@@ -100,27 +102,45 @@ def evaluate_response(item: dict, final_text: str, raw_text: str, token_count: i
             has_4 = any(re.match(r"^4[\.\)]", line) for line in lines)
             instruction_hit = has_1 and has_4 and len(lines) <= 6
         elif itype == "repeat_hello_3":
-            instruction_hit = (len(re.findall(r"안녕하세요", norm)) == 3)
+            instruction_hit = len(re.findall(r"안녕하세요", norm)) == 3
         elif itype == "repeat_thanks_2":
-            instruction_hit = (len(re.findall(r"감사합니다", norm)) == 2)
+            instruction_hit = len(re.findall(r"감사합니다", norm)) == 2
         elif itype == "extract_animals":
-            instruction_hit = ("고양이" in norm and "참새" in norm and "철수" not in norm)
+            instruction_hit = "고양이" in norm and "참새" in norm and "철수" not in norm
         elif itype == "extract_dog_rabbit":
-            instruction_hit = ("강아지" in norm and "토끼" in norm and "민지" not in norm)
+            instruction_hit = "강아지" in norm and "토끼" in norm and "민지" not in norm
         elif itype == "yes_no":
             clean = re.sub(r"[^\w\s]", "", norm).strip()
             instruction_hit = clean in ("네", "예")
         elif itype.startswith("hallucination_trap_"):
             refusal_kw = [
-                "없", "허구", "사실이 아니", "존재하지 않", "지어지지 않", "건설된 적",
-                "건설되지 않", "불가능", "증거가 없", "낭설", "가공", "신화", "개발하지 않",
-                "선출된 적", "발명하지 않", "아닙니다", "역사적 사실과 다릅니다"
+                "없",
+                "허구",
+                "사실이 아니",
+                "존재하지 않",
+                "지어지지 않",
+                "건설된 적",
+                "건설되지 않",
+                "불가능",
+                "증거가 없",
+                "낭설",
+                "가공",
+                "신화",
+                "개발하지 않",
+                "선출된 적",
+                "발명하지 않",
+                "아닙니다",
+                "역사적 사실과 다릅니다",
             ]
             instruction_hit = any(kw in norm for kw in refusal_kw)
         elif itype == "exact_three_fruits":
-            instruction_hit = "apple" in norm.lower() and "banana" in norm.lower() and "orange" in norm.lower()
+            instruction_hit = (
+                "apple" in norm.lower() and "banana" in norm.lower() and "orange" in norm.lower()
+            )
         elif itype == "exact_three_animals":
-            instruction_hit = "cat" in norm.lower() and "dog" in norm.lower() and "bird" in norm.lower()
+            instruction_hit = (
+                "cat" in norm.lower() and "dog" in norm.lower() and "bird" in norm.lower()
+            )
         elif itype == "exact_json_status":
             instruction_hit = '{"status": "ok"}' in norm or '{"status":"ok"}' in norm
         elif itype == "exact_json_pass":
@@ -160,12 +180,12 @@ def run_evaluation(
     repetition_penalty: float = 1.1,
     seed: int = 42,
 ) -> tuple[list[dict], dict]:
-    print(f"\n=======================================================")
+    print("\n=======================================================")
     print(f"Loading Base Model: {model_path}")
     if adapter_path:
         print(f"Loading Adapter: {adapter_path}")
     print(f"Benchmark: {benchmark_path}")
-    print(f"=======================================================")
+    print("=======================================================")
 
     t0 = time.time()
     tokenizer = AutoTokenizer.from_pretrained(model_path)
@@ -182,7 +202,7 @@ def run_evaluation(
     vram_gb = round(torch.cuda.memory_allocated() / (1024**3), 2)
     print(f"Model ready in {load_time}s | VRAM: {vram_gb} GB")
 
-    with open(benchmark_path, "r", encoding="utf-8") as f:
+    with open(benchmark_path, encoding="utf-8") as f:
         bench_items = [json.loads(line) for line in f]
 
     rows = []
@@ -229,7 +249,11 @@ def run_evaluation(
 
         short_ans = clean_final[:50].replace("\n", " ") if clean_final else "(EMPTY)"
         if idx % 10 == 0 or idx == len(bench_items):
-            print(f"  [{idx:03d}/{len(bench_items)}] {item['category']:16s} | Latency: {latency_ms:6.1f}ms | Tokens: {gen_token_count:3d} | Ans: {short_ans}")
+            print(
+                f"  [{idx:03d}/{len(bench_items)}] {item['category']:16s} "
+                f"| Latency: {latency_ms:6.1f}ms | Tokens: {gen_token_count:3d} "
+                f"| Ans: {short_ans}"
+            )
 
     # Summary metrics
     factual_rows = [r for r in rows if r["category"] == "factual_qa"]
@@ -278,8 +302,16 @@ def run_evaluation(
         },
         "general_korean": {
             "total": len(general_rows),
-            "avg_latency_ms": round(sum(r["latency_ms"] for r in general_rows) / len(general_rows), 2),
-            "avg_tokens": round(sum(r["generated_token_count"] for r in general_rows) / len(general_rows), 1),
+            "avg_latency_ms": round(
+                sum(r["latency_ms"] for r in general_rows) / len(general_rows), 2
+            )
+            if general_rows
+            else 0.0,
+            "avg_tokens": round(
+                sum(r["generated_token_count"] for r in general_rows) / len(general_rows), 1
+            )
+            if general_rows
+            else 0.0,
         },
     }
 
@@ -326,12 +358,21 @@ def main():
 
     print("\n=======================================================")
     print("Evaluation Complete!")
-    print(f"  Factual QA:       {summary['factual_qa']['hits']}/{summary['factual_qa']['total']} ({summary['factual_qa']['accuracy_pct']}%)")
-    print(f"  Multi-turn Memory:{summary['multi_turn']['hits']}/{summary['multi_turn']['total']} ({summary['multi_turn']['accuracy_pct']}%)")
-    print(f"  Instruction/Trap: {summary['instruction_trap']['hits']}/{summary['instruction_trap']['total']} ({summary['instruction_trap']['accuracy_pct']}%)")
-    print(f"  Dialect Eval:     {summary['dialect_eval']['hits']}/{summary['dialect_eval']['total']} ({summary['dialect_eval']['accuracy_pct']}%)")
-    print(f"  Avg Latency:      {summary['avg_latency_ms']} ms | Avg Tokens: {summary['avg_tokens']}")
-    print(f"  Empty Final:      {summary['empty_final_count']} | Repetition: {summary['repetition_count']}")
+    for label, category in (
+        ("Factual QA", "factual_qa"),
+        ("Multi-turn Memory", "multi_turn"),
+        ("Instruction/Trap", "instruction_trap"),
+        ("Dialect Eval", "dialect_eval"),
+    ):
+        item = summary[category]
+        print(f"  {label:18s}{item['hits']}/{item['total']} ({item['accuracy_pct']}%)")
+    print(
+        f"  Avg Latency:      {summary['avg_latency_ms']} ms | Avg Tokens: {summary['avg_tokens']}"
+    )
+    print(
+        f"  Empty Final:      {summary['empty_final_count']} "
+        f"| Repetition: {summary['repetition_count']}"
+    )
     print(f"Saved: {out_jsonl} & {out_summary}")
     print("=======================================================\n")
 
