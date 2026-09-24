@@ -1,0 +1,24 @@
+{
+  "qwen3.5-4b": {
+    "name": "qwen3.5-4b",
+    "model_id": "Qwen/Qwen3.5-4B",
+    "load_time_s": 4.74,
+    "vram_gb": 7.83,
+    "parameters": "4,205,751,296 (4.21B)",
+    "context_length": 262144,
+    "dtype": "bfloat16",
+    "license": "apache-2.0",
+    "condition": "non-thinking"
+  },
+  "qwen3.8-4b-distill": {
+    "name": "qwen3.8-4b-distill",
+    "model_id": "empero-ai/Qwen3.8-4B-Distill",
+    "load_time_s": 4.02,
+    "vram_gb": 7.84,
+    "parameters": "4,205,751,296 (4.21B)",
+    "context_length": 262144,
+    "dtype": "bfloat16",
+    "license": "apache-2.0",
+    "condition": "non-thinking"
+  }
+}

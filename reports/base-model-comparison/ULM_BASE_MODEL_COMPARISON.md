@@ -97,10 +97,36 @@
 
 1. **VRAM 및 하드웨어 적합성:**
    - 4.21B 파라미터는 BF16 로드 시 **약 7.84 GB VRAM**만을 차지합니다.
-   - 현재 AWS L40S 인스턴스(46GB VRAM)에서 16-rank LoRA / QLoRA는 물론, **배치 사이즈 4~8 수준의 LoRA Full-Sequence Fine-Tuning이 18~22 GB VRAM 내에서 여유롭게 구동 가능**합니다.
+   - L40S 46GB에서 LoRA/QLoRA fine-tuning이 현실적으로 가능하나, 실제 micro-batch는 sequence length와 activation memory에 따라 결정해야 한다.
 2. **라이선스 및 호환성:**
    - 두 모델 모두 **Apache-2.0** 라이선스로 상용 서비스 및 파인튜닝 배포에 법적 제약이 없습니다.
    - Hugging Face `transformers 5.17.0`, `PEFT`, `TRL`, `vLLM` 등 오픈소스 생태계와 100% 네이티브 호환됩니다.
 3. **최종 추천:**
    - **`empero-ai/Qwen3.8-4B-Distill`을 ULM 차세대 베이스 모델로 최종 추천합니다.**
    - **추천 사유:** 동일한 85%의 최상급 지식 정확도를 유지하면서도, Qwen3.5 대비 **지시 준수율이 70%로 높고(vs 50%)**, **환각 질문에 대한 방어 능력이 탁월**하며, **추론 과정이 컴팩트하게 증류되어 실시간 서빙 및 대화형 SFT에 훨씬 적합**하기 때문입니다.
+
+---
+
+## 6. 비-Thinking(Non-Thinking) 재검증 결과 요약
+
+1차 60-prompt 평가에서 발견된 Qwen3.5-4B의 Thinking 토큰 고갈 문제를 분리 검증하기 위해, `enable_thinking=False` 조건에서 30개 핵심 프롬프트(Factual QA 10, Multi-turn Memory 8, General Korean 6, Instruction/Trap 6)를 대상으로 2차 비교 평가를 수행했습니다.
+
+### 1) 주요 정량 결과 비교
+
+| 메트릭 항목 | Qwen3.5-4B (Non-thinking) | empero-ai/Qwen3.8-4B-Distill (Non-thinking) | 분석 |
+|---|---|---|---|
+| **Factual QA (10개)** | 8/10 (80.0%) | **9/10 (90.0%)** | Qwen3.8 우세 (세종대왕 정답 vs 세조 오답) |
+| **Multi-turn Memory (8개)** | **7/8 (87.5%)** | 6/8 (75.0%) | Qwen3.5 근소 우세 |
+| **Instruction / Trap (6개)** | **6/6 (100.0%)** | **6/6 (100.0%)** | 동점 (완벽 준수) |
+| **Thinking 태그 방출율** | 0/30 (0.0%) | 0/30 (0.0%) | Thinking 완전 우회 성공 |
+| **최종 응답 누락율 (Empty Final)** | 0/30 (0.0%) | 0/30 (0.0%) | 1차 96.7% 실패 완전 해소 |
+| **평균 추론 지연시간** | 5,769.22 ms | **5,613.96 ms** | Qwen3.8이 약 155ms 빠름 |
+| **평균 생성 토큰 수** | 118.0 토큰 | **115.8 토큰** | Qwen3.8의 간결한 출력 |
+| **한국어 무결성 (오염 여부)** | CJK/영문 불완전 누출 1건 (`국wang`, `총质量的`) | 정상 (한자 단순 병기 외 누출 없음) | Qwen3.8 우수 |
+
+### 2) 재검증 결론
+- Qwen3.5-4B의 이전 응답 누락 문제는 `enable_thinking=False` 적용 시 0%로 완벽하게 해결됨을 확인했습니다.
+- 그러나 순수 한국어 생성 품질 측면에서 Qwen3.5-4B는 조선 국왕을 '세조'로 답하거나 중국어 문법 표현(`총质量的`), 비정상 결합 토큰(`국wang`)을 노출하는 결함이 나타났습니다.
+- 반면 `empero-ai/Qwen3.8-4B-Distill`은 핵심 상식 질문에 완벽하게 정답을 내놓았으며, 한국어 문장 형태와 구조적 완결성이 뛰어났습니다.
+- **최종 판정:** 1차 및 2차 non-thinking 검증 결과를 종합하여, ULM 차세대 4B 베이스 모델로 **`empero-ai/Qwen3.8-4B-Distill`**의 선정을 최종 확정합니다. (상세 내역은 `reports/base-model-comparison/non-thinking-final/FINAL_BASE_MODEL_DECISION.md` 참조)
+

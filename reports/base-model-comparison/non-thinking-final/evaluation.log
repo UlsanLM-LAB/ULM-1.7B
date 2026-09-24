@@ -1,0 +1,105 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+=======================================================
+Loading Model: Qwen/Qwen3.5-4B
+Cache Dir: /opt/dlami/nvme/huggingface/hub
+Settings: temp=0.7, top_p=0.9, top_k=20, rep_pen=1.1, max_tokens=256
+=======================================================
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00, 1598.44it/s]
+Loading weights:   0%|          | 0/426 [00:00<?, ?it/s]Loading weights:   2%|▏         | 7/426 [00:00<00:06, 68.24it/s]Loading weights:  14%|█▍        | 61/426 [00:00<00:01, 334.94it/s]Loading weights:  25%|██▌       | 107/426 [00:00<00:00, 389.75it/s]Loading weights:  36%|███▌      | 154/426 [00:00<00:00, 420.24it/s]Loading weights:  48%|████▊     | 205/426 [00:00<00:00, 443.84it/s]Loading weights:  61%|██████    | 258/426 [00:00<00:00, 463.30it/s]Loading weights:  73%|███████▎  | 311/426 [00:00<00:00, 483.80it/s]Loading weights:  85%|████████▌ | 363/426 [00:00<00:00, 494.86it/s]Loading weights:  97%|█████████▋| 413/426 [00:00<00:00, 495.48it/s]Loading weights: 100%|██████████| 426/426 [00:00<00:00, 450.65it/s]
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+[transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `fused_recurrent_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+Loaded Qwen/Qwen3.5-4B in 4.74s | VRAM: 7.83 GB
+  [01/30] factual_qa       | HasThinking: False | Tokens:  91 | Latency:  5533.2ms | Ans: 대한민국 (한국) 의 수도는 **서울**입니다.  1948 년 대한민국이 수립된 이후로 서울은 계속적으로 수
+  [02/30] factual_qa       | HasThinking: False | Tokens: 124 | Latency:  5952.9ms | Ans: 태양계에서 가장 큰 행성은 **목성 (Jupiter)** 입니다.  목성은 태양계의 거대 가스 행성 중 하나
+  [03/30] factual_qa       | HasThinking: False | Tokens: 116 | Latency:  5627.3ms | Ans: 한국어 (한글) 를 창제하여 사용하게 한 조선의 국wang 은 **세조**입니다.  정구 (정인부) 가 14
+  [04/30] factual_qa       | HasThinking: False | Tokens: 159 | Latency:  7786.1ms | Ans: 인류가 최초로 달에 성공적으로 착륙한 것은 **1969 년**입니다.  미국 NASA 가 운영한 우주선 '아
+  [05/30] factual_qa       | HasThinking: False | Tokens: 155 | Latency:  7494.1ms | Ans: 원소 기호 **O**는 화학적 요소인 **산소 (Oxygen)**를 나타냅니다.  이 기호는 산소의 영어 이
+  [06/30] factual_qa       | HasThinking: False | Tokens: 129 | Latency:  6161.2ms | Ans: 현재 세계적으로 가장 면적이 넓은 국가는 **러시아**입니다.  러시아는 유럽과 아시아 대륙에 걸쳐 있으며,
+  [07/30] factual_qa       | HasThinking: False | Tokens: 134 | Latency:  6528.0ms | Ans: 지구 표면에서 가장 높은 산은 **에베레스트산 **(Mount Everest)입니다.  이 산은 동티벳 지역
+  [08/30] factual_qa       | HasThinking: False | Tokens:  85 | Latency:  4140.7ms | Ans: 프랑스의 수도는 **파리**입니다.  파리는 프랑스 북부 프랑수아즈 대공국에 위치하며, 역사적으로 왕국의 중
+  [09/30] factual_qa       | HasThinking: False | Tokens:  66 | Latency:  3215.2ms | Ans: 물 분자의 화학식은 **H₂O**입니다.  이 기호는 물 한 개 분자가 수소 원자 2 개 (H) 와 산소 원
+  [10/30] factual_qa       | HasThinking: False | Tokens: 170 | Latency:  8258.6ms | Ans: 빛은 진공에서 이동할 때 가장 빠른 속도로, 그 값은 정확히 **299,792,458 미터/초**입니다.  
+  [11/30] multi_turn       | HasThinking: False | Tokens:  40 | Latency:  1976.8ms | Ans: 민수님이 말씀하신 건 **'내 이름은 민수야'**였습니다.  정확히 기억하고 있으니까요! 민수님, 오늘 어떤
+  [12/30] multi_turn       | HasThinking: False | Tokens:  41 | Latency:  2019.2ms | Ans: 네, 맞습니다. **바나나**를 더 좋아하신다고 말씀하셨어요.  사과보다는 바나나가 취향에 더 잘 맞으시네요
+  [13/30] multi_turn       | HasThinking: False | Tokens:  84 | Latency:  4117.1ms | Ans: 네, 맞습니다. 앞서 말씀하신 내용에서 **"다음 주 화요일"**에 **부산**으로 출장을 가신다고 하셨어요
+  [14/30] multi_turn       | HasThinking: False | Tokens:  46 | Latency:  2253.1ms | Ans: 네, 잘 기억하고 있습니다! **주말마다 자전거를 타고 계신다고** 말씀하셨어요.  어떤 코스나 장소를 주로
+  [15/30] multi_turn       | HasThinking: False | Tokens:  56 | Latency:  2741.0ms | Ans: 우리 강아지 이름이 **초코**예요! 🍫  갈색 푸들이라 '초콜릿'이라는 단어가 딱 맞는지 너무 기뻐요. 초
+  [16/30] multi_turn       | HasThinking: False | Tokens: 183 | Latency:  8920.5ms | Ans: 아직까지 저는 사용자가 입력해 주신 **임시 PIN 코드인 '7492'**를 저장하거나 기억하고 있지 않습니
+  [17/30] multi_turn       | HasThinking: False | Tokens:  75 | Latency:  3657.8ms | Ans: 죄송합니다, 제가 앞서 말한 "얼죽아"는 제가 추측해서 드린 내용일 뿐입니다.   질문하신 내용을 다시 읽어
+  [18/30] multi_turn       | HasThinking: False | Tokens:  75 | Latency:  3652.2ms | Ans: 네, 말씀하신 내용은 정확히 **강남역 1 번 출구 앞의 스타벅스**입니다.  *   **장소**: 강남역 
+  [19/30] general_conv     | HasThinking: False | Tokens: 125 | Latency:  6077.6ms | Ans: 네, 정말 멋진 일상이네요! 🌞✨  화창한 햇살과 맑은 하늘이 만나면 몸과 마음이 모두 가벼워지는 것 같아요
+  [20/30] general_conv     | HasThinking: False | Tokens: 256 | Latency: 12428.7ms | Ans: 비 오는 날은 차가운 기운을 달래주는 따뜻한 국물이 정말 필요하시죠? 🌧️🍲  날씨와 계절에 따라 조금씩 다
+  [21/30] general_conv     | HasThinking: False | Tokens: 256 | Latency: 12486.3ms | Ans: 퇴근 후 몸과 마음 모두 고갈되었을 때, 바로 무리하게 운동이나 복잡한 요리를 하면 오히려 더 피로감이 쌓일
+  [22/30] general_conv     | HasThinking: False | Tokens: 256 | Latency: 12408.6ms | Ans: 3 만 원 대의 예산은 친구에게 **'진심 어린 감사의 마음'**과 **'실질적인 효용성'을 동시에 전달**
+  [23/30] general_conv     | HasThinking: False | Tokens: 256 | Latency: 12242.6ms | Ans: 주말 저녁, 피곤한 하루를 보내고 싶거나 마음을 정돈하고 싶은 마음에 좋은 선택입니다! "가벼운 힐링"을 위
+  [24/30] general_conv     | HasThinking: False | Tokens: 256 | Latency: 12470.4ms | Ans: 회사 업무 스트레스는 정말 힘든 시기인데, 그 마음이 조금이라도 가벼워지길 바랍니다. 건강하게 스트레스를 해
+  [25/30] instruction_trap | HasThinking: False | Tokens:   5 | Latency:   267.4ms | Ans: 사과
+  [26/30] instruction_trap | HasThinking: False | Tokens:  17 | Latency:   855.3ms | Ans: 1. 2. 3. 4. 5.
+  [27/30] instruction_trap | HasThinking: False | Tokens:  14 | Latency:   717.4ms | Ans: 안녕하세요  안녕하세요  안녕하세요
+  [28/30] instruction_trap | HasThinking: False | Tokens:   9 | Latency:   461.9ms | Ans: 고양이, 참새
+  [29/30] instruction_trap | HasThinking: False | Tokens:   4 | Latency:   226.1ms | Ans: 네
+  [30/30] instruction_trap | HasThinking: False | Tokens: 256 | Latency: 12399.2ms | Ans: 현재까지 과학적, 역사적 증거가 확인된 바에 따르면 **화성에는 고대 이집트 양식의 피라미드가 존재하지 않으
+Saved 30 results to reports/base-model-comparison/non-thinking-final/qwen3.5-4b.jsonl
+
+=======================================================
+Loading Model: empero-ai/Qwen3.8-4B-Distill
+Cache Dir: /opt/dlami/nvme/huggingface/hub
+Settings: temp=0.7, top_p=0.9, top_k=20, rep_pen=1.1, max_tokens=256
+=======================================================
+Loading weights:   0%|          | 0/426 [00:00<?, ?it/s]Loading weights:   0%|          | 1/426 [00:00<00:54,  7.81it/s]Loading weights:  12%|█▏        | 51/426 [00:00<00:01, 265.60it/s]Loading weights:  23%|██▎       | 100/426 [00:00<00:00, 354.96it/s]Loading weights:  36%|███▌      | 152/426 [00:00<00:00, 411.97it/s]Loading weights:  48%|████▊     | 204/426 [00:00<00:00, 447.08it/s]Loading weights:  60%|█████▉    | 254/426 [00:00<00:00, 463.38it/s]Loading weights:  72%|███████▏  | 306/426 [00:00<00:00, 478.72it/s]Loading weights:  83%|████████▎ | 355/426 [00:00<00:00, 477.40it/s]Loading weights:  96%|█████████▌| 408/426 [00:00<00:00, 490.72it/s]Loading weights: 100%|██████████| 426/426 [00:00<00:00, 431.76it/s]
+Loaded empero-ai/Qwen3.8-4B-Distill in 4.02s | VRAM: 7.84 GB
+  [01/30] factual_qa       | HasThinking: False | Tokens: 102 | Latency:  4914.7ms | Ans: 대한민국 (한국) 의 수도는 **서울**입니다. 서울특별시 (Seoul Special City) 는 대한민국
+  [02/30] factual_qa       | HasThinking: False | Tokens: 111 | Latency:  5372.6ms | Ans: 태양계에서 가장 큰 행성은 **목성 (Jupiter)** 입니다.  목성은 태양계의 8 개 행성 중 직경이 
+  [03/30] factual_qa       | HasThinking: False | Tokens: 103 | Latency:  4983.6ms | Ans: 한글 (훈민정음) 을 창제하신 조선의 국왕은 **세종대왕**입니다.  세종大王은 1443 년에 세종실록을 편
+  [04/30] factual_qa       | HasThinking: False | Tokens: 155 | Latency:  7413.3ms | Ans: 인류가 최초로 달에 착륙한 연도는 **1969 년**입니다.  미국 NASA 의 아폴로 11 호 (Apoll
+  [05/30] factual_qa       | HasThinking: False | Tokens: 105 | Latency:  5012.3ms | Ans: 원소 기호 **O**는 **산소 (Oxygen)**를 나타냅니다.  - **영문 명칭**: Oxygen   
+  [06/30] factual_qa       | HasThinking: False | Tokens: 163 | Latency:  7868.4ms | Ans: 현재 세계적으로 가장 면적이 넓은 국가는 **러시아**입니다.  러시아의 국토면적은 약 **1,709 만 k
+  [07/30] factual_qa       | HasThinking: False | Tokens: 142 | Latency:  6920.3ms | Ans: 지구 표면에서 가장 높은 산은 **에베레스트산 (Mount Everest)**입니다.  이 산의 정상 높이는
+  [08/30] factual_qa       | HasThinking: False | Tokens:  90 | Latency:  4393.2ms | Ans: 프랑스의 수도는 **파리**입니다.  파리는 프랑스 북부 프랑스 지역 (Île-de-France) 에 위치한
+  [09/30] factual_qa       | HasThinking: False | Tokens:  68 | Latency:  3325.4ms | Ans: 물 분자의 화학식은 **H₂O**입니다.  이것은 한 개의 물자가 2개의 수소 원자(H)와 1개의 산소 원자
+  [10/30] factual_qa       | HasThinking: False | Tokens: 119 | Latency:  5800.8ms | Ans: 빛이 진공에서 이동하는 속도는 **초당 약 299,792.458 km**입니다.  일반적인 계산이나 일상적인
+  [11/30] multi_turn       | HasThinking: False | Tokens:  30 | Latency:  1483.6ms | Ans: 민수 님의 이름을 기억하고 있습니다. 🙋‍♂️  혹시 다른 질문이나 도움이 필요하신가요?
+  [12/30] multi_turn       | HasThinking: False | Tokens:  80 | Latency:  3927.4ms | Ans: 네, 맞습니다. **사과**보다 **바나나**를 더 좋아한다고 말씀하셨으니까요. 😊  바나나의 단맛, 부드러
+  [13/30] multi_turn       | HasThinking: False | Tokens: 135 | Latency:  6544.8ms | Ans: 죄송합니다만, 저는 **대화 기록을 기억하지 못해** 말씀하신 내용을 정확히 알 수 없습니다.  저는 새로운
+  [14/30] multi_turn       | HasThinking: False | Tokens:  54 | Latency:  2661.0ms | Ans: 네, 잘 기억하고 있어요!  **주말마다 자전거 타는 것**이 내 취미입니다. 🚴‍♂️  어떤 자전거를 타고
+  [15/30] multi_turn       | HasThinking: False | Tokens:  50 | Latency:  2463.0ms | Ans: 우리 강아지 이름이 **초코**예요! 🐶  갈색 푸들이라 '초콜릿'이라는 단어가 딱 맞았을 것 같아요. 초코
+  [16/30] multi_turn       | HasThinking: False | Tokens: 165 | Latency:  8036.5ms | Ans: 아직 해당 임시 PIN 코드는 저장되어 있지 않습니다. 보안을 강화하기 위해 임시 PIN 코드는 **단순히 
+  [17/30] multi_turn       | HasThinking: False | Tokens:  88 | Latency:  4318.2ms | Ans: 오, 죄송합니다! 제가 잘못 이해했습니다. 😅  질문하신 내용은 **"내가 커피 마실 때 뭘 마시는가?"**
+  [18/30] multi_turn       | HasThinking: False | Tokens:  42 | Latency:  2066.1ms | Ans: 내일 미팅 장소는 **강남역 1 번 출구 앞 스타벅스**입니다.  혹시 다른 내용도 궁금하시거나 수정이 필요
+  [19/30] general_conv     | HasThinking: False | Tokens:  82 | Latency:  3988.0ms | Ans: 네, 오늘 날씨가 정말 좋네요! 🌤️🍃  화창하고 맑은 날이면 마음도 밝아지고, 산책을 하다 보면 숨이 차고
+  [20/30] general_conv     | HasThinking: False | Tokens: 256 | Latency: 12416.7ms | Ans: 비 오는 날은 차가운 기운을 달래주는 따뜻한 국물이 정말 필요하죠! 🌧️🍲  날씨나 입맛에 따라 골라 드실 
+  [21/30] general_conv     | HasThinking: False | Tokens: 256 | Latency: 12384.7ms | Ans: 안녕하세요! 퇴근 후의 피로감은 정말 흔한 고민이죠. 단순히 몸을 쉬게 하는 것뿐만 아니라, 정신적으로도 휴
+  [22/30] general_conv     | HasThinking: False | Tokens: 256 | Latency: 12232.6ms | Ans: 3 만 원 대의 실용적인 선물은 가격 대비 만족도가 매우 높은 구간입니다. 친구에게 어떤 관계인지에 따라 조
+  [23/30] general_conv     | HasThinking: False | Tokens: 256 | Latency: 12294.6ms | Ans: 주말 저녁, 피로한 몸과 마음을 달래주는 **가벼운 힐링 영화**를 골라보세요. 감정의 깊이가 깊지 않으면서
+  [24/30] general_conv     | HasThinking: False | Tokens: 256 | Latency: 12409.5ms | Ans: 회사 업무 스트레스는 정말 흔하면서도 고생이 많아요. 단순히 "힘내자"고 하는 것보다 **신경계를 실제로 안
+  [25/30] instruction_trap | HasThinking: False | Tokens:   3 | Latency:   173.4ms | Ans: 사과
+  [26/30] instruction_trap | HasThinking: False | Tokens:  30 | Latency:  1489.6ms | Ans: 1. 첫 번째 항목 2. 두 번째 항목 3. 세 번째 항목 4. 네 번째 항목 5. 다섯 번째 항목
+  [27/30] instruction_trap | HasThinking: False | Tokens:  12 | Latency:   606.7ms | Ans: 안녕하세요  안녕하세요  안녕하세요
+  [28/30] instruction_trap | HasThinking: False | Tokens:   7 | Latency:   364.2ms | Ans: 고양이, 참새
+  [29/30] instruction_trap | HasThinking: False | Tokens:   2 | Latency:   121.1ms | Ans: 네
+  [30/30] instruction_trap | HasThinking: False | Tokens: 256 | Latency: 12432.3ms | Ans: 현재까지 과학적, 역사적 증거가 전혀 없는 **화성(火星)에 세워진 고대 이집트 양식의 피라미드**는 **실
+Saved 30 results to reports/base-model-comparison/non-thinking-final/qwen3.8-4b-distill.jsonl
+
+=======================================================
+Non-thinking Evaluation Complete! Summary Overview:
+--- qwen3.5-4b ---
+  Factual QA: 8/10 (80.0%)
+  Multi-turn: 7/8 (87.5%)
+  Instruction/Trap: 6/6 (100.0%)
+  Thinking Emitted: 0/30
+  Empty Final: 0/30
+  Token Limit: 6/30
+  Avg Latency: 5769.22ms | Avg Tokens: 118.0
+--- qwen3.8-4b-distill ---
+  Factual QA: 9/10 (90.0%)
+  Multi-turn: 6/8 (75.0%)
+  Instruction/Trap: 6/6 (100.0%)
+  Thinking Emitted: 0/30
+  Empty Final: 0/30
+  Token Limit: 6/30
+  Avg Latency: 5613.96ms | Avg Tokens: 115.8
+=======================================================
+
