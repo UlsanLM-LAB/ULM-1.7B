@@ -154,6 +154,8 @@ def evaluate_response(
         else:
             kw = item.get("keywords", [])
             dialect_hit = any(k in norm for k in kw)
+        if item.get("required_keywords"):
+            dialect_hit = dialect_hit and all(k in norm for k in item["required_keywords"])
 
     return {
         "empty_final": empty_final,
@@ -237,6 +239,7 @@ def run_evaluation(
         row = {
             "id": item["id"],
             "category": item["category"],
+            "subtask": item.get("subtask"),
             "prompt": item["prompt"],
             "raw_output": raw_text,
             "thinking_content": thinking_text,

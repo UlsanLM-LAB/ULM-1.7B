@@ -36,6 +36,7 @@ def run_single_pilot(
     max_steps: int = 25,
     micro_batch: int = 8,
     grad_accum: int = 4,
+    sequential: bool = False,
 ) -> dict:
     print(f"\n{'='*70}")
     print(f">>> Running {name} <<<")
@@ -78,6 +79,7 @@ def run_single_pilot(
         eval_strategy="no",
         gradient_checkpointing=True,
         completion_only_loss=True,
+        train_sampling_strategy="sequential" if sequential else "random",
         seed=42,
         data_seed=42,
         report_to="none",

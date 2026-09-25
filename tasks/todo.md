@@ -59,3 +59,19 @@ Startup verified: 3,910 examples, 2,800 dialect, 1,000 factual/general,
 110 memory/instruction; zero exact benchmark prompt overlap. Remote pipeline PID
 14776; pilot running. Full training and final evaluation remain conditional on
 the pilot gate. EC2 remains running.
+
+# Phase3 v3 recovery v3 (2026-09-25)
+
+- [x] Analyze v2 dialect skill coverage and repetition within 15 minutes.
+- [ ] Build v4 skill dataset (five tasks) and 55/30/15 replay mix; verify target-token share and benchmark disjointness.
+- [ ] Create independent 20-prompt dialect gate and baseline.
+- [ ] Run detached 15+15 curriculum pilot from original base, evaluate both dialect gates automatically.
+- [ ] Continue fresh-base full run only on pilot PASS; gate steps 70/140 and optional 210.
+- [ ] On success, evaluate 150+50+20 and FP32 parity; write report and push small files.
+
+## Review
+
+V2 dialect train split contained 2,654 examples: all 2,654 were conversion prompts,
+with no dedicated meaning, correction, or ending-selection tasks. It repeated
+roughly 1,327 paired targets twice. Among 2,654 targets, 1,590 contained
+`아이가`, but none contained `퍼뜩`, `단디`, `뭇나`, `온나`, `천지빼까리`, or `파이다`.

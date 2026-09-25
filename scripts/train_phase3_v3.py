@@ -69,7 +69,8 @@ def checked_copy(source: Path, target: Path) -> None:
 
 class V3GateCallback(TrainerCallback):
     def __init__(
-        self, model_path: str, gate_path: str, reports: Path, ebs: Path, nvme: Path, interval: int
+        self, model_path: str, gate_path: str, reports: Path, ebs: Path, nvme: Path, interval: int,
+        independent_gate_path: str | None = None,
     ) -> None:
         self.model_path = model_path
         self.gate_path = gate_path
@@ -77,6 +78,7 @@ class V3GateCallback(TrainerCallback):
         self.ebs = ebs
         self.nvme = nvme
         self.interval = interval
+        self.independent_gate_path = independent_gate_path
         self.history = sorted(
             (json.loads(p.read_text()) for p in reports.glob("gate-step-*.json")),
             key=lambda row: row["global_step"],
@@ -126,6 +128,18 @@ class V3GateCallback(TrainerCallback):
             for row in rows
             if row["category"] == "dialect_eval"
         )
+        if self.independent_gate_path:
+            with preserved_rng_state():
+                independent_rows, independent_summary = run_evaluation(
+                    model_path=self.model_path, adapter_path=str(source),
+                    benchmark_path=self.independent_gate_path, device="cuda:0", max_new_tokens=256,
+                )
+            summary["independent20"] = independent_summary["dialect_eval"]
+            (self.reports / f"independent-step-{step}.json").write_text(
+                json.dumps(independent_summary, ensure_ascii=False, indent=2) + "\n")
+            with (self.reports / f"independent-step-{step}.jsonl").open("w") as file:
+                for row in independent_rows:
+                    file.write(json.dumps(row, ensure_ascii=False) + "\n")
         (self.reports / f"gate-step-{step}.json").write_text(
             json.dumps(summary, ensure_ascii=False, indent=2) + "\n"
         )
@@ -139,15 +153,30 @@ class V3GateCallback(TrainerCallback):
         self.history.append(summary)
         passed = all(summary[key]["accuracy_pct"] >= threshold for key, threshold in GATES.items())
         def acceptable(row):
+            if self.independent_gate_path:
+                return (row["factual_qa"]["accuracy_pct"] >= 80.0
+                        and row["multi_turn"]["accuracy_pct"] >= 85.0
+                        and row["instruction_trap"]["accuracy_pct"] >= 95.0)
             return (row["factual_qa"]["accuracy_pct"] >= 83.3
                     and row["multi_turn"]["accuracy_pct"] >= 87.5
                     and row["instruction_trap"]["accuracy_pct"] == 100.0)
         def quality(row):
+            if self.independent_gate_path:
+                return (row["dialect_eval"]["accuracy_pct"] + row["independent20"]["accuracy_pct"],
+                        row["dialect_eval"]["accuracy_pct"],
+                        row["factual_qa"]["accuracy_pct"] + row["multi_turn"]["accuracy_pct"]
+                        + row["instruction_trap"]["accuracy_pct"])
             return (row["dialect_eval"]["accuracy_pct"],
                     row["factual_qa"]["accuracy_pct"] + row["multi_turn"]["accuracy_pct"]
                     + row["instruction_trap"]["accuracy_pct"])
         earlier = [row for row in self.history[:-1] if acceptable(row)]
-        if acceptable(summary) and (not earlier or quality(summary) > max(map(quality, earlier))):
+        independent_base = None
+        if self.independent_gate_path:
+            independent_base = json.loads((self.reports / "base-independent-20-summary.json").read_text())["dialect_eval"]["accuracy_pct"]
+        success_candidate = (self.independent_gate_path and step >= 140 and passed
+                             and summary["independent20"]["accuracy_pct"] >= independent_base + 10.0)
+        if (acceptable(summary) and (independent_base is None or summary["independent20"]["accuracy_pct"] > independent_base)
+                and (success_candidate or not earlier or quality(summary) > max(map(quality, earlier)))):
             target = self.ebs / f"best-checkpoint-{step}"
             temp = target.with_name(target.name + ".copying")
             if temp.exists():
@@ -158,10 +187,29 @@ class V3GateCallback(TrainerCallback):
             for old in self.ebs.glob("best-checkpoint-*"):
                 if old != target and old.is_dir():
                     shutil.rmtree(old)
-        if passed or not acceptable(summary) or (step == 70 and summary["dialect_eval"]["accuracy_pct"] <= self.base_summary["dialect_eval"]["accuracy_pct"]):
-            control.should_training_stop = True
-        if step >= 140 and previous and summary["dialect_eval"]["accuracy_pct"] <= previous["dialect_eval"]["accuracy_pct"]:
-            control.should_training_stop = True
+        if self.independent_gate_path:
+            pilot = json.loads((self.reports / "pilot-summary.json").read_text())
+            pilot20 = json.loads((self.reports / "pilot-independent-20-summary.json").read_text())["dialect_eval"]["accuracy_pct"]
+            old_score = summary["dialect_eval"]["accuracy_pct"]
+            mini_score = summary["independent20"]["accuracy_pct"]
+            old_floor = max(25.0, pilot["dialect_eval"]["accuracy_pct"])
+            mini_floor = max(independent_base, pilot20)
+            if step == 70:
+                progressing = old_score >= old_floor and mini_score >= mini_floor and (old_score > old_floor or mini_score > mini_floor)
+            else:
+                progressing = (previous is not None and old_score >= previous["dialect_eval"]["accuracy_pct"]
+                               and mini_score >= previous["independent20"]["accuracy_pct"]
+                               and (old_score > previous["dialect_eval"]["accuracy_pct"] or mini_score > previous["independent20"]["accuracy_pct"]))
+            success = (step >= 140 and passed and mini_score >= independent_base + 10.0)
+            if not acceptable(summary) or success or not progressing:
+                control.should_training_stop = True
+            summary["gate_decision"] = "success" if success else ("continue" if progressing and acceptable(summary) else "stop")
+            (self.reports / f"gate-step-{step}.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n")
+        else:
+            if passed or not acceptable(summary) or (step == 70 and summary["dialect_eval"]["accuracy_pct"] <= self.base_summary["dialect_eval"]["accuracy_pct"]):
+                control.should_training_stop = True
+            if step >= 140 and previous and summary["dialect_eval"]["accuracy_pct"] <= previous["dialect_eval"]["accuracy_pct"]:
+                control.should_training_stop = True
         print(
             f"Gate {step}: factual={summary['factual_qa']['accuracy_pct']} "
             f"memory={summary['multi_turn']['accuracy_pct']} "
@@ -190,6 +238,8 @@ def main() -> None:
     parser.add_argument("--resume", default=None)
     parser.add_argument("--lr", type=float, required=True)
     parser.add_argument("--max-steps", type=int, default=210)
+    parser.add_argument("--independent-gate", default=None)
+    parser.add_argument("--sequential", action="store_true")
     args = parser.parse_args()
     if 32 % args.micro_batch:
         parser.error("micro batch must divide effective batch 32")
@@ -228,7 +278,7 @@ def main() -> None:
         logging_steps=10,
         gradient_checkpointing=args.gradient_checkpointing,
         completion_only_loss=True,
-        train_sampling_strategy="group_by_length" if args.group_by_length else "random",
+        train_sampling_strategy="sequential" if args.sequential else ("group_by_length" if args.group_by_length else "random"),
         dataloader_num_workers=args.workers,
         dataloader_pin_memory=True,
         dataloader_persistent_workers=args.workers > 0,
@@ -237,7 +287,7 @@ def main() -> None:
         data_seed=42,
         report_to="none",
     )
-    callback = V3GateCallback(args.model, args.gate, reports, ebs, nvme, 70)
+    callback = V3GateCallback(args.model, args.gate, reports, ebs, nvme, 70, args.independent_gate)
     trainer = SFTTrainer(
         model=model,
         args=config,

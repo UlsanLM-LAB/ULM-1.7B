@@ -1,0 +1,20 @@
+{"id": "v4c01", "category": "dialect_eval", "subtask": "conversion", "prompt": "친구에게 '지금 어디쯤 와 있어?'를 울산에서 자연스럽게 들을 만한 말투로 전해 봐.", "dialect_gen": true, "markers": ["어데", "어디", "왔노", "오노", "왔나"]}
+{"id": "v4c02", "category": "dialect_eval", "subtask": "conversion", "prompt": "'늦기 전에 서둘러 출발하자'를 자연스러운 경상도 말투 한 문장으로 바꿔줘.", "dialect_gen": true, "markers": ["퍼뜩", "빨리 가자", "가자 아이가", "가자데이"]}
+{"id": "v4c03", "category": "dialect_eval", "subtask": "conversion", "prompt": "친한 사람에게 '그 이야기 정말 맞아?'라고 울산 말투로 물어봐.", "dialect_gen": true, "markers": ["맞나", "맞제", "진짜가", "그라나"]}
+{"id": "v4c04", "category": "dialect_eval", "subtask": "conversion", "prompt": "'물건이 너무 많아서 정리하기 힘들다'를 경상도식으로 자연스럽게 표현해 봐.", "dialect_gen": true, "markers": ["천지빼까리", "억수로", "마이", "힘들데이"]}
+{"id": "v4c05", "category": "dialect_eval", "subtask": "conversion", "prompt": "'오늘은 그 식당에 가기 싫어'를 자연스러운 울산/경상 말투로 말해줘.", "dialect_gen": true, "markers": ["가기 싫다", "안 갈란다", "파이다", "안 간데이"]}
+{"id": "v4c06", "category": "dialect_eval", "subtask": "conversion", "prompt": "'준비물을 빠짐없이 챙겨'를 친한 사이에서 쓰는 경상도 말투로 바꿔줘.", "dialect_gen": true, "markers": ["단디", "챙기라", "챙겨라", "챙기래이"]}
+{"id": "v4m01", "category": "dialect_eval", "subtask": "meaning", "prompt": "경상도에서 '퍼뜩 가자'라고 하면 무엇을 재촉하는 말이야? 표준어로 풀어줘.", "keywords": ["빨리", "서둘", "얼른"]}
+{"id": "v4m02", "category": "dialect_eval", "subtask": "meaning", "prompt": "'물건이 천지빼까리다'는 어떤 상태라는 뜻이야? 표준어로 알려줘.", "keywords": ["많", "가득", "잔뜩"]}
+{"id": "v4m03", "category": "dialect_eval", "subtask": "meaning", "prompt": "친구가 '그거 파이다'라고 하면 호의적인 말이야? 뜻을 풀어줘.", "keywords": ["별로", "아니", "좋지 않", "마음에 안"]}
+{"id": "v4m04", "category": "dialect_eval", "subtask": "meaning", "prompt": "'점심은 뭇나?'라는 질문을 표준어로 설명해 줘.", "keywords": ["먹었", "식사했", "점심 먹"]}
+{"id": "v4g01", "category": "dialect_eval", "subtask": "grammar", "prompt": "경상도 말투에서 예/아니요로 답할 질문과 '뭐/왜'를 묻는 질문의 종결어미가 어떻게 달라질 수 있는지 ~나, ~노를 써서 짧게 설명해줘.", "required_keywords": ["나", "노"], "keywords": ["의문", "질문", "예", "왜", "뭐"]}
+{"id": "v4g02", "category": "dialect_eval", "subtask": "grammar", "prompt": "'맞제?'의 끝에 붙은 ~제는 상대에게 어떤 반응을 기대할 때 자연스러워?", "keywords": ["동의", "확인", "맞", "그렇"]}
+{"id": "v4g03", "category": "dialect_eval", "subtask": "grammar", "prompt": "'조심해서 가래이'와 '조심해서 가데이' 같은 끝맺음을 무턱대고 아무 문장에나 붙이면 왜 어색할 수 있어?", "keywords": ["맥락", "상황", "어색", "말투", "의미"]}
+{"id": "v4g04", "category": "dialect_eval", "subtask": "grammar", "prompt": "친구한테 '어데 가노?'라고 물을 때 ~노가 나타내는 문장 기능은 뭐야?", "keywords": ["어디", "묻", "질문", "의문"]}
+{"id": "v4e01", "category": "dialect_eval", "subtask": "correction", "prompt": "'니 지금 뭐 하고 있나데이?'가 어색해. 자연스러운 경상도식 질문으로 고쳐줘.", "dialect_gen": true, "markers": ["뭐 하노", "뭐 하니", "뭐하노", "뭐 하나"]}
+{"id": "v4e02", "category": "dialect_eval", "subtask": "correction", "prompt": "'그거 진짜 맞제노?'에서 어색하게 겹친 끝맺음을 고쳐 자연스럽게 말해줘.", "dialect_gen": true, "markers": ["맞제", "맞나", "맞아"]}
+{"id": "v4e03", "category": "dialect_eval", "subtask": "correction", "prompt": "'준비물 단디 챙겨아이가데이'를 자연스럽게 고쳐줘.", "dialect_gen": true, "markers": ["단디 챙기라", "단디 챙겨라", "단디 챙겨", "단디 챙겨래이"]}
+{"id": "v4d01", "category": "dialect_eval", "subtask": "contextual", "history": [["내일 일찍 만나자. 울산 말투로 계속 얘기해 줘.", "그래, 내일 아침에 보자데이."]], "prompt": "좋아. 그럼 늦지 않게 빨리 오라고 어떻게 말할래?", "dialect_gen": true, "markers": ["퍼뜩", "온나", "빨리 오", "늦지 마라"]}
+{"id": "v4d02", "category": "dialect_eval", "subtask": "contextual", "history": [["친구랑 점심 얘기 중이야. 울산식 말투로 부탁해.", "그래, 밥 묵으러 가자."]], "prompt": "친구가 이미 밥을 먹었는지 자연스럽게 물어봐.", "dialect_gen": true, "markers": ["뭇나", "묵었나", "밥 문나", "밥 묵"]}
+{"id": "v4d03", "category": "dialect_eval", "subtask": "contextual", "history": [["시장에 물건이 잔뜩 쌓였어. 말투 유지해 줘.", "와, 물건이 억수로 많네."]], "prompt": "이 많은 물건을 보고 친구에게 한마디 더 해봐.", "dialect_gen": true, "markers": ["천지빼까리", "마이", "많네", "억수로"]}
