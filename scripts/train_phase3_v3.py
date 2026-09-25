@@ -158,7 +158,7 @@ class V3GateCallback(TrainerCallback):
             for old in self.ebs.glob("best-checkpoint-*"):
                 if old != target and old.is_dir():
                     shutil.rmtree(old)
-        if not acceptable(summary) or (step == 70 and summary["dialect_eval"]["accuracy_pct"] <= self.base_summary["dialect_eval"]["accuracy_pct"]):
+        if passed or not acceptable(summary) or (step == 70 and summary["dialect_eval"]["accuracy_pct"] <= self.base_summary["dialect_eval"]["accuracy_pct"]):
             control.should_training_stop = True
         if step >= 140 and previous and summary["dialect_eval"]["accuracy_pct"] <= previous["dialect_eval"]["accuracy_pct"]:
             control.should_training_stop = True

@@ -44,3 +44,18 @@ The step-70 full run failed its dialect and instruction gate and stopped.
 The safer step-25 B adapter scored factual 92%, memory 84%, instruction 100%,
 and dialect 16% on regression-150; dialect holdout-50 was 8%. FP32 merge
 passed 20/20 parity. Final verdict: FAIL against the dialect objective.
+
+# Phase3 v3 recovery v2 (2026-09-25)
+
+- [x] Trace failed B and identify more diverse, strong dialect training pairs.
+- [x] Build benchmark-disjoint recovery dataset from real dense pairs and capped replay.
+- [x] Keep completion-only masking, lower LR to 7e-6, and add automatic pilot/full gates.
+- [x] Start detached 30-step pilot from the original base model on EC2.
+- [ ] Automatic gate decides whether to continue to steps 70/140, select best, merge FP32, and evaluate 150+50.
+
+## Review
+
+Startup verified: 3,910 examples, 2,800 dialect, 1,000 factual/general,
+110 memory/instruction; zero exact benchmark prompt overlap. Remote pipeline PID
+14776; pilot running. Full training and final evaluation remain conditional on
+the pilot gate. EC2 remains running.
