@@ -63,9 +63,9 @@ the pilot gate. EC2 remains running.
 # Phase3 v3 recovery v3 (2026-09-25)
 
 - [x] Analyze v2 dialect skill coverage and repetition within 15 minutes.
-- [ ] Build v4 skill dataset (five tasks) and 55/30/15 replay mix; verify target-token share and benchmark disjointness.
-- [ ] Create independent 20-prompt dialect gate and baseline.
-- [ ] Run detached 15+15 curriculum pilot from original base, evaluate both dialect gates automatically.
+- [x] Build v4 skill dataset (five tasks) and 55/30/15 replay mix; verify target-token share and benchmark disjointness.
+- [x] Create independent 20-prompt dialect gate; baseline evaluation is running.
+- [x] Start detached 15+15 curriculum pilot pipeline from original base; it evaluates both dialect gates automatically.
 - [ ] Continue fresh-base full run only on pilot PASS; gate steps 70/140 and optional 210.
 - [ ] On success, evaluate 150+50+20 and FP32 parity; write report and push small files.
 
@@ -75,3 +75,9 @@ V2 dialect train split contained 2,654 examples: all 2,654 were conversion promp
 with no dedicated meaning, correction, or ending-selection tasks. It repeated
 roughly 1,327 paired targets twice. Among 2,654 targets, 1,590 contained
 `아이가`, but none contained `퍼뜩`, `단디`, `뭇나`, `온나`, `천지빼까리`, or `파이다`.
+
+Recovery v3 startup: 3,500 skill examples (1,225/700/525/525/525),
+1,909 factual/general and 954 memory/instruction examples; dialect target
+tokens 51.5%; exact prompt overlap 0. Stage counts verified at 384/60/36
+then 264/144/72. Detached pipeline PID 21304; base independent20 evaluation
+started. Full training and final evaluation are automatic and conditional.
