@@ -1,5 +1,54 @@
 # Phase 3 v3 Training Failure Diagnosis & Root Cause Analysis
 
+## 2026-09-25 recovery decision
+
+The failed step-70 checkpoint is excluded from further training. The recovery
+pipeline represents each example as a prompt plus its final assistant completion.
+TRL's `completion_only_loss=True` masks the complete prompt, including system,
+user, prior assistant turns, and the non-thinking assistant header. A runtime
+batch assertion verifies that target labels contain no user role header and
+that both masked and trainable tokens are present. The target completion ends
+with `<|im_end|>`, matching the Qwen chat template. This is used instead of
+merely setting `assistant_only_loss=True`, which depends on generation markers
+in the tokenizer chat template.
+The inspected template ends the prompt at
+`<|im_start|>assistant\n<think>\n\n</think>\n\n`; tokenizer EOS is
+`<|im_end|>` and padding is `<|endoftext|>`.
+
+The pilot mixtures include actual preservation replay: A has 45% dialect,
+40% factual/general, and 15% memory/instruction samples; B has 50%, 35%,
+and 15%. Assistant target tokens differ from sample proportions: A has
+84,494 dialect, 106,691 factual, and 18,032 instruction tokens; B has
+83,706 dialect, 81,958 factual, and 16,083 instruction tokens. Exact prompt
+overlap with regression-150 and dialect holdout-50 was checked as zero for
+both training splits. LR is reduced to 1.5e-5 or 1.0e-5; LoRA targets remain
+the same 12 projection modules.
+
+| Mixture | Dialect sample share | Factual sample share | Memory/instruction sample share | Dialect all-token share | Factual all-token share | Memory/instruction all-token share |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| A | 45.0% | 40.0% | 14.9% | 51.2% | 33.8% | 15.1% |
+| B | 50.0% | 35.0% | 15.0% | 56.1% | 29.0% | 14.9% |
+
+The quick repetition audit found a remaining limitation: factual replay has
+only 40 distinct response openings among 2,242 A examples (maximum 107
+repeats) and 1,751 B examples (maximum 87 repeats). Dialect responses are
+more diverse (2,442 distinct openings in A; each repeats at most eight times).
+The short pilot and early full-run gates are therefore important safeguards
+against replay-template overfitting. No new synthetic replay was added during
+this timeboxed recovery.
+
+Recovery outcome: both 25-step pilots preserved the 40-prompt Base scores but
+neither improved dialect (3/12 each). The lower-LR B pilot was selected for a
+fresh full run. At step 70, factual and memory still matched Base (11/12 and
+7/8), but instruction fell to 7/8 and dialect to 2/12. The run stopped there.
+The step-70 checkpoint fabricated an answer to a false-president trap and its
+average answer length shrank to 26 tokens. The selected step-25 B adapter was
+safer, but final regression-150 dialect was 4/25 (16%) versus Base 5/25
+(20%), and the 50-item dialect set was 4/50 (8%). The masking/replay/LR bug
+was fixed, yet this available data and short SFT schedule did not achieve the
+dialect objective. No further ablations were run under the timebox.
+
+
 **Document Date:** 2026-09-25  
 **Target Model:** `empero-ai/Qwen3.8-4B-Distill`  
 **Execution Environment:** AWS EC2 `i-0f732bf7d1cc409b4` (NVIDIA L40S 46GB)  
@@ -153,8 +202,8 @@ This explains why the model could not generalize: it memorized these specific ca
 
 ## 3. Recommended Remediation Plan
 
-1. **Enable Strict Assistant-Only Loss Masking:**
-   - Configure `assistant_only_loss=True` in `SFTConfig`.
+1. **Enable Strict Final-Assistant Loss Masking (implemented):**
+   - Use prompt/completion records and `completion_only_loss=True` in `SFTConfig`.
    - Ensure all prompt tokens up through `<|im_start|>assistant\n<think>\n\n</think>\n\n` are labeled with `-100`.
    - Only compute cross-entropy loss on assistant response tokens and `<|im_end|>\n`.
 2. **Rebalance Training Mixture with Preservation Replay:**
@@ -163,8 +212,8 @@ This explains why the model could not generalize: it memorized these specific ca
      - **General Korean & Factual Knowledge Replay:** ~40% (~2,200 samples)
      - **Multi-turn Memory & Instruction Replay:** ~15% (~800 samples)
    - Total dataset size: ~5,500 samples.
-3. **Lower Learning Rate:**
-   - Reduce LR from 5e-5 to **1.5e-5** with cosine decay and 10 warmup steps.
+3. **Lower Learning Rate (implemented):**
+   - Compare 1.5e-5 and 1.0e-5 with eight warmup steps; select 1.0e-5 by the preservation-first tie rule.
 4. **Preserve Failed Step-70 Checkpoint:**
-   - Retain `/opt/dlami/nvme/phase3-v3-checkpoints/checkpoint-70` as failure archive.
+   - The original failed step-70 checkpoint was moved to `/opt/dlami/nvme/phase3-v3-failed-step70-archive` for this running session.
    - Run fresh training from base model `/home/ubuntu/models/Qwen3.8-4B-Distill`.

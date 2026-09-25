@@ -1,5 +1,32 @@
 # Phase 3 v3 throughput optimization
 
+## Recovery run timebox update (2026-09-25)
+
+The recovery uses the measured micro-batch 8 / accumulation 4 configuration,
+SDPA, gradient checkpointing, and no packing. The earlier micro-batch 16 trial
+was slower (9.770 versus 6.157 seconds per step), so it was not repeated.
+Intermediate scoring uses a fixed 40-prompt subset (12 factual, 8 memory,
+8 instruction, 12 dialect) instead of the original 60 prompts. Pilot and
+checkpoint gates use the same subset and decoding parameters. Base on this
+subset: 91.7%, 87.5%, 100.0%, 25.0%, respectively. Only the selected best
+checkpoint receives the full 150-prompt regression and 50-prompt dialect
+holdout evaluation.
+
+Measured pilot costs on the masked, mixed data: A trained 25 optimizer steps
+in 114.42 seconds and scored 40 prompts in 271.93 seconds; B trained in
+140.96 seconds and scored in 391.05 seconds. B's longer generated responses
+(110.1 versus 78.4 tokens on average) explain most of its slower gate. These
+measured gate times are used for the remaining deadline decisions.
+
+The selected B full run stopped at step 70 after **453.9 seconds** including
+the **93.7-second** gate; peak reserved VRAM was **16.381 GiB**. No step 140
+or 210 was run. The final FP32 merged model averaged 5,126 ms and 115.1
+tokens on regression-150, and 5,429 ms and 122.1 tokens on dialect-50.
+FP32 was required to obtain 20/20 adapter-versus-merged greedy parity; a
+BF16 merge passed only 5/20 because small adapter deltas were rounded during
+the merge. The FP32 artifact is approximately 16 GiB on EBS.
+
+
 Date: 2026-09-25. EC2 `i-0f732bf7d1cc409b4`, NVIDIA L40S, 46 GB.
 
 ## Storage and starting point

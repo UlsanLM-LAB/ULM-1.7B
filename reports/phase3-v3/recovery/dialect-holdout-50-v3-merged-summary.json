@@ -1,0 +1,39 @@
+{
+  "model_path": "outputs/ulm-4b-phase3-v3-best-merged",
+  "adapter_path": null,
+  "total_prompts": 50,
+  "load_time_s": 4.19,
+  "vram_gb": 15.67,
+  "avg_latency_ms": 5429.15,
+  "avg_tokens": 122.1,
+  "empty_final_count": 0,
+  "token_limit_count": 9,
+  "cjk_leakage_count": 0,
+  "repetition_count": 4,
+  "malformed_unicode_count": 0,
+  "factual_qa": {
+    "total": 0,
+    "hits": 0,
+    "accuracy_pct": null
+  },
+  "multi_turn": {
+    "total": 0,
+    "hits": 0,
+    "accuracy_pct": null
+  },
+  "instruction_trap": {
+    "total": 0,
+    "hits": 0,
+    "accuracy_pct": null
+  },
+  "dialect_eval": {
+    "total": 50,
+    "hits": 4,
+    "accuracy_pct": 8.0
+  },
+  "general_korean": {
+    "total": 0,
+    "avg_latency_ms": 0.0,
+    "avg_tokens": 0.0
+  }
+}

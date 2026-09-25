@@ -1,0 +1,22 @@
+{
+  "factual_qa": {
+    "hits": 11,
+    "total": 12,
+    "accuracy_pct": 91.7
+  },
+  "multi_turn": {
+    "hits": 7,
+    "total": 8,
+    "accuracy_pct": 87.5
+  },
+  "instruction_trap": {
+    "hits": 8,
+    "total": 8,
+    "accuracy_pct": 100.0
+  },
+  "dialect_eval": {
+    "hits": 3,
+    "total": 12,
+    "accuracy_pct": 25.0
+  }
+}

@@ -179,6 +179,7 @@ def run_evaluation(
     top_k: int = 20,
     repetition_penalty: float = 1.1,
     seed: int = 42,
+    dtype: torch.dtype = torch.bfloat16,
 ) -> tuple[list[dict], dict]:
     print("\n=======================================================")
     print(f"Loading Base Model: {model_path}")
@@ -191,7 +192,7 @@ def run_evaluation(
     tokenizer = AutoTokenizer.from_pretrained(model_path)
     model = AutoModelForCausalLM.from_pretrained(
         model_path,
-        dtype=torch.bfloat16,
+        dtype=dtype,
         device_map=device,
     )
     if adapter_path:
@@ -283,22 +284,22 @@ def run_evaluation(
         "factual_qa": {
             "total": len(factual_rows),
             "hits": factual_hits,
-            "accuracy_pct": round(factual_hits / len(factual_rows) * 100, 1),
+            "accuracy_pct": round(factual_hits / len(factual_rows) * 100, 1) if factual_rows else None,
         },
         "multi_turn": {
             "total": len(memory_rows),
             "hits": memory_hits,
-            "accuracy_pct": round(memory_hits / len(memory_rows) * 100, 1),
+            "accuracy_pct": round(memory_hits / len(memory_rows) * 100, 1) if memory_rows else None,
         },
         "instruction_trap": {
             "total": len(trap_rows),
             "hits": trap_hits,
-            "accuracy_pct": round(trap_hits / len(trap_rows) * 100, 1),
+            "accuracy_pct": round(trap_hits / len(trap_rows) * 100, 1) if trap_rows else None,
         },
         "dialect_eval": {
             "total": len(dialect_rows),
             "hits": dialect_hits,
-            "accuracy_pct": round(dialect_hits / len(dialect_rows) * 100, 1),
+            "accuracy_pct": round(dialect_hits / len(dialect_rows) * 100, 1) if dialect_rows else None,
         },
         "general_korean": {
             "total": len(general_rows),
@@ -333,6 +334,7 @@ def main():
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--max-new-tokens", type=int, default=256)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--dtype", choices=("bf16", "fp32"), default="bf16")
     args = parser.parse_args()
 
     out_jsonl = Path(args.output_jsonl)
@@ -347,6 +349,7 @@ def main():
         device=args.device,
         max_new_tokens=args.max_new_tokens,
         seed=args.seed,
+        dtype=torch.float32 if args.dtype == "fp32" else torch.bfloat16,
     )
 
     with open(out_jsonl, "w", encoding="utf-8") as f:
@@ -365,7 +368,8 @@ def main():
         ("Dialect Eval", "dialect_eval"),
     ):
         item = summary[category]
-        print(f"  {label:18s}{item['hits']}/{item['total']} ({item['accuracy_pct']}%)")
+        if item["total"]:
+            print(f"  {label:18s}{item['hits']}/{item['total']} ({item['accuracy_pct']}%)")
     print(
         f"  Avg Latency:      {summary['avg_latency_ms']} ms | Avg Tokens: {summary['avg_tokens']}"
     )

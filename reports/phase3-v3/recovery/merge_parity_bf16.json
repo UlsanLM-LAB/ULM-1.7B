@@ -1,0 +1,9 @@
+{
+  "total_prompts": 20,
+  "parity_matches": 5,
+  "parity_pct": 25.0,
+  "parity_pass": false,
+  "base_model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+  "adapter_path": "/home/ubuntu/ULM-1.7B/outputs/ulm-4b-phase3-v3-lora",
+  "merged_path": "/home/ubuntu/ULM-1.7B/outputs/ulm-4b-phase3-v3-best-merged"
+}

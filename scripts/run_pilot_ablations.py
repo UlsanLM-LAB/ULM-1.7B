@@ -1,11 +1,4 @@
-"""Run pilot ablation experiments (35 optimizer steps each) on EC2 L40S.
-
-Candidates:
-- Pilot A: Current config reproduction (LR 5e-5, raw v3 dataset, assistant_only_loss=False)
-- Pilot B: LR 1.5e-5 (LR 1.5e-5, raw v3 dataset, assistant_only_loss=False)
-- Pilot C: LR 1.5e-5 + Rebalanced mixture (LR 1.5e-5, rebalanced 45/40/15, assistant_only_loss=False)
-- Pilot D: LR 1.5e-5 + Rebalanced mixture + assistant_only_loss=True
-"""
+"""Run at most two short, masked Phase 3 v3 pilots from the base model."""
 
 from __future__ import annotations
 
@@ -27,9 +20,10 @@ from trl import SFTConfig, SFTTrainer
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from evaluate_preservation import run_evaluation
 from train_phase3_v2 import TARGET_MODULES
+from phase3_v3_data import completion_dataset
 
 BASE_MODEL = "/home/ubuntu/models/Qwen3.8-4B-Distill"
-GATE_PATH = "reports/phase3-v3/gate-60.jsonl"
+GATE_PATH = "reports/phase3-v3/gate-40.jsonl"
 NVME_PILOTS_DIR = Path("/opt/dlami/nvme/phase3-v3-pilots")
 REPORTS_DIR = Path("reports/phase3-v3")
 
@@ -39,15 +33,14 @@ def run_single_pilot(
     train_path: str,
     val_path: str,
     lr: float,
-    assistant_only_loss: bool,
-    max_steps: int = 35,
+    max_steps: int = 25,
     micro_batch: int = 8,
     grad_accum: int = 4,
 ) -> dict:
     print(f"\n{'='*70}")
     print(f">>> Running {name} <<<")
     print(f"Dataset: {train_path}")
-    print(f"LR: {lr}, Assistant Only Loss: {assistant_only_loss}")
+    print(f"LR: {lr}, completion-only loss: True")
     print(f"Steps: {max_steps}, Effective Batch: {micro_batch * grad_accum}")
     print(f"{'='*70}\n")
 
@@ -65,8 +58,8 @@ def run_single_pilot(
         attn_implementation="sdpa",
     )
 
-    train_ds = load_dataset("json", data_files=train_path, split="train")
-    val_ds = load_dataset("json", data_files=val_path, split="train")
+    train_ds = completion_dataset(load_dataset("json", data_files=train_path, split="train"), tokenizer)
+    val_ds = completion_dataset(load_dataset("json", data_files=val_path, split="train"), tokenizer)
 
     sft_args = SFTConfig(
         output_dir=str(pilot_out),
@@ -84,7 +77,7 @@ def run_single_pilot(
         save_strategy="no",
         eval_strategy="no",
         gradient_checkpointing=True,
-        assistant_only_loss=assistant_only_loss,
+        completion_only_loss=True,
         seed=42,
         data_seed=42,
         report_to="none",
@@ -105,6 +98,11 @@ def run_single_pilot(
         ),
         processing_class=tokenizer,
     )
+    batch = next(iter(trainer.get_train_dataloader()))
+    labels = batch["labels"][0]
+    assert (labels == -100).any() and (labels != -100).any(), "completion loss mask missing"
+    target = tokenizer.decode(labels[labels != -100])
+    assert "<|im_start|>user" not in target, f"user prompt leaked into loss: {target[:120]}"
 
     t0 = time.monotonic()
     result = trainer.train()
@@ -142,7 +140,7 @@ def run_single_pilot(
     summary["eval_time_s"] = eval_time
     summary["final_loss"] = round(result.training_loss, 4)
     summary["lr"] = lr
-    summary["assistant_only_loss"] = assistant_only_loss
+    summary["completion_only_loss"] = True
     summary["dataset"] = train_path
 
     print(f"\n--- {name} Results ---")
@@ -158,8 +156,8 @@ def run_single_pilot(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--only", default=None, help="Run only specific pilot: A, B, C, D")
-    parser.add_argument("--steps", type=int, default=35)
+    parser.add_argument("--only", default=None, choices=("A", "B"))
+    parser.add_argument("--steps", type=int, default=25)
     args = parser.parse_args()
 
     NVME_PILOTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -167,28 +165,14 @@ def main():
 
     pilots = {
         "Pilot_A": {
-            "train_path": "data/ulsan_dialect_phase3_v3/train.jsonl",
-            "val_path": "data/ulsan_dialect_phase3_v3/validation.jsonl",
-            "lr": 5e-5,
-            "assistant_only_loss": False,
+            "train_path": "data/ulsan_dialect_phase3_v3_rebalanced/train.jsonl",
+            "val_path": "data/ulsan_dialect_phase3_v3_rebalanced/validation.jsonl",
+            "lr": 1.5e-5,
         },
         "Pilot_B": {
-            "train_path": "data/ulsan_dialect_phase3_v3/train.jsonl",
-            "val_path": "data/ulsan_dialect_phase3_v3/validation.jsonl",
-            "lr": 1.5e-5,
-            "assistant_only_loss": False,
-        },
-        "Pilot_C": {
-            "train_path": "data/ulsan_dialect_phase3_v3_rebalanced/train.jsonl",
-            "val_path": "data/ulsan_dialect_phase3_v3_rebalanced/validation.jsonl",
-            "lr": 1.5e-5,
-            "assistant_only_loss": False,
-        },
-        "Pilot_D": {
-            "train_path": "data/ulsan_dialect_phase3_v3_rebalanced/train.jsonl",
-            "val_path": "data/ulsan_dialect_phase3_v3_rebalanced/validation.jsonl",
-            "lr": 1.5e-5,
-            "assistant_only_loss": True,
+            "train_path": "data/ulsan_dialect_phase3_v3_candidate_b/train.jsonl",
+            "val_path": "data/ulsan_dialect_phase3_v3_candidate_b/validation.jsonl",
+            "lr": 1.0e-5,
         },
     }
 
@@ -208,7 +192,6 @@ def main():
             train_path=cfg["train_path"],
             val_path=cfg["val_path"],
             lr=cfg["lr"],
-            assistant_only_loss=cfg["assistant_only_loss"],
             max_steps=args.steps,
         )
         results[name] = summary
@@ -222,8 +205,8 @@ def main():
         m = res["multi_turn"]["accuracy_pct"]
         i = res["instruction_trap"]["accuracy_pct"]
         d = res["dialect_eval"]["accuracy_pct"]
-        rep = "Yes" if "rebalanced" in res["dataset"] else "No"
-        mask = "AsstOnly" if res["assistant_only_loss"] else "None"
+        rep = "Yes" if "rebalanced" in res["dataset"] or "candidate_b" in res["dataset"] else "No"
+        mask = "Completion"
         lr_s = f"{res['lr']:.1e}"
         print(f"{name:<10} | {lr_s:<7} | {rep:<7} | {mask:<7} | {f:<7.1f}% | {m:<7.1f}% | {i:<10.1f}% | {d:<7.1f}%")
     print("========================================================\n")

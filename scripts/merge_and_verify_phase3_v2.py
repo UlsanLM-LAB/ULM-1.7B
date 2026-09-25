@@ -111,7 +111,9 @@ def main():
     )
     parser.add_argument("--parity-output", default="reports/phase3-v2/merge_parity.json")
     parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--dtype", choices=("bf16", "fp32"), default="bf16")
     args = parser.parse_args()
+    model_dtype = torch.float32 if args.dtype == "fp32" else torch.bfloat16
 
     merged_out = Path(args.merged_output_path)
     merged_out.mkdir(parents=True, exist_ok=True)
@@ -124,7 +126,7 @@ def main():
 
     tokenizer = AutoTokenizer.from_pretrained(args.base_model_path)
     base_model = AutoModelForCausalLM.from_pretrained(
-        args.base_model_path, dtype=torch.bfloat16, device_map=args.device
+        args.base_model_path, dtype=model_dtype, device_map=args.device
     )
     peft_model = PeftModel.from_pretrained(base_model, args.adapter_path)
     peft_model.eval()
@@ -157,7 +159,7 @@ def main():
     print(">>> 3. Reloading Merged Standalone Model for Verification <<<")
     print("=======================================================")
     standalone_model = AutoModelForCausalLM.from_pretrained(
-        str(merged_out), dtype=torch.bfloat16, device_map=args.device
+        str(merged_out), dtype=model_dtype, device_map=args.device
     )
     standalone_model.eval()
 
@@ -187,6 +189,7 @@ def main():
         "base_model": args.base_model_path,
         "adapter_path": args.adapter_path,
         "merged_path": args.merged_output_path,
+        "dtype": args.dtype,
     }
 
     parity_file = Path(args.parity_output)

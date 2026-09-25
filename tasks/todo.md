@@ -29,3 +29,18 @@
 2. Compare pilot outcomes on 60-prompt preservation gate (`gate-60.jsonl`).
 3. Select the safest passing candidate (expected: Pilot D) and initiate full Phase 3 v3 training from base `Qwen3.8-4B-Distill`.
 4. Monitor quality gates at step 70 and step 140 (target: Factual >= 80%, Memory >= 85%, Instruction >= 95%, Dialect >= 60%).
+# ULM-4B Phase3 v3 recovery (2026-09-25, 3-hour deadline)
+
+- [x] Start EC2, obtain current IP, inspect disk/GPU/repository state.
+- [x] Confirm root causes and prepare response-only loss plus replay mixtures.
+- [x] Run at most two 25-step pilots on the same 40-prompt gate.
+- [x] Train a fresh run from base; stop at failed step 70 (no step 140/210).
+- [x] Select safer step-25 pilot, merge in FP32, evaluate 150+50, check 20/20 parity.
+- [x] Update reports, commit/push code and small reports, remove temporary SSH rule, leave EC2 running.
+
+## Review
+
+The step-70 full run failed its dialect and instruction gate and stopped.
+The safer step-25 B adapter scored factual 92%, memory 84%, instruction 100%,
+and dialect 16% on regression-150; dialect holdout-50 was 8%. FP32 merge
+passed 20/20 parity. Final verdict: FAIL against the dialect objective.

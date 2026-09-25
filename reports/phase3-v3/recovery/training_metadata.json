@@ -1,0 +1,19 @@
+{
+  "global_step": 70,
+  "max_steps": 210,
+  "training_loss": 2.1886910847255163,
+  "runtime_s": 453.9,
+  "peak_vram_gib": 16.381,
+  "micro_batch": 8,
+  "gradient_accumulation": 4,
+  "effective_batch": 32,
+  "gradient_checkpointing": true,
+  "group_by_length": false,
+  "dataloader_num_workers": 0,
+  "packing": false,
+  "attention_backend": "sdpa",
+  "resume_from": null,
+  "gate_steps": [
+    70
+  ]
+}

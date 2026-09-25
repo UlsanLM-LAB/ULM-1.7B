@@ -22,6 +22,7 @@ from trl import SFTConfig, SFTTrainer
 
 from evaluate_preservation import run_evaluation
 from train_phase3_v2 import TARGET_MODULES
+from phase3_v3_data import completion_dataset
 
 GATES = {"factual_qa": 80.0, "multi_turn": 85.0, "instruction_trap": 95.0, "dialect_eval": 60.0}
 REQUIRED_STATE = ("optimizer.pt", "scheduler.pt", "trainer_state.json")
@@ -80,7 +81,9 @@ class V3GateCallback(TrainerCallback):
             (json.loads(p.read_text()) for p in reports.glob("gate-step-*.json")),
             key=lambda row: row["global_step"],
         )
-        baseline_path = reports / "base-gate-60-summary.json"
+        baseline_path = reports / "base-gate-40-summary.json"
+        if not baseline_path.exists():
+            baseline_path = Path(gate_path).with_name("base-gate-40-summary.json")
         self.base_summary = json.loads(baseline_path.read_text()) if baseline_path.exists() else None
 
     def _mirror(self, source: Path, step: int, kind: str) -> None:
@@ -131,21 +134,34 @@ class V3GateCallback(TrainerCallback):
                 file.write(json.dumps(row, ensure_ascii=False) + "\n")
 
         previous = self.history[-1] if self.history else self.base_summary
+        if self.base_summary is None:
+            raise FileNotFoundError("base-gate-40-summary.json is required for gate decisions")
         self.history.append(summary)
         passed = all(summary[key]["accuracy_pct"] >= threshold for key, threshold in GATES.items())
-        best_dialect = max(
-            (
-                row["dialect_eval"]["accuracy_pct"]
-                for row in self.history[:-1]
-                if all(row[key]["accuracy_pct"] >= threshold for key, threshold in GATES.items())
-            ),
-            default=-1.0,
-        )
-        if passed and summary["dialect_eval"]["accuracy_pct"] > best_dialect:
-            self._mirror(source, step, "best")
-        if previous and stalled_with_forgetting(summary, previous):
+        def acceptable(row):
+            return (row["factual_qa"]["accuracy_pct"] >= 83.3
+                    and row["multi_turn"]["accuracy_pct"] >= 87.5
+                    and row["instruction_trap"]["accuracy_pct"] == 100.0)
+        def quality(row):
+            return (row["dialect_eval"]["accuracy_pct"],
+                    row["factual_qa"]["accuracy_pct"] + row["multi_turn"]["accuracy_pct"]
+                    + row["instruction_trap"]["accuracy_pct"])
+        earlier = [row for row in self.history[:-1] if acceptable(row)]
+        if acceptable(summary) and (not earlier or quality(summary) > max(map(quality, earlier))):
+            target = self.ebs / f"best-checkpoint-{step}"
+            temp = target.with_name(target.name + ".copying")
+            if temp.exists():
+                shutil.rmtree(temp)
+            shutil.copytree(source, temp, ignore=shutil.ignore_patterns(
+                "optimizer.pt", "scheduler.pt", "rng_state.pth", "training_args.bin"))
+            temp.rename(target)
+            for old in self.ebs.glob("best-checkpoint-*"):
+                if old != target and old.is_dir():
+                    shutil.rmtree(old)
+        if not acceptable(summary) or (step == 70 and summary["dialect_eval"]["accuracy_pct"] <= self.base_summary["dialect_eval"]["accuracy_pct"]):
             control.should_training_stop = True
-            print(f"Early stop at step {step}: dialect stalled while preservation fell", flush=True)
+        if step >= 140 and previous and summary["dialect_eval"]["accuracy_pct"] <= previous["dialect_eval"]["accuracy_pct"]:
+            control.should_training_stop = True
         print(
             f"Gate {step}: factual={summary['factual_qa']['accuracy_pct']} "
             f"memory={summary['multi_turn']['accuracy_pct']} "
@@ -161,17 +177,19 @@ class V3GateCallback(TrainerCallback):
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default="/home/ubuntu/models/Qwen3.8-4B-Distill")
-    parser.add_argument("--train", default="data/ulsan_dialect_phase3_v3/train.jsonl")
-    parser.add_argument("--validation", default="data/ulsan_dialect_phase3_v3/validation.jsonl")
-    parser.add_argument("--gate", default="reports/phase3-v3/gate-60.jsonl")
-    parser.add_argument("--nvme", default="/opt/dlami/nvme/phase3-v3-checkpoints")
+    parser.add_argument("--train", default="data/ulsan_dialect_phase3_v3_candidate_b/train.jsonl")
+    parser.add_argument("--validation", default="data/ulsan_dialect_phase3_v3_candidate_b/validation.jsonl")
+    parser.add_argument("--gate", default="reports/phase3-v3/gate-40.jsonl")
+    parser.add_argument("--nvme", default="/opt/dlami/nvme/phase3-v3")
     parser.add_argument("--ebs", default="outputs/ulm-4b-phase3-v3")
-    parser.add_argument("--reports", default="reports/phase3-v3")
+    parser.add_argument("--reports", default="reports/phase3-v3/recovery")
     parser.add_argument("--micro-batch", type=int, required=True)
     parser.add_argument("--gradient-checkpointing", action="store_true")
     parser.add_argument("--group-by-length", action="store_true")
     parser.add_argument("--workers", type=int, default=0)
     parser.add_argument("--resume", default=None)
+    parser.add_argument("--lr", type=float, required=True)
+    parser.add_argument("--max-steps", type=int, default=210)
     args = parser.parse_args()
     if 32 % args.micro_batch:
         parser.error("micro batch must divide effective batch 32")
@@ -189,15 +207,15 @@ def main() -> None:
     model = AutoModelForCausalLM.from_pretrained(
         args.model, dtype=torch.bfloat16, device_map="cuda:0", attn_implementation="sdpa"
     )
-    train = load_dataset("json", data_files=args.train, split="train")
-    validation = load_dataset("json", data_files=args.validation, split="train")
+    train = completion_dataset(load_dataset("json", data_files=args.train, split="train"), tokenizer)
+    validation = completion_dataset(load_dataset("json", data_files=args.validation, split="train"), tokenizer)
     config = SFTConfig(
         output_dir=str(nvme),
         max_length=2048,
         per_device_train_batch_size=args.micro_batch,
         gradient_accumulation_steps=32 // args.micro_batch,
-        learning_rate=5e-5,
-        num_train_epochs=2,
+        learning_rate=args.lr,
+        max_steps=args.max_steps,
         warmup_steps=8,
         weight_decay=0.01,
         lr_scheduler_type="cosine",
@@ -205,10 +223,11 @@ def main() -> None:
         bf16=True,
         save_strategy="steps",
         save_steps=70,
-        save_total_limit=9,
+        save_total_limit=2,
         eval_strategy="no",
         logging_steps=10,
         gradient_checkpointing=args.gradient_checkpointing,
+        completion_only_loss=True,
         train_sampling_strategy="group_by_length" if args.group_by_length else "random",
         dataloader_num_workers=args.workers,
         dataloader_pin_memory=True,
@@ -235,6 +254,9 @@ def main() -> None:
         processing_class=tokenizer,
         callbacks=[callback],
     )
+    labels = next(iter(trainer.get_train_dataloader()))["labels"][0]
+    assert (labels == -100).any() and (labels != -100).any()
+    assert "<|im_start|>user" not in tokenizer.decode(labels[labels != -100])
     start = time.monotonic()
     result = trainer.train(resume_from_checkpoint=args.resume)
     if not math.isfinite(result.training_loss):

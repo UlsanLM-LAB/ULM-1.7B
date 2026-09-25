@@ -1,0 +1,7 @@
+{
+  "benchmark": "reports/phase3-v3/final-dialect-holdout-50.jsonl",
+  "selection_gate": "reports/phase3-v3/gate-40.jsonl",
+  "all": {"hits": 4, "total": 50, "accuracy_pct": 8.0},
+  "gate_disjoint": {"hits": 2, "total": 38, "accuracy_pct": 5.3},
+  "gate_overlap": {"hits": 2, "total": 12, "accuracy_pct": 16.7}
+}

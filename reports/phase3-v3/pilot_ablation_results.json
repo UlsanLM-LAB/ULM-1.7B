@@ -1,0 +1,94 @@
+{
+  "Pilot_A": {
+    "model_path": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+    "adapter_path": "/opt/dlami/nvme/phase3-v3-pilots/Pilot_A/final_adapter",
+    "total_prompts": 40,
+    "load_time_s": 2.3,
+    "vram_gb": 7.97,
+    "avg_latency_ms": 6729.05,
+    "avg_tokens": 78.4,
+    "empty_final_count": 0,
+    "token_limit_count": 4,
+    "cjk_leakage_count": 1,
+    "repetition_count": 2,
+    "malformed_unicode_count": 0,
+    "factual_qa": {
+      "total": 12,
+      "hits": 11,
+      "accuracy_pct": 91.7
+    },
+    "multi_turn": {
+      "total": 8,
+      "hits": 7,
+      "accuracy_pct": 87.5
+    },
+    "instruction_trap": {
+      "total": 8,
+      "hits": 8,
+      "accuracy_pct": 100.0
+    },
+    "dialect_eval": {
+      "total": 12,
+      "hits": 3,
+      "accuracy_pct": 25.0
+    },
+    "general_korean": {
+      "total": 0,
+      "avg_latency_ms": 0.0,
+      "avg_tokens": 0.0
+    },
+    "pilot_name": "Pilot_A",
+    "train_time_s": 114.42,
+    "eval_time_s": 271.93,
+    "final_loss": 2.3759,
+    "lr": 1.5e-05,
+    "completion_only_loss": true,
+    "dataset": "data/ulsan_dialect_phase3_v3_rebalanced/train.jsonl"
+  },
+  "Pilot_B": {
+    "model_path": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+    "adapter_path": "/opt/dlami/nvme/phase3-v3-pilots/Pilot_B/final_adapter",
+    "total_prompts": 40,
+    "load_time_s": 2.32,
+    "vram_gb": 7.97,
+    "avg_latency_ms": 9706.5,
+    "avg_tokens": 110.1,
+    "empty_final_count": 0,
+    "token_limit_count": 3,
+    "cjk_leakage_count": 6,
+    "repetition_count": 1,
+    "malformed_unicode_count": 0,
+    "factual_qa": {
+      "total": 12,
+      "hits": 11,
+      "accuracy_pct": 91.7
+    },
+    "multi_turn": {
+      "total": 8,
+      "hits": 7,
+      "accuracy_pct": 87.5
+    },
+    "instruction_trap": {
+      "total": 8,
+      "hits": 8,
+      "accuracy_pct": 100.0
+    },
+    "dialect_eval": {
+      "total": 12,
+      "hits": 3,
+      "accuracy_pct": 25.0
+    },
+    "general_korean": {
+      "total": 0,
+      "avg_latency_ms": 0.0,
+      "avg_tokens": 0.0
+    },
+    "pilot_name": "Pilot_B",
+    "train_time_s": 140.96,
+    "eval_time_s": 391.05,
+    "final_loss": 2.5581,
+    "lr": 1e-05,
+    "completion_only_loss": true,
+    "dataset": "data/ulsan_dialect_phase3_v3_candidate_b/train.jsonl"
+  }
+}
