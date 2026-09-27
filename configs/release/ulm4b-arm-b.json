@@ -1,0 +1,36 @@
+{
+  "name": "ULM-4B Arm B",
+  "status": "release-candidate",
+  "date": "2026-09-27",
+  "base_model": "Qwen3.8-4B-Distill",
+  "lineage": [
+    "Dialect Alignment v3",
+    "Context Repair v1 Arm B",
+    "Instruction Recovery v1 Arm B"
+  ],
+  "training": {
+    "method": "LoRA SFT",
+    "learning_rate": 0.0000006,
+    "fraction": 0.25,
+    "steps": 35,
+    "completion_only_loss": true
+  },
+  "inference": {
+    "enable_thinking": false,
+    "repetition_penalty": 1.1,
+    "no_repeat_ngram_size": 3
+  },
+  "evaluation": {
+    "factual_qa_pct": 84.0,
+    "multi_turn_pct": 100.0,
+    "instruction_trap_pct": 65.0,
+    "generation_semantic": 0.9843,
+    "generation_dialectness": 0.6589,
+    "grammar_semantic": 0.9846,
+    "grammar_dialectness": 0.8955,
+    "context_semantic": 0.4578,
+    "context_repetition_count": 0,
+    "context_malformed_count": 0,
+    "identification_accuracy": 0.32
+  }
+}
