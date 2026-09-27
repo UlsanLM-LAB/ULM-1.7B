@@ -6,7 +6,7 @@ from typing import Any
 import torch
 from fastapi.testclient import TestClient
 
-from ulm.inference.policy import DEFAULT_MAX_NEW_TOKENS, REPETITION_PENALTY
+from ulm.inference.policy import (\n    DEFAULT_MAX_NEW_TOKENS,\n    NO_REPEAT_NGRAM_SIZE,\n    REPETITION_PENALTY,\n)
 from ulm.inference.prompt import PHASE4_SYSTEM_PROMPT
 from ulm.inference.server import (
     ChatCompletionRequest,
@@ -53,7 +53,7 @@ def test_health_reports_loaded_model() -> None:
     assert response.json() == {
         "status": "ok",
         "model_loaded": True,
-        "model": "ULM-1.7B",
+        "model": "ULM-4B",
         "model_path": "/models/phase4",
         "device": "cpu",
         "dtype": "float32",
