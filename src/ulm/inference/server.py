@@ -29,8 +29,8 @@ from .policy import (
 )
 from .prompt import PHASE4_SYSTEM_PROMPT
 
-DEFAULT_MODEL_PATH = "outputs/ulm-1.7b-phase4-best-merged"
-MODEL_NAME = "ULM-1.7B"
+DEFAULT_MODEL_PATH = "outputs/ulm-4b-arm-b-merged"
+MODEL_NAME = "ULM-4B"
 DEFAULT_SYSTEM_PROMPT = PHASE4_SYSTEM_PROMPT
 
 
