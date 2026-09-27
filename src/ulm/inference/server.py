@@ -29,8 +29,8 @@ from .policy import (
 )
 from .prompt import PHASE4_SYSTEM_PROMPT
 
-DEFAULT_MODEL_PATH = "outputs/ulm-1.7b-phase4-best-merged"
-MODEL_NAME = "ULM-1.7B"
+DEFAULT_MODEL_PATH = "outputs/ulm-4b-arm-b-merged"
+MODEL_NAME = "ULM-4B"
 DEFAULT_SYSTEM_PROMPT = PHASE4_SYSTEM_PROMPT
 
 
@@ -49,7 +49,7 @@ class ChatMessage(BaseModel):
 class ChatCompletionRequest(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    model: str = "ulm-1.7b"
+    model: str = "ulm-4b"
     messages: list[ChatMessage] = Field(min_length=1)
     stream: bool = True
     temperature: float = Field(default=DEFAULT_TEMPERATURE, ge=0.0, le=2.0)
@@ -108,7 +108,9 @@ class TransformersChatEngine:
                 "모델 서버 의존성이 없습니다. `uv sync --extra ml`을 먼저 실행하세요."
             ) from exc
 
-        tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True)
+        adapter_path = os.environ.get("ULM_ADAPTER_PATH")
+        tokenizer_path = adapter_path or model_path
+        tokenizer = AutoTokenizer.from_pretrained(tokenizer_path, use_fast=True)
 
         if torch.cuda.is_available():
             dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
@@ -118,8 +120,16 @@ class TransformersChatEngine:
             model_kwargs = {"dtype": torch.float32}
 
         model = AutoModelForCausalLM.from_pretrained(model_path, **model_kwargs)
+        resolved_path = model_path
+        if adapter_path:
+            try:
+                from peft import PeftModel
+            except ImportError as exc:
+                raise RuntimeError("ULM_ADAPTER_PATH requires peft") from exc
+            model = PeftModel.from_pretrained(model, adapter_path)
+            resolved_path = f"{model_path} + {adapter_path}"
         model.eval()
-        return cls(model_path, tokenizer, model, torch)
+        return cls(resolved_path, tokenizer, model, torch)
 
     def _messages_for_template(self, request: ChatCompletionRequest) -> list[dict[str, str]]:
         messages = [message.model_dump() for message in request.messages]
@@ -285,7 +295,7 @@ def create_app(
             )
         yield
 
-    app = FastAPI(title="ULM-1.7B Inference API", version="1.0.0", lifespan=lifespan)
+    app = FastAPI(title="ULM-4B Inference API", version="1.0.0", lifespan=lifespan)
     app.state.engine = engine
 
     @app.get("/health")
@@ -375,7 +385,7 @@ app = create_app()
 
 
 def main(argv: Sequence[str] | None = None) -> None:
-    parser = argparse.ArgumentParser(description="ULM-1.7B streaming inference server")
+    parser = argparse.ArgumentParser(description="ULM-4B streaming inference server")
     parser.add_argument(
         "--model",
         default=os.environ.get("ULM_MODEL_PATH", DEFAULT_MODEL_PATH),

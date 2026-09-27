@@ -6,7 +6,11 @@ from typing import Any
 import torch
 from fastapi.testclient import TestClient
 
-from ulm.inference.policy import DEFAULT_MAX_NEW_TOKENS, REPETITION_PENALTY
+from ulm.inference.policy import (
+    DEFAULT_MAX_NEW_TOKENS,
+    NO_REPEAT_NGRAM_SIZE,
+    REPETITION_PENALTY,
+)
 from ulm.inference.prompt import PHASE4_SYSTEM_PROMPT
 from ulm.inference.server import (
     ChatCompletionRequest,
@@ -53,7 +57,7 @@ def test_health_reports_loaded_model() -> None:
     assert response.json() == {
         "status": "ok",
         "model_loaded": True,
-        "model": "ULM-1.7B",
+        "model": "ULM-4B",
         "model_path": "/models/phase4",
         "device": "cpu",
         "dtype": "float32",
@@ -194,6 +198,7 @@ def test_phase4_template_and_generation_settings() -> None:
     assert kwargs["attention_mask"].tolist() == [[1, 1, 1]]
     assert kwargs["pad_token_id"] == 151645
     assert kwargs["repetition_penalty"] == REPETITION_PENALTY == 1.1
+    assert kwargs["no_repeat_ngram_size"] == NO_REPEAT_NGRAM_SIZE == 3
     assert kwargs["top_k"] == 20
     assert kwargs["do_sample"] is True
     assert "eos_token_id" not in kwargs  # preserve checkpoint EOS set
@@ -207,5 +212,6 @@ def test_greedy_policy_keeps_repetition_penalty_and_eos_pad() -> None:
         "max_new_tokens": 150,
         "do_sample": False,
         "repetition_penalty": 1.1,
+        "no_repeat_ngram_size": 3,
         "pad_token_id": 151645,
     }
