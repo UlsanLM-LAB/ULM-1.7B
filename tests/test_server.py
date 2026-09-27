@@ -6,7 +6,11 @@ from typing import Any
 import torch
 from fastapi.testclient import TestClient
 
-from ulm.inference.policy import (\n    DEFAULT_MAX_NEW_TOKENS,\n    NO_REPEAT_NGRAM_SIZE,\n    REPETITION_PENALTY,\n)
+from ulm.inference.policy import (
+    DEFAULT_MAX_NEW_TOKENS,
+    NO_REPEAT_NGRAM_SIZE,
+    REPETITION_PENALTY,
+)
 from ulm.inference.prompt import PHASE4_SYSTEM_PROMPT
 from ulm.inference.server import (
     ChatCompletionRequest,
