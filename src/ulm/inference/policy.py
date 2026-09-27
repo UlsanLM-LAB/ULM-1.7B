@@ -1,4 +1,4 @@
-"""Phase4 inference settings shared by the text entry points."""
+"""Inference settings shared by ULM text entry points."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ DEFAULT_TOP_P = 0.9
 DEFAULT_TOP_K = 20
 DEFAULT_MAX_NEW_TOKENS = 150
 REPETITION_PENALTY = 1.1
+NO_REPEAT_NGRAM_SIZE = 3
 
 
 def generation_kwargs(
@@ -16,11 +17,12 @@ def generation_kwargs(
     max_new_tokens: int = DEFAULT_MAX_NEW_TOKENS,
     eos_token_id: int,
 ) -> dict:
-    """Match the settings used for the Phase4 200-prompt regression."""
+    """Return the release-candidate generation policy."""
     kwargs = {
         "max_new_tokens": max_new_tokens,
         "do_sample": temperature > 0,
         "repetition_penalty": REPETITION_PENALTY,
+        "no_repeat_ngram_size": NO_REPEAT_NGRAM_SIZE,
         "pad_token_id": eos_token_id,
     }
     if temperature > 0:
