@@ -14,6 +14,26 @@ def test_inference_strength_is_explicit() -> None:
         build_inference_messages("입력", dialect_strength=4)
 
 
+def test_inference_default_remains_strength_two_without_style_conflict() -> None:
+    messages = build_inference_messages("오늘 뭐 해?")
+    system = messages[0]["content"]
+    assert "의미 전달과 사실성을 우선" in system
+    assert "울산 지역 일상 대화" in system
+    assert "울산 말투를 기본으로 구사" not in system
+
+
+def test_strength_zero_has_no_conflicting_default_dialect_instruction() -> None:
+    from ulm.inference.prompt import build_chat_messages
+
+    prepared = build_chat_messages(
+        [{"role": "user", "content": "안녕"}],
+        dialect_strength=0,
+    )
+    system = prepared[0]["content"]
+    assert "표준 한국어로 답한다" in system
+    assert "울산 말투를 기본으로 구사" not in system
+
+
 def test_model_dtype_argument_has_one_supported_name() -> None:
     assert set(_model_dtype_kwargs(object())) in [{"dtype"}, {"torch_dtype"}]
 
