@@ -1,0 +1,48 @@
+{
+  "benchmark": "UlsanBench v2",
+  "benchmark_dataset": "data/ulsanbench_v1/benchmark.jsonl",
+  "total_items": 500,
+  "categories": {
+    "comprehension": 100,
+    "generation": 150,
+    "identification": 100,
+    "grammar": 75,
+    "context": 75
+  },
+  "evaluation_pipeline": "evaluate_ulsanbench_v2.py (paraphrase-multilingual-MiniLM-L12-v2 embedding + lexical & ending matching)",
+  "hardware": {
+    "aws_region": "ap-northeast-2",
+    "ec2_instance": "i-0f732bf7d1cc409b4",
+    "instance_type": "g6e.xlarge",
+    "gpu": "NVIDIA L40S 46GB",
+    "cuda_version": "13.2",
+    "driver_version": "595.91.07",
+    "pytorch_version": "2.14.0+cu130"
+  },
+  "evaluation_date": "2026-09-28",
+  "decoding": {
+    "neutral": {
+      "do_sample": false,
+      "temperature": 0,
+      "enable_thinking": false,
+      "max_new_tokens": {
+        "identification": 16,
+        "other": 96
+      }
+    },
+    "context_guard": {
+      "do_sample": false,
+      "temperature": 0,
+      "enable_thinking": false,
+      "max_new_tokens": {
+        "identification": 16,
+        "other": 96
+      },
+      "context_task_extra": {
+        "repetition_penalty": 1.1,
+        "no_repeat_ngram_size": 3
+      },
+      "scope": "context task only; supplementary ablation, not a full deployed-mode benchmark"
+    }
+  }
+}
