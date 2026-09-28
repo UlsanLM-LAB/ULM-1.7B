@@ -99,8 +99,8 @@ User explicitly requested a new dataset and three new arms; previous instruction
 Three independent 80-step continued SFT arms completed at LR 2e-6/4e-6/7e-6. All 496 inherited LoRA tensors matched the release adapter before each arm; the frozen base was reused. Full evaluation was limited to C/60 and B/80 after denial-rubric correction and saved-prediction rescoring, with no repeated SFT. Best rejected C/60 scored legacy/corrected instruction 85/80%, factual 86%, memory 92%, generation semantic/dialectness .9842/.6615 and context .4576 with zero context repetition. DPO was considered and skipped. Weights/tokenizers/configs remain on EBS and six adapter backups match locally. Original Arm B and Live are unchanged; Git push and actual EC2 stop verification are recorded in operations.json.
 
 ## Final bounded Arm B experiment (2026-09-28)
-- [ ] Reuse 2160 rows; add 160 balanced yes/no examples and 108 audited context replay rows.
-- [ ] One original Arm B run, LR 7e-7, max 60 steps; evaluate 20/40/60.
-- [ ] Apply absolute gates; full UlsanBench on at most one passing checkpoint.
-- [ ] Preserve original/Live; save results and artifacts; commit and push.
+- [x] Reuse 2160 rows; add 160 balanced yes/no examples and 108 audited context replay rows.
+- [x] One original Arm B run, LR 7e-7, max 60 steps; evaluate 20/40/60.
+- [x] Apply absolute gates; full UlsanBench on at most one passing checkpoint.
+- [x] Preserve original/Live; save results and artifacts; commit and push.
 - [ ] Stop EC2 and verify actual stopped.

@@ -70,3 +70,4 @@ reports/instruction-recovery-final/**/predictions.jsonl
 reports/instruction-recovery-final/*.log
 reports/instruction-recovery-final/*pid*.json
 data/instruction_recovery_final/
+reports/instruction-recovery-final/**/manual_review_30.jsonl

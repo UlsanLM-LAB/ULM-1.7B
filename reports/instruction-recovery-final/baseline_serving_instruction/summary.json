@@ -1,0 +1,10 @@
+{
+  "instruction_trap": {
+    "n": 20,
+    "accuracy_pct": 40.0
+  },
+  "corrected_instruction_pct": 30.0,
+  "policy": "serving",
+  "repetition_count": 0,
+  "general_regression_repetition_count": 0
+}
