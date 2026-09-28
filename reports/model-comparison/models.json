@@ -1,0 +1,68 @@
+{
+  "ulm-4b-arm-b-neutral": {
+    "id": "ulm-4b-arm-b-neutral",
+    "display_name": "ULM-4B Arm B (Neutral)",
+    "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+    "adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
+    "model_id": "UlsanLM-LAB/ULM-4B-Arm-B (Base: empero-ai/Qwen3.8-4B-Distill)",
+    "params": "4.21B",
+    "decoding_mode": "neutral",
+    "quantization": "None (bf16)",
+    "type": "dialect_specialized"
+  },
+  "ulm-4b-arm-b-deployed": {
+    "id": "ulm-4b-arm-b-deployed",
+    "display_name": "ULM-4B Arm B (Deployed)",
+    "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+    "adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
+    "model_id": "UlsanLM-LAB/ULM-4B-Arm-B (Base: empero-ai/Qwen3.8-4B-Distill)",
+    "params": "4.21B",
+    "decoding_mode": "deployed",
+    "quantization": "None (bf16)",
+    "type": "dialect_specialized_deployed"
+  },
+  "qwen3.8-4b-base": {
+    "id": "qwen3.8-4b-base",
+    "display_name": "Qwen3.8-4B-Distill (Base)",
+    "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+    "adapter": null,
+    "model_id": "empero-ai/Qwen3.8-4B-Distill",
+    "params": "4.21B",
+    "decoding_mode": "neutral",
+    "quantization": "None (bf16)",
+    "type": "direct_base"
+  },
+  "qwen2.5-3b-instruct": {
+    "id": "qwen2.5-3b-instruct",
+    "display_name": "Qwen2.5-3B-Instruct",
+    "model": "Qwen/Qwen2.5-3B-Instruct",
+    "adapter": null,
+    "model_id": "Qwen/Qwen2.5-3B-Instruct",
+    "params": "3.09B",
+    "decoding_mode": "neutral",
+    "quantization": "None (bf16)",
+    "type": "general_open_llm_3b"
+  },
+  "qwen2.5-7b-instruct": {
+    "id": "qwen2.5-7b-instruct",
+    "display_name": "Qwen2.5-7B-Instruct",
+    "model": "Qwen/Qwen2.5-7B-Instruct",
+    "adapter": null,
+    "model_id": "Qwen/Qwen2.5-7B-Instruct",
+    "params": "7.61B",
+    "decoding_mode": "neutral",
+    "quantization": "None (bf16)",
+    "type": "general_open_llm_7b"
+  },
+  "llama-3.2-korean-bllossom-3b": {
+    "id": "llama-3.2-korean-bllossom-3b",
+    "display_name": "Llama-3.2-Korean-Bllossom-3B",
+    "model": "Bllossom/llama-3.2-Korean-Bllossom-3B",
+    "adapter": null,
+    "model_id": "Bllossom/llama-3.2-Korean-Bllossom-3B",
+    "params": "3.21B",
+    "decoding_mode": "neutral",
+    "quantization": "None (bf16)",
+    "type": "korean_open_llm_3b"
+  }
+}

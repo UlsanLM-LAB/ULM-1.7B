@@ -45,6 +45,35 @@ Arm B는 울산 방언 생성, 문법, 문맥 응답, 일반 지식 보존을 �
 
 Context 반복은 기존 greedy decoding에서 발생했지만, 현재 릴리스 디코딩 정책에서는 75개 context 항목에서 0회로 줄었습니다.
 
+## UlsanBench 모델 비교
+
+동일한 500개 평가 항목(UlsanBench v2 held-out split)과 동일한 평가 파이프라인(`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` 임베딩 + 종결어미·어휘 규칙 매칭)에서 오픈 모델들을 직접 실행하여 비교한 결과입니다.
+
+![UlsanBench v2 모델 비교](assets/benchmarks/ulsanbench-model-comparison.svg)
+
+> **평가 환경 및 기준 (2026-09-28)**  
+> - **하드웨어**: AWS EC2 `g6e.xlarge` (NVIDIA L40S 46GB VRAM, `ap-northeast-2`)
+> - **디코딩 조건**: 공정한 비교를 위해 모든 모델에 동일한 결정론적 디코딩(`do_sample=false`, `temperature=0`, `enable_thinking=false`)을 적용했습니다. (ULM-4B 릴리스 디코딩인 Context 반복 제어 적용 수치는 별도 표기)
+> - **프롬프트**: 각 모델 공식 토크나이저 chat template 사용, 추가 few-shot 없는 동일 제로샷 지시문 제공
+> - **지표 주의**: Semantic similarity 및 Dialectness 점수는 자동 평가 모델(프록시)의 산출물이며, 울산 시민의 실제 주관적 수용도를 직접 측정한 휴먼 평가 점수가 아닙니다. Higher is better.
+
+| 모델 | 파라미터 | Gen Semantic | Gen Dialect | Grammar Dialect | Context Semantic | Identification | Comprehension |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **ULM-4B Arm B (중립 디코딩)** | 4.21B | **0.9841** | **0.6591** | **0.8909** | **0.4594** | 0.3000 | **0.9802** |
+| **ULM-4B Arm B (릴리스 디코딩\*)** | 4.21B | **0.9841** | **0.6591** | **0.8909** | **0.4656** | 0.3000 | **0.9802** |
+| **Qwen3.8-4B-Distill (Base)** | 4.21B | 0.8840 | 0.5629 | 0.7790 | 0.3593 | 0.2800 | 0.8220 |
+| **Qwen2.5-3B-Instruct** | 3.09B | 0.6888 | 0.4537 | 0.6303 | 0.4186 | 0.2100 | 0.8150 |
+| **Qwen2.5-7B-Instruct** | 7.61B | 0.7766 | 0.5007 | 0.7241 | 0.3859 | 0.2700 | 0.7193 |
+| **Llama-3.2-Korean-Bllossom-3B** | 3.21B | 0.8695 | 0.5548 | 0.7530 | 0.3792 | **0.3300** | 0.8228 |
+
+*\* ULM-4B Arm B 릴리스 디코딩: Context 작업에서 `repetition_penalty=1.10`, `no_repeat_ngram_size=3` 적용으로 문맥 반복 0회 달성.*
+
+### 결과 해석
+- **방언 생성 및 문법 정렬**: ULM-4B Arm B는 튜닝되지 않은 원본 Base 모델(Qwen3.8-4B) 대비 울산 방언 생성 점수(0.5629 → 0.6591, +0.0962)와 문법 종결 표현 점수(0.7790 → 0.8909, +0.1119)를 크게 향상시켰습니다.
+- **의미 보존력 유지**: 방언 변환 시 표준어 원문의 핵심 의미를 보존하는 Generation Semantic(0.9841) 및 방언 이해 Comprehension(0.9802) 지표에서 높은 일관성을 유지했습니다.
+- **방언 식별의 한계**: 텍스트만으로 경상도 내 울산 방언과 타 경상 방언을 구분하는 Identification 과제는 비교군 전반에서 21%~33% 수준에 머물렀으며, Bllossom-3B(0.3300)가 ULM-4B(0.3000)보다 소폭 높은 정확도를 보였습니다.
+- **종합 분석 보고서**: 전체 500개 세부 추론 로그 및 지연시간, VRAM 등 시스템 성능 측정치는 [ULM-4B 모델 비교 보고서](reports/ULM_4B_MODEL_COMPARISON.md)에서 확인하실 수 있습니다.
+
 ## 구조
 
 ```text
@@ -146,6 +175,7 @@ tests/                   회귀 및 API 테스트
 ## 주요 문서
 
 - [MODEL_CARD.md](MODEL_CARD.md): 현재 ULM-4B 모델 카드
+- [ULM-4B Model Comparison Report](reports/ULM_4B_MODEL_COMPARISON.md): 500개 UlsanBench v2 항목에 대한 원본 Base 및 공개 LLM 비교 벤치마크 결과
 - [Arm B release candidate report](reports/ULM_4B_ARM_B_RELEASE_CANDIDATE.md): 현재 고정 후보와 평가 결과
 - [PLAN.md](PLAN.md): 연구 목표와 단계
 - [EXPERIMENTS.md](EXPERIMENTS.md): 실험 기록 규칙
