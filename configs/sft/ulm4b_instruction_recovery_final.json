@@ -1,0 +1,84 @@
+{
+  "experiment": "Instruction Recovery final bounded run",
+  "candidate_name": "ULM-4B Arm B+",
+  "branch": "ulm4b-arm-b-plus",
+  "base_model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+  "initial_adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
+  "method": "continued LoRA SFT",
+  "arms": {
+    "low_lr": {
+      "learning_rate": 7e-07
+    }
+  },
+  "max_steps_per_arm": 60,
+  "max_sft_arms": 1,
+  "checkpoint_and_gate_interval": 20,
+  "per_device_train_batch_size": 8,
+  "gradient_accumulation_steps": 2,
+  "optimizer": "adamw_torch",
+  "lr_scheduler": "cosine",
+  "warmup_steps": 2,
+  "weight_decay": 0.01,
+  "seed": 420929,
+  "completion_only_loss": true,
+  "max_length": 1024,
+  "bf16": true,
+  "gradient_checkpointing": true,
+  "lora": {
+    "r": 8,
+    "alpha": 16,
+    "dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj",
+      "in_proj_qkv",
+      "in_proj_a",
+      "in_proj_b",
+      "in_proj_z",
+      "out_proj"
+    ]
+  },
+  "mixture_examples": 2428,
+  "maximum_fraction_of_epoch": 0.3953871499176277,
+  "baseline_adapter_read_only": true,
+  "automatic_deployment": false,
+  "aws_instance": "i-0f732bf7d1cc409b4",
+  "aws_region": "ap-northeast-2",
+  "instance_completion_action": "stop",
+  "evaluation": {
+    "comparable_policy": "greedy; non-thinking; context only repetition_penalty=1.1, no_repeat_ngram_size=3 (identical to archived evaluations)",
+    "serving_counterfactual": "greedy; non-thinking; repetition_penalty=1.1, no_repeat_ngram_size=3 on all instruction items",
+    "synthetic_hidden_monitor_n": 32,
+    "synthetic_hidden_final_n": 135,
+    "benchmark_used_for_training": false,
+    "final_hidden_template_family_never_monitored": true,
+    "fast_general_repetition_items": 0,
+    "maximum_full_candidates": 1,
+    "screening_scope": "All instruction/factual/multi-turn regression items; fixed existing UlsanBench subset generation16/grammar8/context12. Absolute thresholds apply to subset; no full-score claim from screening."
+  },
+  "run_id": "arm-b-final-low-lr-20260928",
+  "acceptance_gates": {
+    "legacy_instruction_pct": 90,
+    "corrected_instruction_pct": 90,
+    "multi_turn_pct": 95,
+    "factual_pct": 80,
+    "generation_semantic": 0.98,
+    "generation_dialectness": 0.65,
+    "context_semantic": 0.44,
+    "repetition": 0,
+    "malformed": 0
+  },
+  "new_data": {
+    "base_rows": 2160,
+    "contrastive_yes_no": 160,
+    "yes": 80,
+    "no": 80,
+    "context_replay_added": 108
+  },
+  "invocation": "scripts/run_instruction_recovery_v2.py --final-small"
+}

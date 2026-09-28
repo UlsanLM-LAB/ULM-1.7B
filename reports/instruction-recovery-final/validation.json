@@ -1,0 +1,11 @@
+{
+  "base_rows_preserved": 2160,
+  "total_rows": 2428,
+  "yes_no_counts": {
+    "yes": 80,
+    "no": 80
+  },
+  "heldout_files_unchanged": true,
+  "file_hashes_match": true,
+  "gate_and_rubric_tests": "4 passed"
+}

@@ -66,3 +66,7 @@ reports/instruction-recovery-v2/**/manual_review_30.jsonl
 reports/instruction-recovery-v2/*.log
 reports/instruction-recovery-v2/*pid*.json
 data/instruction_recovery_v2/
+reports/instruction-recovery-final/**/predictions.jsonl
+reports/instruction-recovery-final/*.log
+reports/instruction-recovery-final/*pid*.json
+data/instruction_recovery_final/

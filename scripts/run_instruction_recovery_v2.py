@@ -21,6 +21,7 @@ from evaluate_preservation import evaluate_response
 from evaluate_ulsanbench_v2 import Embedder, SYSTEM, jsonl, save, score_rows
 from instruction_eval_v2 import instruction_ok, synthetic_ok
 from phase3_v3_data import completion_dataset
+from instruction_recovery_gates import absolute_gate_failures
 
 BASE='/home/ubuntu/models/Qwen3.8-4B-Distill'
 INITIAL='/home/ubuntu/models/ULM-4B-Arm-B'
@@ -203,7 +204,11 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True)
     p.add_argument('--reference',type=Path,required=True);p.add_argument('--data',type=Path,required=True)
     p.add_argument('--continue-orchestration',action='store_true',help='Reuse completed arms; never retrain or overwrite an existing arm.')
-    a=p.parse_args();outputs=a.root/'outputs/instruction-recovery-v2';reports=a.root/'reports/instruction-recovery-v2'
+    p.add_argument('--final-small',action='store_true',help='One original Arm B run: LR 7e-7, 60 steps, absolute gates, at most one full evaluation.')
+    a=p.parse_args();experiment='instruction-recovery-final' if a.final_small else 'instruction-recovery-v2'
+    outputs=a.root/'outputs'/experiment;reports=a.root/'reports'/experiment
+    arms={'low_lr':7e-7} if a.final_small else ARMS
+    max_steps=60 if a.final_small else 80
     if outputs.exists() and not a.continue_orchestration:raise FileExistsError(outputs)
     outputs.mkdir(parents=True,exist_ok=True);reports.mkdir(parents=True,exist_ok=True)
     original=digest(Path(INITIAL)/'adapter_model.safetensors')
@@ -212,6 +217,8 @@ def main():
     base=AutoModelForCausalLM.from_pretrained(BASE,dtype=torch.bfloat16,device_map='cuda:0',attn_implementation='sdpa')
     model=PeftModel.from_pretrained(base,INITIAL,is_trainable=True)
     evaluator=Evaluator(tokenizer,a.reference,a.data,reports)
+    if a.final_small:
+        evaluator.fast_reg=[r for r in evaluator.reg if r['category'] in ('instruction_trap','factual_qa','multi_turn')]
     baseline_path=reports/'baseline_fast/gate.json'
     baseline=json.loads(baseline_path.read_text()) if a.continue_orchestration else evaluator.evaluate(model,'baseline_fast')
     # Serving counterfactual catches impossible repetition constraints; does not change production.
@@ -220,7 +227,7 @@ def main():
     raw=Dataset.from_list(jsonl(a.data/'train.jsonl'));data=completion_dataset(raw,tokenizer)
     dev=completion_dataset(Dataset.from_list(jsonl(a.data/'synthetic_dev.jsonl')),tokenizer)
     states=[]
-    for arm,lr in ARMS.items():
+    for arm,lr in arms.items():
         if digest(Path(INITIAL)/'adapter_model.safetensors')!=original:raise RuntimeError('Original changed')
         out=outputs/f'arm_{arm}'
         if out.exists():
@@ -247,7 +254,7 @@ def main():
         set_seed(SEED)
         callback=GateCallback(evaluator,arm,baseline,tokenizer)
         cfg=SFTConfig(output_dir=str(out),max_length=1024,per_device_train_batch_size=8,
-                      gradient_accumulation_steps=2,learning_rate=lr,max_steps=80,warmup_steps=2,
+                      gradient_accumulation_steps=2,learning_rate=lr,max_steps=max_steps,warmup_steps=2,
                       weight_decay=.01,lr_scheduler_type='cosine',optim='adamw_torch',bf16=True,
                       save_strategy='steps',save_steps=20,save_total_limit=4,eval_strategy='steps',eval_steps=20,
                       per_device_eval_batch_size=8,logging_steps=10,gradient_checkpointing=True,
@@ -280,6 +287,7 @@ def main():
     for state in states:
         for gate in state['gates']:
             if gate['stop_reasons']:continue
+            if a.final_small and absolute_gate_failures(gate['result']):continue
             candidates.append((gate['result']['regression']['corrected_instruction_pct'],
                                gate['result']['synthetic']['accuracy_pct'],gate['result']['ulsanbench']['context']['semantic_similarity'],
                                state['arm'],gate['step']))
@@ -288,7 +296,7 @@ def main():
     for cand in candidates:
         if cand[3] in seen:continue
         seen.add(cand[3]);selected.append(cand)
-        if len(selected)==2:break
+        if len(selected)==(1 if a.final_small else 2):break
     final=[]
     for _,_,_,arm,step in selected:
         path=outputs/f'arm_{arm}/checkpoint-{step}'
@@ -296,10 +304,19 @@ def main():
         result=evaluator.evaluate(model,f'final_arm_{arm}_step_{step}',full=True,adapter_path=path)
         final.append({'arm':arm,'step':step,'adapter':str(path),'result':result})
         save(reports/'full_candidates.json',final)
-    model=model.unload();model=PeftModel.from_pretrained(model,INITIAL,is_trainable=False)
-    evaluator.synthetic(model,evaluator.final_hidden,reports/'baseline_final_hidden')
+    if not a.final_small:
+        model=model.unload();model=PeftModel.from_pretrained(model,INITIAL,is_trainable=False)
+        evaluator.synthetic(model,evaluator.final_hidden,reports/'baseline_final_hidden')
+    else:
+        accepted=bool(final) and not absolute_gate_failures(final[0]['result'])
+        save(reports/'decision.json',{'accepted':accepted,'retain_original_arm_b':not accepted,
+             'screening_scope':'full instruction/factual/multi-turn; fixed UlsanBench subset (generation 16, grammar 8, context 12); absolute thresholds',
+             'checkpoint_failures':{str(g['step']):absolute_gate_failures(g['result']) for st in states for g in st['gates']},
+             'full_evaluations':len(final),'selected':final[0]['adapter'] if accepted else None,
+             'full_gate_failures':absolute_gate_failures(final[0]['result']) if final else None,
+             'production_modified':False})
     save(reports/'execution_complete.json',{'original_unchanged':digest(Path(INITIAL)/'adapter_model.safetensors')==original,
-         'arms':len(states),'max_steps_per_arm':80,'full_candidates':len(final),'production_modified':False})
+         'arms':len(states),'max_steps_per_arm':max_steps,'full_candidates':len(final),'production_modified':False})
     print('EXPERIMENT_COMPLETE',flush=True)
 
 
