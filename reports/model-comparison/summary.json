@@ -16,17 +16,17 @@
     "metrics": {
       "comprehension": {
         "n": 100,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.9802,
         "reference_similarity": 0.9802,
-        "dialectness_proxy": 0.0,
+        "dialectness_proxy": 0,
         "lexical_marker_mean": 0.05,
         "repetition_count": 0,
         "malformed_count": 0
       },
       "generation": {
         "n": 150,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.9841,
         "reference_similarity": 0.9889,
         "dialectness_proxy": 0.6591,
@@ -36,18 +36,18 @@
       },
       "identification": {
         "n": 100,
-        "compliance": 1.0,
-        "semantic_similarity": 0.0,
+        "compliance": 1,
+        "semantic_similarity": 0,
         "reference_similarity": 0.6489,
-        "dialectness_proxy": 0.0,
-        "lexical_marker_mean": 0.0,
+        "dialectness_proxy": 0,
+        "lexical_marker_mean": 0,
         "repetition_count": 0,
         "malformed_count": 0,
         "accuracy": 0.3
       },
       "grammar": {
         "n": 75,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.9843,
         "reference_similarity": 0.9685,
         "dialectness_proxy": 0.8909,
@@ -57,11 +57,11 @@
       },
       "context": {
         "n": 75,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.4594,
         "reference_similarity": 0.4594,
         "dialectness_proxy": 0.2986,
-        "lexical_marker_mean": 0.0,
+        "lexical_marker_mean": 0,
         "repetition_count": 3,
         "malformed_count": 0
       }
@@ -89,96 +89,6 @@
       "type": "dialect_specialized"
     }
   },
-  "ulm-4b-arm-b-deployed": {
-    "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
-    "adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
-    "n": 500,
-    "config": {
-      "do_sample": false,
-      "temperature": 0,
-      "enable_thinking": false,
-      "system": "요청한 결과만 출력하세요. 설명, 머리말, 따옴표, 부가 설명을 추가하지 마세요.",
-      "max_new_tokens": {
-        "identification": 16,
-        "other": 96
-      }
-    },
-    "metrics": {
-      "comprehension": {
-        "n": 100,
-        "compliance": 1.0,
-        "semantic_similarity": 0.9802,
-        "reference_similarity": 0.9802,
-        "dialectness_proxy": 0.0,
-        "lexical_marker_mean": 0.05,
-        "repetition_count": 0,
-        "malformed_count": 0
-      },
-      "generation": {
-        "n": 150,
-        "compliance": 1.0,
-        "semantic_similarity": 0.9841,
-        "reference_similarity": 0.9889,
-        "dialectness_proxy": 0.6591,
-        "lexical_marker_mean": 0.0467,
-        "repetition_count": 0,
-        "malformed_count": 0
-      },
-      "identification": {
-        "n": 100,
-        "compliance": 1.0,
-        "semantic_similarity": 0.0,
-        "reference_similarity": 0.6489,
-        "dialectness_proxy": 0.0,
-        "lexical_marker_mean": 0.0,
-        "repetition_count": 0,
-        "malformed_count": 0,
-        "accuracy": 0.3
-      },
-      "grammar": {
-        "n": 75,
-        "compliance": 1.0,
-        "semantic_similarity": 0.9843,
-        "reference_similarity": 0.9685,
-        "dialectness_proxy": 0.8909,
-        "lexical_marker_mean": 0.1067,
-        "repetition_count": 0,
-        "malformed_count": 0
-      },
-      "context": {
-        "n": 75,
-        "compliance": 1.0,
-        "semantic_similarity": 0.4656,
-        "reference_similarity": 0.4656,
-        "dialectness_proxy": 0.3073,
-        "lexical_marker_mean": 0.0133,
-        "repetition_count": 0,
-        "malformed_count": 0
-      }
-    },
-    "display_name": "ulm-4b-arm-b-deployed",
-    "runtime": {
-      "load_time_seconds": 2.08,
-      "total_inference_time_seconds": 78.85,
-      "avg_latency_ms_per_item": 157.71,
-      "total_tokens_generated": 13913,
-      "tokens_per_second": 176.44,
-      "peak_vram_gib": 9.27,
-      "decoding_mode": "deployed",
-      "batch_size": 16
-    },
-    "meta": {
-      "id": "ulm-4b-arm-b-deployed",
-      "display_name": "ULM-4B Arm B (Deployed)",
-      "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
-      "adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
-      "model_id": "UlsanLM-LAB/ULM-4B-Arm-B (Base: empero-ai/Qwen3.8-4B-Distill)",
-      "params": "4.21B",
-      "decoding_mode": "deployed",
-      "quantization": "None (bf16)",
-      "type": "dialect_specialized_deployed"
-    }
-  },
   "qwen3.8-4b-base": {
     "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
     "adapter": null,
@@ -199,14 +109,14 @@
         "compliance": 0.99,
         "semantic_similarity": 0.822,
         "reference_similarity": 0.822,
-        "dialectness_proxy": 0.0,
+        "dialectness_proxy": 0,
         "lexical_marker_mean": 0.03,
         "repetition_count": 0,
         "malformed_count": 0
       },
       "generation": {
         "n": 150,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.884,
         "reference_similarity": 0.8624,
         "dialectness_proxy": 0.5629,
@@ -216,11 +126,11 @@
       },
       "identification": {
         "n": 100,
-        "compliance": 1.0,
-        "semantic_similarity": 0.0,
+        "compliance": 1,
+        "semantic_similarity": 0,
         "reference_similarity": 0.6523,
-        "dialectness_proxy": 0.0,
-        "lexical_marker_mean": 0.0,
+        "dialectness_proxy": 0,
+        "lexical_marker_mean": 0,
         "repetition_count": 0,
         "malformed_count": 0,
         "accuracy": 0.28
@@ -241,7 +151,7 @@
         "semantic_similarity": 0.3593,
         "reference_similarity": 0.3593,
         "dialectness_proxy": 0.2336,
-        "lexical_marker_mean": 0.0,
+        "lexical_marker_mean": 0,
         "repetition_count": 6,
         "malformed_count": 2
       }
@@ -286,17 +196,17 @@
     "metrics": {
       "comprehension": {
         "n": 100,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.815,
         "reference_similarity": 0.815,
-        "dialectness_proxy": 0.0,
+        "dialectness_proxy": 0,
         "lexical_marker_mean": 0.02,
         "repetition_count": 0,
         "malformed_count": 0
       },
       "generation": {
         "n": 150,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.6888,
         "reference_similarity": 0.6944,
         "dialectness_proxy": 0.4537,
@@ -307,17 +217,17 @@
       "identification": {
         "n": 100,
         "compliance": 0.7,
-        "semantic_similarity": 0.0,
+        "semantic_similarity": 0,
         "reference_similarity": 0.6088,
-        "dialectness_proxy": 0.0,
-        "lexical_marker_mean": 0.0,
+        "dialectness_proxy": 0,
+        "lexical_marker_mean": 0,
         "repetition_count": 0,
         "malformed_count": 0,
         "accuracy": 0.21
       },
       "grammar": {
         "n": 75,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.7554,
         "reference_similarity": 0.7544,
         "dialectness_proxy": 0.6303,
@@ -327,7 +237,7 @@
       },
       "context": {
         "n": 75,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.4186,
         "reference_similarity": 0.4186,
         "dialectness_proxy": 0.2768,
@@ -376,17 +286,17 @@
     "metrics": {
       "comprehension": {
         "n": 100,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.7193,
         "reference_similarity": 0.7193,
-        "dialectness_proxy": 0.0,
+        "dialectness_proxy": 0,
         "lexical_marker_mean": 0.04,
         "repetition_count": 0,
         "malformed_count": 0
       },
       "generation": {
         "n": 150,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.7766,
         "reference_similarity": 0.7631,
         "dialectness_proxy": 0.5007,
@@ -396,18 +306,18 @@
       },
       "identification": {
         "n": 100,
-        "compliance": 1.0,
-        "semantic_similarity": 0.0,
+        "compliance": 1,
+        "semantic_similarity": 0,
         "reference_similarity": 0.5907,
-        "dialectness_proxy": 0.0,
-        "lexical_marker_mean": 0.0,
+        "dialectness_proxy": 0,
+        "lexical_marker_mean": 0,
         "repetition_count": 0,
         "malformed_count": 0,
         "accuracy": 0.27
       },
       "grammar": {
         "n": 75,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.8933,
         "reference_similarity": 0.8556,
         "dialectness_proxy": 0.7241,
@@ -417,7 +327,7 @@
       },
       "context": {
         "n": 75,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.3859,
         "reference_similarity": 0.3859,
         "dialectness_proxy": 0.2648,
@@ -469,14 +379,14 @@
         "compliance": 0.99,
         "semantic_similarity": 0.8228,
         "reference_similarity": 0.8228,
-        "dialectness_proxy": 0.0,
+        "dialectness_proxy": 0,
         "lexical_marker_mean": 0.05,
         "repetition_count": 0,
         "malformed_count": 0
       },
       "generation": {
         "n": 150,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.8695,
         "reference_similarity": 0.8428,
         "dialectness_proxy": 0.5548,
@@ -486,22 +396,22 @@
       },
       "identification": {
         "n": 100,
-        "compliance": 1.0,
-        "semantic_similarity": 0.0,
+        "compliance": 1,
+        "semantic_similarity": 0,
         "reference_similarity": 0.6078,
-        "dialectness_proxy": 0.0,
-        "lexical_marker_mean": 0.0,
+        "dialectness_proxy": 0,
+        "lexical_marker_mean": 0,
         "repetition_count": 0,
         "malformed_count": 0,
         "accuracy": 0.33
       },
       "grammar": {
         "n": 75,
-        "compliance": 1.0,
+        "compliance": 1,
         "semantic_similarity": 0.9101,
         "reference_similarity": 0.8785,
         "dialectness_proxy": 0.753,
-        "lexical_marker_mean": 0.0,
+        "lexical_marker_mean": 0,
         "repetition_count": 0,
         "malformed_count": 0
       },
@@ -511,7 +421,7 @@
         "semantic_similarity": 0.3792,
         "reference_similarity": 0.3792,
         "dialectness_proxy": 0.2465,
-        "lexical_marker_mean": 0.0,
+        "lexical_marker_mean": 0,
         "repetition_count": 0,
         "malformed_count": 1
       }
@@ -537,6 +447,96 @@
       "decoding_mode": "neutral",
       "quantization": "None (bf16)",
       "type": "korean_open_llm_3b"
+    }
+  },
+  "ulm-4b-arm-b-context-guard": {
+    "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+    "adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
+    "n": 500,
+    "config": {
+      "do_sample": false,
+      "temperature": 0,
+      "enable_thinking": false,
+      "system": "요청한 결과만 출력하세요. 설명, 머리말, 따옴표, 부가 설명을 추가하지 마세요.",
+      "max_new_tokens": {
+        "identification": 16,
+        "other": 96
+      }
+    },
+    "metrics": {
+      "comprehension": {
+        "n": 100,
+        "compliance": 1,
+        "semantic_similarity": 0.9802,
+        "reference_similarity": 0.9802,
+        "dialectness_proxy": 0,
+        "lexical_marker_mean": 0.05,
+        "repetition_count": 0,
+        "malformed_count": 0
+      },
+      "generation": {
+        "n": 150,
+        "compliance": 1,
+        "semantic_similarity": 0.9841,
+        "reference_similarity": 0.9889,
+        "dialectness_proxy": 0.6591,
+        "lexical_marker_mean": 0.0467,
+        "repetition_count": 0,
+        "malformed_count": 0
+      },
+      "identification": {
+        "n": 100,
+        "compliance": 1,
+        "semantic_similarity": 0,
+        "reference_similarity": 0.6489,
+        "dialectness_proxy": 0,
+        "lexical_marker_mean": 0,
+        "repetition_count": 0,
+        "malformed_count": 0,
+        "accuracy": 0.3
+      },
+      "grammar": {
+        "n": 75,
+        "compliance": 1,
+        "semantic_similarity": 0.9843,
+        "reference_similarity": 0.9685,
+        "dialectness_proxy": 0.8909,
+        "lexical_marker_mean": 0.1067,
+        "repetition_count": 0,
+        "malformed_count": 0
+      },
+      "context": {
+        "n": 75,
+        "compliance": 1,
+        "semantic_similarity": 0.4656,
+        "reference_similarity": 0.4656,
+        "dialectness_proxy": 0.3073,
+        "lexical_marker_mean": 0.0133,
+        "repetition_count": 0,
+        "malformed_count": 0
+      }
+    },
+    "display_name": "ulm-4b-arm-b-context-guard",
+    "runtime": {
+      "load_time_seconds": 2.08,
+      "total_inference_time_seconds": 78.85,
+      "avg_latency_ms_per_item": 157.71,
+      "total_tokens_generated": 13913,
+      "tokens_per_second": 176.44,
+      "peak_vram_gib": 9.27,
+      "decoding_mode": "context_guard",
+      "batch_size": 16
+    },
+    "meta": {
+      "id": "ulm-4b-arm-b-context-guard",
+      "display_name": "ULM-4B Arm B (Context Guard)",
+      "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+      "adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
+      "model_id": "UlsanLM-LAB/ULM-4B-Arm-B (Base: empero-ai/Qwen3.8-4B-Distill)",
+      "params": "4.21B",
+      "decoding_mode": "context_guard",
+      "quantization": "None (bf16)",
+      "type": "dialect_specialized_context_guard"
     }
   }
 }
