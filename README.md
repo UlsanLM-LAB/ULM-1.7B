@@ -53,20 +53,20 @@ Context 반복은 기존 greedy decoding에서 발생했지만, 현재 릴리스
 
 > **평가 환경 및 기준 (2026-09-28)**  
 > - **하드웨어**: AWS EC2 `g6e.xlarge` (NVIDIA L40S 46GB VRAM, `ap-northeast-2`)
-> - **디코딩 조건**: 공정한 비교를 위해 모든 모델에 동일한 결정론적 디코딩(`do_sample=false`, `temperature=0`, `enable_thinking=false`)을 적용했습니다. (ULM-4B 릴리스 디코딩인 Context 반복 제어 적용 수치는 별도 표기)
+> - **디코딩 조건**: 공정한 비교를 위해 모든 모델에 동일한 결정론적 디코딩(`do_sample=false`, `temperature=0`, `enable_thinking=false`)을 적용했습니다. (Context 작업에만 반복 제어를 적용한 보조 실험 수치는 별도 표기)
 > - **프롬프트**: 각 모델 공식 토크나이저 chat template 사용, 추가 few-shot 없는 동일 제로샷 지시문 제공
 > - **지표 주의**: Semantic similarity 및 Dialectness 점수는 자동 평가 모델(프록시)의 산출물이며, 울산 시민의 실제 주관적 수용도를 직접 측정한 휴먼 평가 점수가 아닙니다. Higher is better.
 
 | 모델 | 파라미터 | Gen Semantic | Gen Dialect | Grammar Dialect | Context Semantic | Identification | Comprehension |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **ULM-4B Arm B (중립 디코딩)** | 4.21B | **0.9841** | **0.6591** | **0.8909** | **0.4594** | 0.3000 | **0.9802** |
-| **ULM-4B Arm B (릴리스 디코딩\*)** | 4.21B | **0.9841** | **0.6591** | **0.8909** | **0.4656** | 0.3000 | **0.9802** |
+| **ULM-4B Arm B (Context Guard\*)** | 4.21B | **0.9841** | **0.6591** | **0.8909** | **0.4656** | 0.3000 | **0.9802** |
 | **Qwen3.8-4B-Distill (Base)** | 4.21B | 0.8840 | 0.5629 | 0.7790 | 0.3593 | 0.2800 | 0.8220 |
 | **Qwen2.5-3B-Instruct** | 3.09B | 0.6888 | 0.4537 | 0.6303 | 0.4186 | 0.2100 | 0.8150 |
 | **Qwen2.5-7B-Instruct** | 7.61B | 0.7766 | 0.5007 | 0.7241 | 0.3859 | 0.2700 | 0.7193 |
 | **Llama-3.2-Korean-Bllossom-3B** | 3.21B | 0.8695 | 0.5548 | 0.7530 | 0.3792 | **0.3300** | 0.8228 |
 
-*\* ULM-4B Arm B 릴리스 디코딩: Context 작업에서 `repetition_penalty=1.10`, `no_repeat_ngram_size=3` 적용으로 문맥 반복 0회 달성.*
+*\* ULM-4B Arm B Context Guard: 보조 실험에서 Context 작업에만 `repetition_penalty=1.10`, `no_repeat_ngram_size=3`를 적용해 문맥 반복 0회를 기록했습니다. 전체 릴리스 디코딩을 재현한 별도 전체 벤치마크는 아닙니다.*
 
 ### 결과 해석
 - **방언 생성 및 문법 정렬**: ULM-4B Arm B는 튜닝되지 않은 원본 Base 모델(Qwen3.8-4B) 대비 울산 방언 생성 점수(0.5629 → 0.6591, +0.0962)와 문법 종결 표현 점수(0.7790 → 0.8909, +0.1119)를 크게 향상시켰습니다.
