@@ -10,17 +10,6 @@
     "quantization": "None (bf16)",
     "type": "dialect_specialized"
   },
-  "ulm-4b-arm-b-deployed": {
-    "id": "ulm-4b-arm-b-deployed",
-    "display_name": "ULM-4B Arm B (Deployed)",
-    "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
-    "adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
-    "model_id": "UlsanLM-LAB/ULM-4B-Arm-B (Base: empero-ai/Qwen3.8-4B-Distill)",
-    "params": "4.21B",
-    "decoding_mode": "deployed",
-    "quantization": "None (bf16)",
-    "type": "dialect_specialized_deployed"
-  },
   "qwen3.8-4b-base": {
     "id": "qwen3.8-4b-base",
     "display_name": "Qwen3.8-4B-Distill (Base)",
@@ -64,5 +53,16 @@
     "decoding_mode": "neutral",
     "quantization": "None (bf16)",
     "type": "korean_open_llm_3b"
+  },
+  "ulm-4b-arm-b-context-guard": {
+    "id": "ulm-4b-arm-b-context-guard",
+    "display_name": "ULM-4B Arm B (Context Guard)",
+    "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+    "adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
+    "model_id": "UlsanLM-LAB/ULM-4B-Arm-B (Base: empero-ai/Qwen3.8-4B-Distill)",
+    "params": "4.21B",
+    "decoding_mode": "context_guard",
+    "quantization": "None (bf16)",
+    "type": "dialect_specialized_context_guard"
   }
 }
