@@ -1,35 +1,66 @@
 # ULM-4B
 
-UlsanLM Lab의 울산 방언 특화 소형 언어모델 연구 프로젝트입니다.
+UlsanLM Lab에서 개발하는 울산 방언 특화 4B급 소형 언어모델입니다. 현재 공개 저장소의 기준 릴리스 후보는 `ULM-4B Arm B`이며, 울산 방언 생성·이해와 일반 응답 능력 보존을 함께 목표로 합니다.
 
-> 저장소 이름은 초기 1.7B 실험명인 `ULM-1.7B`를 유지하고 있지만, 현재 주력 계열은 Qwen3.8-4B-Distill 기반 ULM-4B입니다.
+> Repository note: 저장소 slug는 초기 1.7B 실험명인 `ULM-1.7B`를 유지하고 있지만, 현재 주력 모델 계열과 문서는 ULM-4B 기준입니다.
 
 ![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.x-orange)
 ![Transformers](https://img.shields.io/badge/Hugging%20Face-Transformers-yellow)
 ![FastAPI](https://img.shields.io/badge/API-FastAPI-009688)
-![License](https://img.shields.io/badge/License-Apache--2.0-green)
+![License](https://img.shields.io/badge/Code%20License-Apache--2.0-green)
+![Status](https://img.shields.io/badge/Status-Release%20Candidate-blueviolet)
 
-## 현재 릴리스 후보
+[Model Card](MODEL_CARD.md) · [Benchmark Report](reports/ULM_4B_MODEL_COMPARISON.md) · [Release Report](reports/ULM_4B_ARM_B_RELEASE_CANDIDATE.md) · [ULM Live](https://github.com/UlsanLM-LAB/ULM-LIVE)
 
-현재 데모와 ULM Live 연동에 사용하는 체크포인트는 `ULM-4B Arm B`입니다.
+## Release snapshot
 
-| 항목 | 현재 값 |
+| 항목 | 내용 |
 | --- | --- |
-| Base model | Qwen3.8-4B-Distill |
-| Tuning | LoRA SFT |
-| Lineage | Dialect Alignment v3 → Context Repair v1 Arm B → Instruction Recovery v1 Arm B |
+| Model | ULM-4B Arm B |
 | Status | Release Candidate |
+| Release candidate date | 2026-09-27 |
+| Base model | [empero-ai/Qwen3.8-4B-Distill](https://huggingface.co/empero-ai/Qwen3.8-4B-Distill) |
+| Parameter class | 4.21B |
+| Adaptation | LoRA SFT |
+| Training lineage | Dialect Alignment v3 → Context Repair v1 Arm B → Instruction Recovery v1 Arm B |
 | Serving | FastAPI / OpenAI-compatible chat API |
 | Voice | ULM-LIVE + Qwen3-TTS |
+| Default dialect strength | 2 / Ulsan |
 | Thinking | disabled |
-| Repetition control | repetition_penalty 1.10 + no_repeat_ngram_size 3 |
+| Repetition control | `repetition_penalty=1.10`, `no_repeat_ngram_size=3` |
+| Code license | Apache-2.0 |
+| Weights | 대형 체크포인트는 이 Git 저장소에 포함하지 않음 |
 
-Arm B는 울산 방언 생성, 문법, 문맥 응답, 일반 지식 보존을 우선해 고정한 릴리스 후보입니다. instruction-trap 회귀는 아직 남아 있어 연구용 최종 체크포인트로 확정한 상태는 아닙니다.
+Arm B는 제품 통합과 ULM Live 데모를 위해 고정한 릴리스 후보입니다. instruction-trap 회귀와 방언 식별 정확도 등 남은 한계가 있으므로 최종 연구 체크포인트나 완전한 production release로 표기하지 않습니다.
 
-자세한 수치와 선택 이유는 [Arm B release candidate report](reports/ULM_4B_ARM_B_RELEASE_CANDIDATE.md)와 [MODEL_CARD.md](MODEL_CARD.md)를 참고하세요.
+## Model overview
 
-## 평가 요약
+ULM-4B는 범용 4B 모델을 울산 지역어에 맞게 추가 적응한 모델 계열입니다. 현재 Arm B는 다음 세 단계를 거칩니다.
+
+```text
+empero-ai/Qwen3.8-4B-Distill
+  → Dialect Alignment v3
+  → Context Repair v1 Arm B
+  → Instruction Recovery v1 Arm B
+  → ULM-4B Arm B
+```
+
+학습은 LoRA 기반 supervised fine-tuning을 사용하며, 릴리스 설정은 [configs/release/ulm4b-arm-b.json](configs/release/ulm4b-arm-b.json)에 고정되어 있습니다.
+
+주요 목적:
+
+- 울산 방언 이해 및 생성
+- 표준어 ↔ 울산 방언 변환 연구
+- 지역어 챗봇 및 교육·포트폴리오 데모
+- ULM Live 음성 대화 파이프라인의 텍스트 모델
+- 소형 언어모델의 지역어 적응 및 평가 연구
+
+## Evaluation
+
+### Release-candidate snapshot
+
+아래 값은 Arm B 릴리스 후보를 고정할 때 사용한 내부 평가 스냅샷입니다.
 
 | 평가 | Arm B |
 | --- | ---: |
@@ -43,38 +74,39 @@ Arm B는 울산 방언 생성, 문법, 문맥 응답, 일반 지식 보존을 �
 | Instruction trap | 65% |
 | UlsanBench identification accuracy | 32% |
 
-Context 반복은 기존 greedy decoding에서 발생했지만, 현재 릴리스 디코딩 정책에서는 75개 context 항목에서 0회로 줄었습니다.
+이 값들은 release-candidate 선택 시점의 결과이며, 아래 모델 비교 벤치마크와는 실행 조건 및 평가 시점이 일부 다르므로 동일한 실험으로 합쳐 해석하지 않습니다.
 
-## UlsanBench 모델 비교
+### UlsanBench v2 model comparison
 
-동일한 500개 평가 항목(UlsanBench v2 held-out split)과 동일한 평가 파이프라인(`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` 임베딩 + 종결어미·어휘 규칙 매칭)에서 오픈 모델들을 직접 실행하여 비교한 결과입니다.
+동일한 500개 평가 항목과 동일한 평가 파이프라인에서 ULM-4B Arm B와 비교 모델을 직접 실행한 결과입니다.
 
 ![UlsanBench v2 모델 비교](assets/benchmarks/ulsanbench-model-comparison.svg)
 
-> **평가 환경 및 기준 (2026-09-28)**  
-> - **하드웨어**: AWS EC2 `g6e.xlarge` (NVIDIA L40S 46GB VRAM, `ap-northeast-2`)
-> - **디코딩 조건**: 공정한 비교를 위해 모든 모델에 동일한 결정론적 디코딩(`do_sample=false`, `temperature=0`, `enable_thinking=false`)을 적용했습니다. (Context 작업에만 반복 제어를 적용한 보조 실험 수치는 별도 표기)
-> - **프롬프트**: 각 모델 공식 토크나이저 chat template 사용, 추가 few-shot 없는 동일 제로샷 지시문 제공
-> - **지표 주의**: Semantic similarity 및 Dialectness 점수는 자동 평가 모델(프록시)의 산출물이며, 울산 시민의 실제 주관적 수용도를 직접 측정한 휴먼 평가 점수가 아닙니다. Higher is better.
+평가 조건:
+
+- Date: 2026-09-28
+- Hardware: AWS EC2 `g6e.xlarge`, NVIDIA L40S 46GB, `ap-northeast-2`
+- Decoding: `do_sample=false`, `temperature=0`, `enable_thinking=false`
+- Prompting: 각 모델의 공식 tokenizer chat template, 동일 zero-shot system instruction
+- Evaluator: `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` + 울산 방언 어휘·종결어미 규칙
+- Caveat: semantic similarity와 dialectness는 자동 proxy 지표이며 사람의 방언 자연스러움 평가를 대체하지 않습니다.
 
 | 모델 | 파라미터 | Gen Semantic | Gen Dialect | Grammar Dialect | Context Semantic | Identification | Comprehension |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **ULM-4B Arm B (중립 디코딩)** | 4.21B | **0.9841** | **0.6591** | **0.8909** | **0.4594** | 0.3000 | **0.9802** |
-| **ULM-4B Arm B (Context Guard\*)** | 4.21B | **0.9841** | **0.6591** | **0.8909** | **0.4656** | 0.3000 | **0.9802** |
-| **Qwen3.8-4B-Distill (Base)** | 4.21B | 0.8840 | 0.5629 | 0.7790 | 0.3593 | 0.2800 | 0.8220 |
-| **Qwen2.5-3B-Instruct** | 3.09B | 0.6888 | 0.4537 | 0.6303 | 0.4186 | 0.2100 | 0.8150 |
-| **Qwen2.5-7B-Instruct** | 7.61B | 0.7766 | 0.5007 | 0.7241 | 0.3859 | 0.2700 | 0.7193 |
-| **Llama-3.2-Korean-Bllossom-3B** | 3.21B | 0.8695 | 0.5548 | 0.7530 | 0.3792 | **0.3300** | 0.8228 |
+| ULM-4B Arm B (Neutral) | 4.21B | 0.9841 | 0.6591 | 0.8909 | 0.4594 | 0.3000 | 0.9802 |
+| ULM-4B Arm B (Context Guard*) | 4.21B | 0.9841 | 0.6591 | 0.8909 | 0.4656 | 0.3000 | 0.9802 |
+| Qwen3.8-4B-Distill (Base) | 4.21B | 0.8840 | 0.5629 | 0.7790 | 0.3593 | 0.2800 | 0.8220 |
+| Qwen2.5-3B-Instruct | 3.09B | 0.6888 | 0.4537 | 0.6303 | 0.4186 | 0.2100 | 0.8150 |
+| Qwen2.5-7B-Instruct | 7.61B | 0.7766 | 0.5007 | 0.7241 | 0.3859 | 0.2700 | 0.7193 |
+| Llama-3.2-Korean-Bllossom-3B | 3.21B | 0.8695 | 0.5548 | 0.7530 | 0.3792 | 0.3300 | 0.8228 |
 
-*\* ULM-4B Arm B Context Guard: 보조 실험에서 Context 작업에만 `repetition_penalty=1.10`, `no_repeat_ngram_size=3`를 적용해 문맥 반복 0회를 기록했습니다. 전체 릴리스 디코딩을 재현한 별도 전체 벤치마크는 아닙니다.*
+*Context Guard는 보조 ablation으로 Context 작업에만 `repetition_penalty=1.10`, `no_repeat_ngram_size=3`를 적용했습니다. 전체 production decoding을 그대로 재현한 별도 500-item rerun은 아닙니다.*
 
-### 결과 해석
-- **방언 생성 및 문법 정렬**: ULM-4B Arm B는 튜닝되지 않은 원본 Base 모델(Qwen3.8-4B) 대비 울산 방언 생성 점수(0.5629 → 0.6591, +0.0962)와 문법 종결 표현 점수(0.7790 → 0.8909, +0.1119)를 크게 향상시켰습니다.
-- **의미 보존력 유지**: 방언 변환 시 표준어 원문의 핵심 의미를 보존하는 Generation Semantic(0.9841) 및 방언 이해 Comprehension(0.9802) 지표에서 높은 일관성을 유지했습니다.
-- **방언 식별의 한계**: 텍스트만으로 경상도 내 울산 방언과 타 경상 방언을 구분하는 Identification 과제는 비교군 전반에서 21%~33% 수준에 머물렀으며, Bllossom-3B(0.3300)가 ULM-4B(0.3000)보다 소폭 높은 정확도를 보였습니다.
-- **종합 분석 보고서**: 전체 500개 세부 추론 로그 및 지연시간, VRAM 등 시스템 성능 측정치는 [ULM-4B 모델 비교 보고서](reports/ULM_4B_MODEL_COMPARISON.md)에서 확인하실 수 있습니다.
+이 벤치마크에서는 ULM-4B Arm B가 base model보다 generation dialectness, grammar dialectness, comprehension semantic에서 높은 proxy score를 기록했습니다. Identification은 비교 모델 전체가 낮은 정확도를 보였고, Bllossom-3B가 이 항목에서는 ULM-4B보다 높은 값을 기록했습니다.
 
-## 구조
+세부 설정, 런타임, VRAM, 과제별 결과는 [ULM-4B Model Comparison Report](reports/ULM_4B_MODEL_COMPARISON.md)를 참고하세요.
+
+## Architecture
 
 ```text
 Browser / Client
@@ -98,9 +130,11 @@ ULM-4B Arm B LoRA
           24 kHz WAV
 ```
 
-음성 경로는 별도 저장소 [ULM-LIVE](https://github.com/UlsanLM-LAB/ULM-LIVE)에서 관리합니다.
+음성 경로는 별도 저장소 [UlsanLM-LAB/ULM-LIVE](https://github.com/UlsanLM-LAB/ULM-LIVE)에서 관리합니다.
 
-## 빠른 시작
+## Quick start
+
+개발 환경:
 
 ```bash
 uv sync --extra dev --extra ml
@@ -108,11 +142,11 @@ uv run pytest
 uv run ruff check .
 ```
 
-모델 가중치와 AI Hub 원본 데이터는 저장소에 포함하지 않습니다.
+모델 가중치와 원본 대형 데이터는 저장소에 포함하지 않습니다.
 
-### Arm B 서버 실행
+### Run Arm B API
 
-현재 release candidate는 base model과 LoRA adapter를 분리해서 로드할 수 있습니다.
+현재 release candidate는 base model과 LoRA adapter를 분리해서 로드합니다.
 
 ```bash
 export ULM_MODEL_PATH=/path/to/Qwen3.8-4B-Distill
@@ -124,13 +158,13 @@ uv run python scripts/serve.py \
   --port 8000
 ```
 
-상태 확인:
+Health check:
 
 ```bash
 curl http://127.0.0.1:8000/health
 ```
 
-비스트리밍 요청:
+Non-streaming chat:
 
 ```bash
 curl http://127.0.0.1:8000/v1/chat/completions \
@@ -138,39 +172,45 @@ curl http://127.0.0.1:8000/v1/chat/completions \
   -d '{
     "messages": [{"role": "user", "content": "오늘 뭐하노?"}],
     "stream": false,
-    "temperature": 0
+    "temperature": 0,
+    "dialect_strength": 2
   }'
 ```
 
-SSE 스트리밍도 같은 엔드포인트에서 `"stream": true`로 사용할 수 있습니다.
+SSE streaming은 같은 endpoint에서 `"stream": true`로 사용할 수 있습니다.
 
-## Dialect Strength (사투리 강도)
+## Dialect Strength
 
-`/v1/chat/completions`와 `/api/chat`에 선택적 정수 필드 `dialect_strength`를 보낼 수 있습니다.
+Text API는 `dialect_strength` 정수 필드로 응답의 기본 방언 강도를 조정합니다.
 
-| 값 | 이름 | 기본 응답 말투 |
-|---|---|---|
-| 0 | Standard / 표준어 | 방언 어휘와 종결어미를 의도적으로 사용하지 않음 |
-| 1 | Mild / 약하게 | 표준어 중심, 가벼운 울산 표현을 간헐적으로 사용 |
-| 2 | Ulsan / 보통 | 자연스러운 울산 일상 말투 (기본값) |
-| 3 | Strong / 강하게 | 울산 어휘·어미를 적극 사용하되 과장과 반복을 피함 |
+| 값 | API 이름 | 동작 |
+| --- | --- | --- |
+| 0 | Standard | 방언을 의도적으로 억제 |
+| 1 | Mild | 표준어 중심 + 가벼운 울산 표현 |
+| 2 | Ulsan | 자연스러운 울산 일상 말투, 기본값 |
+| 3 | Strong | 울산 어휘와 종결어미를 적극 사용 |
 
 ```json
-{"messages":[{"role":"user","content":"오늘 뭐하노?"}],"stream":true,"dialect_strength":2}
+{
+  "messages": [{"role": "user", "content": "오늘 뭐하노?"}],
+  "stream": true,
+  "dialect_strength": 2
+}
 ```
 
-미지정 시 2입니다. 정수 0–3 이외의 값(음수, 4, 문자열, null, boolean, 실수)은 422로 거부합니다.
-기존 client는 필드 추가 없이 사용할 수 있으며 stream 여부에 따른 강도 처리 차이는 없습니다.
+- API 범위: 0–3
+- Default: 2
+- ULM Live 웹 UI: 1 / 2 / 3만 노출
+- `0`은 API 호환성·직접 호출용으로 유지
+- 음수, 4, 문자열, `null`, boolean, 실수는 422
+- stream/non-stream 모두 동일한 prompt path 사용
+- 강도 지시는 history에 누적하지 않음
 
-기존 system 지시에 현재 강도 지시를 합성하는 **prompt-based control**입니다.
-서비스 안전·시스템 지시를 유지하고, 사용자가 명시한 말투나 출력 형식은 기본 강도 설정보다 우선하도록 안내합니다.
-예를 들어 “표준어로 말해”라는 요청은 강도 3에서도 우선합니다.
-매 요청의 메시지 사본에만 적용하므로 user/assistant history에 지시를 저장하거나 누적하지 않습니다.
-학습된 control token이나 정확히 보장되는 강도 제어가 아니며, 모델 가중치·adapter·decoding 정책은 변경하지 않습니다.
+현재 구현은 learned control token이 아니라 system prompt 기반 style control입니다. 사용자가 직접 지정한 말투·출력 형식은 기본 dialect strength보다 우선하도록 설계되어 있습니다.
 
-## 현재 디코딩 정책
+## Decoding policy
 
-Release Candidate에서 반복 루프를 줄이기 위해 다음 설정을 기본으로 사용합니다.
+Release Candidate 기본 추론 정책:
 
 ```text
 enable_thinking = false
@@ -178,9 +218,9 @@ repetition_penalty = 1.10
 no_repeat_ngram_size = 3
 ```
 
-샘플링을 사용할 때는 기존 Phase 4 정책의 `temperature`, `top_p`, `top_k` 설정을 함께 사용합니다.
+샘플링을 사용할 때는 서버의 `temperature`, `top_p` 등 generation 옵션을 함께 사용합니다.
 
-## 저장소 구성
+## Repository layout
 
 ```text
 src/ulm/                 모델 학습·추론 핵심 코드
@@ -194,25 +234,57 @@ portfolio/               포트폴리오용 시각 자료
 tests/                   회귀 및 API 테스트
 ```
 
-실험 산출물과 대형 체크포인트는 Git에 직접 커밋하지 않습니다.
+실험 산출물, 원본 제한 데이터, 대형 체크포인트는 Git에 직접 커밋하지 않습니다.
 
-## 주요 문서
+## Reproducibility and release files
 
-- [MODEL_CARD.md](MODEL_CARD.md): 현재 ULM-4B 모델 카드
-- [ULM-4B Model Comparison Report](reports/ULM_4B_MODEL_COMPARISON.md): 500개 UlsanBench v2 항목에 대한 원본 Base 및 공개 LLM 비교 벤치마크 결과
-- [Arm B release candidate report](reports/ULM_4B_ARM_B_RELEASE_CANDIDATE.md): 현재 고정 후보와 평가 결과
-- [PLAN.md](PLAN.md): 연구 목표와 단계
-- [EXPERIMENTS.md](EXPERIMENTS.md): 실험 기록 규칙
-- [GPU.md](GPU.md): GPU 운영 가이드
+- [MODEL_CARD.md](MODEL_CARD.md): ULM-4B model card
+- [configs/release/ulm4b-arm-b.json](configs/release/ulm4b-arm-b.json): 고정 release-candidate 설정
+- [ULM-4B Arm B Release Candidate Report](reports/ULM_4B_ARM_B_RELEASE_CANDIDATE.md): Arm B 선택 근거
+- [ULM-4B Model Comparison Report](reports/ULM_4B_MODEL_COMPARISON.md): 500-item 비교 벤치마크
 - [benchmarks/README.md](benchmarks/README.md): benchmark 작성 및 검수 규칙
 - [data/README.md](data/README.md): 데이터 거버넌스
+- [EXPERIMENTS.md](EXPERIMENTS.md): 실험 기록 규칙
+- [GPU.md](GPU.md): GPU 운영 가이드
 
-## 현재 상태
+## Limitations
 
-ULM-4B Arm B는 텍스트 추론과 ULM Live의 TTS 경로까지 end-to-end 동작을 확인한 release candidate입니다.
+- Instruction-trap snapshot은 65%로, 엄격한 출력 형식과 지시 추종에서 추가 개선이 필요합니다.
+- Dialect identification accuracy는 release snapshot 기준 32%이며, 울산/타 경상/표준어 분류를 안정적으로 해결했다고 볼 수 없습니다.
+- UlsanBench의 semantic/dialectness 지표는 자동 proxy이므로 native speaker human evaluation을 대체하지 않습니다.
+- 울산 방언은 지역, 세대, 화자에 따라 변이가 크므로 모델의 한 가지 출력 스타일을 전체 울산 방언으로 일반화하면 안 됩니다.
+- 모델은 일반 언어모델과 마찬가지로 사실 오류나 환각을 생성할 수 있습니다.
+- Dialect Strength는 현재 prompt-based control이며 강도별 출력 특성이 학습된 control token으로 보장되지 않습니다.
+- ULM Live의 음성 억양 품질과 자연스러움은 별도 human listening 검증이 필요합니다.
 
-다음 우선순위는 instruction-following 회귀 복구, identification 성능 개선, STT 연결, 실시간 음성 스트리밍과 barge-in 지원입니다.
+## Citation
 
-## 라이선스
+연구, 발표, 보고서에서 이 저장소를 인용할 때는 아래 형식을 사용할 수 있습니다.
 
-코드 라이선스는 저장소의 [LICENSE](LICENSE)를 따릅니다. Base model, 데이터셋, 음성 모델은 각각의 원 라이선스와 이용 조건을 별도로 따라야 합니다.
+```bibtex
+@software{ulsanlm_ulm4b_2026,
+  author       = {{UlsanLM Lab}},
+  title        = {ULM-4B: Ulsan Dialect Small Language Model},
+  year         = {2026},
+  url          = {https://github.com/UlsanLM-LAB/ULM-1.7B},
+  note         = {Release candidate: ULM-4B Arm B}
+}
+```
+
+저장소 이름이 추후 `ULM-4B`로 변경되면 citation URL도 새 주소로 갱신합니다.
+
+## References
+
+1. Empero. “Qwen3.8-4B-Distill.” Hugging Face model card. https://huggingface.co/empero-ai/Qwen3.8-4B-Distill
+2. Hu, E. J., Shen, Y., Wallis, P., et al. “LoRA: Low-Rank Adaptation of Large Language Models.” arXiv:2106.09685, 2021. https://arxiv.org/abs/2106.09685
+3. Reimers, N., & Gurevych, I. “Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks.” EMNLP-IJCNLP 2019. https://aclanthology.org/D19-1410/
+4. Sentence Transformers. “paraphrase-multilingual-MiniLM-L12-v2.” https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+5. Qwen Team. “Qwen3-TTS.” https://github.com/QwenLM/Qwen3-TTS
+6. Hugging Face. “Transformers.” https://github.com/huggingface/transformers
+7. Hugging Face. “PEFT: Parameter-Efficient Fine-Tuning.” https://github.com/huggingface/peft
+
+외부 base model, 데이터셋, 평가 모델, TTS 모델은 각 원 프로젝트의 라이선스와 이용 조건을 별도로 확인해야 합니다.
+
+## License
+
+이 저장소의 코드는 [Apache License 2.0](LICENSE)을 따릅니다. Base model, 외부 데이터셋, 평가 모델, 음성 모델 및 파생 가중치에는 각각의 upstream 라이선스와 데이터 이용 조건이 별도로 적용될 수 있습니다.
