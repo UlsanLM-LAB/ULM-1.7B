@@ -104,3 +104,14 @@ Three independent 80-step continued SFT arms completed at LR 2e-6/4e-6/7e-6. All
 - [x] Apply absolute gates; full UlsanBench on at most one passing checkpoint.
 - [x] Preserve original/Live; save results and artifacts; commit and push.
 - [x] Stop EC2 and verify actual stopped.
+
+## Dialect strength API (2026-09-28)
+- [x] Trace shared endpoints, prompt semantics and generation invariants.
+- [x] Add strict optional integer 0–3/default2 and reusable request-time prompt composition.
+- [x] Cover all levels, invalid input, system preservation, history isolation and both streaming modes/routes.
+- [x] Run CPU unit/full tests; document prompt-only semantics and client contract.
+- [ ] Commit/push feature branch and open PR without merge; AWS unchanged.
+
+### Review
+
+CPU/offline full pytest: 134 passed; focused API/prompt suite: 52 passed. Both endpoint aliases and streaming modes exercise the real template preparation with a fake tokenizer/model. Strict invalid input, system preservation, explicit-request priority instructions and clean history are covered. Generation policy and model/adapter assets are unchanged. Real model style A/B testing is deferred to a separate user request.

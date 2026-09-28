@@ -27,7 +27,7 @@ from .policy import (
 from .policy import (
     generation_kwargs as phase4_generation_kwargs,
 )
-from .prompt import PHASE4_SYSTEM_PROMPT
+from .prompt import PHASE4_SYSTEM_PROMPT, build_chat_messages
 
 DEFAULT_MODEL_PATH = "outputs/ulm-4b-arm-b-merged"
 MODEL_NAME = "ULM-4B"
@@ -55,6 +55,7 @@ class ChatCompletionRequest(BaseModel):
     temperature: float = Field(default=DEFAULT_TEMPERATURE, ge=0.0, le=2.0)
     top_p: float = Field(default=DEFAULT_TOP_P, gt=0.0, le=1.0)
     max_tokens: int = Field(default=DEFAULT_MAX_NEW_TOKENS, ge=1, le=2048)
+    dialect_strength: int = Field(default=2, ge=0, le=3, strict=True)
     system_prompt: str | None = Field(
         default=None,
         validation_alias=AliasChoices("system_prompt", "systemPrompt"),
@@ -132,16 +133,11 @@ class TransformersChatEngine:
         return cls(resolved_path, tokenizer, model, torch)
 
     def _messages_for_template(self, request: ChatCompletionRequest) -> list[dict[str, str]]:
-        messages = [message.model_dump() for message in request.messages]
-        if not any(message["role"] == "system" for message in messages):
-            messages.insert(
-                0,
-                {
-                    "role": "system",
-                    "content": request.system_prompt or DEFAULT_SYSTEM_PROMPT,
-                },
-            )
-        return messages
+        return build_chat_messages(
+            [message.model_dump() for message in request.messages],
+            dialect_strength=request.dialect_strength,
+            system_prompt=request.system_prompt or DEFAULT_SYSTEM_PROMPT,
+        )
 
     def _prepare_generation(self, request: ChatCompletionRequest, streamer: Any) -> dict[str, Any]:
         messages = self._messages_for_template(request)
