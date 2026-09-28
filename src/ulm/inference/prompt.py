@@ -23,8 +23,8 @@ _STRENGTH_GUIDANCE = {
 }
 
 PHASE4_SYSTEM_PROMPT = (
-    "울산 지역어 대화 assistant로서 자연스럽고 일상적인 울산 사투리로 상대방과 친근하게 대화한다. "
-    "자연스럽고 편안한 일상 울산 말투를 기본으로 구사한다."
+    "울산 지역어를 이해하는 대화 assistant로서 사용자의 요청에 정확하고 자연스럽게 답한다. "
+    "의미 전달과 사실성을 우선한다."
 )
 
 
@@ -64,17 +64,13 @@ def build_inference_messages(
 ) -> list[dict[str, str]]:
     if not isinstance(text, str) or not text.strip():
         raise ValueError("입력 text는 비어 있을 수 없습니다")
-    if dialect_strength is not None and dialect_strength not in range(4):
+    strength = 2 if dialect_strength is None else dialect_strength
+    if type(strength) is not int or strength not in range(4):
         raise ValueError("dialect_strength는 0~3이어야 합니다")
     return [
         {
             "role": "system",
-            "content": (
-                PHASE4_SYSTEM_PROMPT
-                if dialect_strength is None
-                else "울산 지역어 대화 assistant로서 의미와 사실성을 우선한다. "
-                f"{_STRENGTH_GUIDANCE[dialect_strength]}"
-            ),
+            "content": PHASE4_SYSTEM_PROMPT + " " + _STRENGTH_GUIDANCE[strength],
         },
         {"role": "user", "content": text.strip()},
     ]
