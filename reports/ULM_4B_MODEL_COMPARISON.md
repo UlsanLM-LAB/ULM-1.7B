@@ -8,7 +8,7 @@
   - GPU: NVIDIA L40S 46GB VRAM (Driver: 595.91.07, CUDA: 13.2)
   - Software: PyTorch 2.14.0+cu130, Transformers 5.17.0, PEFT 0.20.0
 - **Evaluator**: Sentence embedding model (`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`) + lexical marker and ending rule matchers.
-- **Decoding Protocol**: Neutral deterministic evaluation (`do_sample=false`, `temperature=0`, `enable_thinking=false`). ULM release repetition control (`repetition_penalty=1.10`, `no_repeat_ngram_size=3` on context task) is reported separately for complete fairness transparency.
+- **Decoding Protocol**: Neutral deterministic evaluation (`do_sample=false`, `temperature=0`, `enable_thinking=false`). A supplementary **Context Guard** ablation applies `repetition_penalty=1.10` and `no_repeat_ngram_size=3` only to the context task; it is not a full deployed-mode rerun.
 
 ---
 
@@ -27,7 +27,7 @@ All models were evaluated on the **exact same hardware**, **identical prompts an
 3. **Identification Task**:
    - Dialect identification remains a challenging classification task across all zero-shot open models without few-shot examples: Llama-3.2-Bllossom-3B scored **0.33**, ULM-4B scored **0.30**, Qwen3.8 Base scored **0.28**, and Qwen2.5-3B scored **0.21**.
 4. **Context & Repetition Mitigation**:
-   - Under neutral greedy decoding without repetition penalties, ULM-4B recorded 3 repetitions on multi-turn dialogue context items (compared to 6 on Qwen3.8 Base). Under ULM's deployed decoding configuration (`repetition_penalty=1.10`, `no_repeat_ngram_size=3`), context repetition is reduced to **0**.
+   - Under neutral greedy decoding without repetition penalties, ULM-4B recorded 3 repetitions on multi-turn dialogue context items (compared to 6 on Qwen3.8 Base). Under the context-only **Context Guard** ablation (`repetition_penalty=1.10`, `no_repeat_ngram_size=3`), context repetition is reduced to **0**.
 
 ---
 
@@ -36,7 +36,7 @@ All models were evaluated on the **exact same hardware**, **identical prompts an
 | Model Identifier | Display Name | Base Model / Organization | Parameters | Quantization | Precision | Context Len |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | `ulm-4b-arm-b-neutral` | **ULM-4B Arm B (Neutral)** | `empero-ai/Qwen3.8-4B-Distill` + LoRA | 4.21B | None | bfloat16 | 262,144 |
-| `ulm-4b-arm-b-deployed` | **ULM-4B Arm B (Deployed)** | `empero-ai/Qwen3.8-4B-Distill` + LoRA | 4.21B | None | bfloat16 | 262,144 |
+| `ulm-4b-arm-b-context-guard` | **ULM-4B Arm B (Context Guard)** | `empero-ai/Qwen3.8-4B-Distill` + LoRA | 4.21B | None | bfloat16 | 262,144 |
 | `qwen3.8-4b-base` | **Qwen3.8-4B-Distill Base** | `empero-ai/Qwen3.8-4B-Distill` | 4.21B | None | bfloat16 | 262,144 |
 | `qwen2.5-3b-instruct` | **Qwen2.5-3B-Instruct** | `Qwen/Qwen2.5-3B-Instruct` | 3.09B | None | bfloat16 | 32,768 |
 | `qwen2.5-7b-instruct` | **Qwen2.5-7B-Instruct** | `Qwen/Qwen2.5-7B-Instruct` | 7.61B | None | bfloat16 | 131,072 |
@@ -60,14 +60,14 @@ All scores below are measured under strict deterministic decoding (`do_sample=fa
 
 *Note: Semantic similarity and dialectness proxy are calculated on a [0.0, 1.0] scale. In visualization assets, values are multiplied by 100 for display purposes.*
 
-### 3.2 Deployed vs Neutral Decoding for ULM-4B Arm B
+### 3.2 Context Guard vs Neutral Decoding for ULM-4B Arm B
 
-In the production serving configuration, ULM-4B applies mild repetition control on the open-ended dialogue context task.
+For this supplementary ablation, ULM-4B repetition controls are applied only to the open-ended dialogue context task. This isolates their effect on context behavior and should not be read as a full production-serving benchmark.
 
 | Decoding Setting | Context Sem. | Context Dialect | Context Repetitions | Context Malformed | Generation Dialect |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **ULM-4B Neutral** (`penalty=1.0`) | 0.4594 | 0.2986 | 3 / 75 | 0 / 75 | 0.6591 |
-| **ULM-4B Deployed** (`penalty=1.10`, `ngram=3`) | **0.4656** | **0.3073** | **0 / 75** | **0 / 75** | 0.6591 |
+| **ULM-4B Context Guard** (`penalty=1.10`, `ngram=3`, context only) | **0.4656** | **0.3073** | **0 / 75** | **0 / 75** | 0.6591 |
 
 ---
 
@@ -78,7 +78,7 @@ Measured on NVIDIA L40S 46GB (`g6e.xlarge`), batch size 16 in bfloat16:
 | Model | Total Inference Time (500 items) | Avg Latency / Item | Generation Throughput | Peak VRAM |
 | :--- | :---: | :---: | :---: | :---: |
 | **ULM-4B Arm B (Neutral)** | 92.52s | 185.0 ms | 174.9 tok/s | 9.27 GiB |
-| **ULM-4B Arm B (Deployed)** | 78.85s | 157.7 ms | 176.4 tok/s | 9.27 GiB |
+| **ULM-4B Arm B (Context Guard)** | 78.85s | 157.7 ms | 176.4 tok/s | 9.27 GiB |
 | **Qwen3.8-4B-Distill Base** | 65.16s | 130.3 ms | 301.5 tok/s | 9.21 GiB |
 | **Qwen2.5-3B-Instruct** | 51.68s | 103.4 ms | 471.8 tok/s | 5.99 GiB |
 | **Qwen2.5-7B-Instruct** | 60.75s | 121.5 ms | 468.9 tok/s | 14.59 GiB |
@@ -108,7 +108,7 @@ Measured on NVIDIA L40S 46GB (`g6e.xlarge`), batch size 16 in bfloat16:
 ### 5.4 Context (75 items)
 - **Task**: Open-ended conversational turn in response to a conversational partner speaking Ulsan dialect.
 - **Metrics**: Context semantic similarity, dialectness proxy, repetition count, malformed count.
-- **Analysis**: ULM-4B scored **0.4594** semantic similarity in neutral mode (0.4656 deployed), outperforming Qwen3.8 Base (0.3593) and other baselines. Deployed repetition penalty completely suppressed repetitive output loops.
+- **Analysis**: ULM-4B scored **0.4594** semantic similarity in neutral mode (0.4656 with Context Guard), outperforming Qwen3.8 Base (0.3593) and other baselines. The Context Guard ablation suppressed the observed repetitive output loops on the 75 context items.
 
 ### 5.5 Identification (100 items)
 - **Task**: Classify dialect utterance into `ULSAN`, `OTHER_GYEONGSANG`, or `STANDARD`.
@@ -122,5 +122,5 @@ Measured on NVIDIA L40S 46GB (`g6e.xlarge`), batch size 16 in bfloat16:
 1. **Unmodified Rubric**: Scoring uses the exact `score_rows` rubric from `scripts/evaluate_ulsanbench_v2.py`.
 2. **Evaluator Independence**: Metric embeddings are generated by `paraphrase-multilingual-MiniLM-L12-v2`, an independent pretrained multilingual encoder not fine-tuned on ULM data.
 3. **Official Chat Templates**: Every model used its official tokenizer chat template (`apply_chat_template`) with identical system prompt `"요청한 결과만 출력하세요. 설명, 머리말, 따옴표, 부가 설명을 추가하지 마세요."`.
-4. **No Cherry-Picking**: The full 500-item split was evaluated end-to-end for all models. Raw prediction logs are preserved in `reports/model-comparison/raw/`.
+4. **No Cherry-Picking**: The full 500-item split was evaluated end-to-end for all models. Raw prediction logs are retained on the benchmark EC2 volume and are not committed to Git.
 5. **Metric Caveats**: Semantic similarity and dialectness proxy scores are automated evaluation proxies. They provide reproducible directional signals but do not replace human dialectal perception tests by native Ulsan residents.
