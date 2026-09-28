@@ -23,16 +23,16 @@
   "decoding": {
     "neutral": {
       "do_sample": false,
-      "temperature": 0.0,
+      "temperature": 0,
       "enable_thinking": false,
       "max_new_tokens": {
         "identification": 16,
         "other": 96
       }
     },
-    "deployed": {
+    "context_guard": {
       "do_sample": false,
-      "temperature": 0.0,
+      "temperature": 0,
       "enable_thinking": false,
       "max_new_tokens": {
         "identification": 16,
@@ -41,7 +41,8 @@
       "context_task_extra": {
         "repetition_penalty": 1.1,
         "no_repeat_ngram_size": 3
-      }
+      },
+      "scope": "context task only; supplementary ablation, not a full deployed-mode benchmark"
     }
   }
 }
