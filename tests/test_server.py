@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import AsyncIterator
 from typing import Any
 
+import pytest
 import torch
 from fastapi.testclient import TestClient
 
@@ -11,7 +12,7 @@ from ulm.inference.policy import (
     NO_REPEAT_NGRAM_SIZE,
     REPETITION_PENALTY,
 )
-from ulm.inference.prompt import PHASE4_SYSTEM_PROMPT
+from ulm.inference.prompt import PHASE4_SYSTEM_PROMPT, build_dialect_instruction
 from ulm.inference.server import (
     ChatCompletionRequest,
     GenerationEnd,
@@ -188,7 +189,9 @@ def test_phase4_template_and_generation_settings() -> None:
     kwargs = engine._prepare_generation(request, streamer=object())
 
     assert [m["role"] for m in tokenizer.messages] == ["system", "user", "assistant", "user"]
-    assert tokenizer.messages[0]["content"] == PHASE4_SYSTEM_PROMPT
+    assert tokenizer.messages[0]["content"] == (
+        PHASE4_SYSTEM_PROMPT + "\n\n" + build_dialect_instruction(2)
+    )
     assert tokenizer.template_options == {
         "tokenize": False,
         "add_generation_prompt": True,
@@ -215,3 +218,83 @@ def test_greedy_policy_keeps_repetition_penalty_and_eos_pad() -> None:
         "no_repeat_ngram_size": 3,
         "pad_token_id": 151645,
     }
+
+
+@pytest.mark.parametrize("endpoint", ["/v1/chat/completions", "/api/chat"])
+@pytest.mark.parametrize("stream", [False, True])
+def test_dialect_strength_reaches_generation_template(endpoint, stream) -> None:
+    """Run both routes/modes through the real template preparation with a CPU fake model."""
+    class Tokenizer:
+        eos_token_id = 151645
+        messages: list[list[dict[str, str]]] = []
+
+        def apply_chat_template(self, messages, **options):
+            self.messages.append(messages)
+            return "mock prompt"
+
+        def __call__(self, prompt, return_tensors):
+            return {"input_ids": torch.tensor([[1]]), "attention_mask": torch.tensor([[1]])}
+
+    class Model:
+        config = type("Config", (), {"max_position_embeddings": 32768})()
+
+        def get_input_embeddings(self):
+            return type("Embeddings", (), {"weight": torch.zeros(1)})()
+
+    class RecordingEngine(TransformersChatEngine):
+        async def stream_chat(self, request, is_disconnected):
+            self._prepare_generation(request, streamer=None)
+            yield "mock reply"
+
+    tokenizer = Tokenizer()
+    tokenizer.messages = []
+    engine = RecordingEngine("mock", tokenizer, Model(), torch)
+    messages = [
+        {"role": "system", "content": "서비스 규칙: 비밀을 공개하지 않는다."},
+        {"role": "user", "content": "약속 장소는 도서관이야."},
+        {"role": "assistant", "content": "기억할게요."},
+        {"role": "user", "content": "어디에서 만나기로 했지? 표준어로 말해."},
+    ]
+    with TestClient(create_app(engine=engine)) as client:
+        for strength in range(4):
+            response = client.post(endpoint, json={
+                "messages": messages, "stream": stream, "dialect_strength": strength,
+            })
+            assert response.status_code == 200
+            prepared = tokenizer.messages[-1]
+            assert prepared[0]["content"].startswith(messages[0]["content"] + "\n\n")
+            assert prepared[0]["content"].endswith(build_dialect_instruction(strength))
+            assert prepared[1:] == messages[1:]
+            assert prepared[0]["content"].count("[기본 응답 말투 설정]") == 1
+    assert len({turn[0]["content"] for turn in tokenizer.messages}) == 4
+    assert messages[0]["content"] == "서비스 규칙: 비밀을 공개하지 않는다."
+
+
+@pytest.mark.parametrize("strength", [0, 1, 2, 3])
+def test_dialect_strength_schema_accepts_each_level(strength) -> None:
+    request = ChatCompletionRequest(
+        messages=[{"role": "user", "content": "안녕"}], dialect_strength=strength,
+    )
+    assert request.dialect_strength == strength
+
+
+@pytest.mark.parametrize("endpoint", ["/v1/chat/completions", "/api/chat"])
+def test_missing_dialect_strength_defaults_to_two(endpoint) -> None:
+    engine = FakeEngine()
+    with TestClient(create_app(engine=engine)) as client:
+        assert client.post(endpoint, json={
+            "messages": [{"role": "user", "content": "안녕"}], "stream": False,
+        }).status_code == 200
+    assert engine.requests[0].dialect_strength == 2
+
+
+@pytest.mark.parametrize("strength", [-1, 4, "strong", "2", None, True, 1.5])
+@pytest.mark.parametrize("endpoint", ["/v1/chat/completions", "/api/chat"])
+def test_invalid_dialect_strength_rejected_before_generation(endpoint, strength) -> None:
+    engine = FakeEngine()
+    with TestClient(create_app(engine=engine)) as client:
+        response = client.post(endpoint, json={
+            "messages": [{"role": "user", "content": "안녕"}], "dialect_strength": strength,
+        })
+    assert response.status_code == 422
+    assert engine.requests == []

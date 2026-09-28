@@ -144,6 +144,30 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 
 SSE 스트리밍도 같은 엔드포인트에서 `"stream": true`로 사용할 수 있습니다.
 
+## Dialect Strength (사투리 강도)
+
+`/v1/chat/completions`와 `/api/chat`에 선택적 정수 필드 `dialect_strength`를 보낼 수 있습니다.
+
+| 값 | 이름 | 기본 응답 말투 |
+|---|---|---|
+| 0 | Standard / 표준어 | 방언 어휘와 종결어미를 의도적으로 사용하지 않음 |
+| 1 | Mild / 약하게 | 표준어 중심, 가벼운 울산 표현을 간헐적으로 사용 |
+| 2 | Ulsan / 보통 | 자연스러운 울산 일상 말투 (기본값) |
+| 3 | Strong / 강하게 | 울산 어휘·어미를 적극 사용하되 과장과 반복을 피함 |
+
+```json
+{"messages":[{"role":"user","content":"오늘 뭐하노?"}],"stream":true,"dialect_strength":2}
+```
+
+미지정 시 2입니다. 정수 0–3 이외의 값(음수, 4, 문자열, null, boolean, 실수)은 422로 거부합니다.
+기존 client는 필드 추가 없이 사용할 수 있으며 stream 여부에 따른 강도 처리 차이는 없습니다.
+
+기존 system 지시에 현재 강도 지시를 합성하는 **prompt-based control**입니다.
+서비스 안전·시스템 지시를 유지하고, 사용자가 명시한 말투나 출력 형식은 기본 강도 설정보다 우선하도록 안내합니다.
+예를 들어 “표준어로 말해”라는 요청은 강도 3에서도 우선합니다.
+매 요청의 메시지 사본에만 적용하므로 user/assistant history에 지시를 저장하거나 누적하지 않습니다.
+학습된 control token이나 정확히 보장되는 강도 제어가 아니며, 모델 가중치·adapter·decoding 정책은 변경하지 않습니다.
+
 ## 현재 디코딩 정책
 
 Release Candidate에서 반복 루프를 줄이기 위해 다음 설정을 기본으로 사용합니다.
