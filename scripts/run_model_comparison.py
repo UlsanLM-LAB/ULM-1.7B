@@ -110,7 +110,7 @@ def run_model_inference(
         limit = 16 if task == "identification" else 96
 
         extra = {}
-        if decoding_mode == "deployed" and task == "context":
+        if decoding_mode == "context_guard" and task == "context":
             extra = {"repetition_penalty": 1.10, "no_repeat_ngram_size": 3}
 
         for start in range(0, len(indices), batch_size):
@@ -176,7 +176,7 @@ def main():
     parser.add_argument("--device", default="cuda:0", help="CUDA device")
     parser.add_argument("--dtype", default="bfloat16", choices=["bfloat16", "float16", "float32"], help="Model dtype")
     parser.add_argument("--batch-size", type=int, default=8, help="Batch size for generation")
-    parser.add_argument("--decoding-mode", default="neutral", choices=["neutral", "deployed"], help="neutral or deployed decoding")
+    parser.add_argument("--decoding-mode", default="neutral", choices=["neutral", "context_guard"], help="neutral decoding or context-only repetition guard")
     parser.add_argument("--subset", type=int, default=0, help="Subset size for smoke testing (0 = full benchmark)")
 
     args = parser.parse_args()
