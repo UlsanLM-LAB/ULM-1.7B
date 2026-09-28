@@ -103,4 +103,4 @@ Three independent 80-step continued SFT arms completed at LR 2e-6/4e-6/7e-6. All
 - [x] One original Arm B run, LR 7e-7, max 60 steps; evaluate 20/40/60.
 - [x] Apply absolute gates; full UlsanBench on at most one passing checkpoint.
 - [x] Preserve original/Live; save results and artifacts; commit and push.
-- [ ] Stop EC2 and verify actual stopped.
+- [x] Stop EC2 and verify actual stopped.

@@ -34,3 +34,5 @@ At step40, the eight corrected instruction misses comprise two numbered-list for
 - Protected original/Live files:29 hash matches after completion. Training process ended; GPU memory0MiB.
 - checkpoint20/40/60 and final adapter preserved on persistent EC2 EBS and in local `outputs/instruction-recovery-final-backup/adapter-backup.tar.gz`; all four local adapter hashes verified. Raw predictions and private datasets backed up locally and excluded from Git.
 - Source/config/summary results are committed on `ulm4b-arm-b-plus`. AWS shutdown and push evidence: `instruction-recovery-final/operations.json`.
+
+EC2 `i-0f732bf7d1cc409b4` verified **stopped** at 2026-09-28T03:05:13.304230+00:00. Persistent volume `vol-07580a7ba8e092248` retained. Results commit `60580a211a4b4fc3ad6fb88f65f5321bc0372e35` pushed and remote SHA verified; main unchanged.
