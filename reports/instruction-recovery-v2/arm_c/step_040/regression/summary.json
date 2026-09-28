@@ -1,0 +1,20 @@
+{
+  "factual_qa": {
+    "n": 10,
+    "accuracy_pct": 90.0
+  },
+  "multi_turn": {
+    "n": 5,
+    "accuracy_pct": 100.0
+  },
+  "instruction_trap": {
+    "n": 20,
+    "accuracy_pct": 85.0
+  },
+  "corrected_instruction_pct": 70.0,
+  "policy": "comparable",
+  "repetition_count": 0,
+  "general_regression_repetition_count": 0,
+  "pre_hardening_corrected_instruction_pct": 60.0,
+  "corrected_rubric_version": "v2.5-denial-and-quoted-claim-audit"
+}

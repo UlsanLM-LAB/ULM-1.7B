@@ -1,0 +1,20 @@
+{
+  "verified_at_utc": "2026-09-28T01:47:36.868133+00:00",
+  "instance": "i-0f732bf7d1cc409b4",
+  "region": "ap-northeast-2",
+  "aws_state": "running",
+  "completion_action": "stop",
+  "termination_requested": false,
+  "branch": "ulm4b-arm-b-plus",
+  "main_base_commit": "60f4a926ae0006dbf3fa40c553dc19b222b1078a",
+  "git_push_status": "pending",
+  "adapters_saved_ebs": 16,
+  "local_adapter_backups_verified": 6,
+  "original_arm_b_and_live_unchanged": true,
+  "training_and_evaluation_finished": true,
+  "gpu_compute_processes": 0,
+  "ulm_backend_services_running": 0,
+  "accepted_release_adapter": null,
+  "best_rejected_adapter": "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_c/checkpoint-60",
+  "shutdown_proof": "shutdown_checks.json"
+}

@@ -81,3 +81,19 @@ Recovery v3 startup: 3,500 skill examples (1,225/700/525/525/525),
 tokens 51.5%; exact prompt overlap 0. Stage counts verified at 384/60/36
 then 264/144/72. Detached pipeline PID 21304; base independent20 evaluation
 started. Full training and final evaluation are automatic and conditional.
+
+# Arm B+ fresh-data experiment (2026-09-28)
+
+- [x] Verify latest main and create a separate ulm4b-arm-b-plus branch/worktree.
+- [x] Inspect AWS/GPU/runtime and verify immutable release adapter against historical weights.
+- [x] Build 1,500–2,000 new synthetic examples and replay with disjoint template families, benchmark audit, completion/EOS proof.
+- [x] Run exactly three independent bounded continued SFT arms from the release adapter, with 20-step preservation gates.
+- [x] Fully evaluate at most two candidates; consider at most one small DPO only if permitted by instruction gate.
+- [x] Save adapters/tokenizers/configs, per-arm results, final comparison, decision/report; verify original Arm B and Live unchanged.
+- [ ] Commit/push code/config/summaries to experiment branch only, stop EC2 and confirm stopped.
+
+User explicitly requested a new dataset and three new arms; previous instruction-recovery-v2 artifacts remain unchanged. No automatic main merge or Live deployment.
+
+## Fresh-data experiment review
+
+Three independent 80-step continued SFT arms completed at LR 2e-6/4e-6/7e-6. All 496 inherited LoRA tensors matched the release adapter before each arm; the frozen base was reused. Full evaluation was limited to C/60 and B/80 after denial-rubric correction and saved-prediction rescoring, with no repeated SFT. Best rejected C/60 scored legacy/corrected instruction 85/80%, factual 86%, memory 92%, generation semantic/dialectness .9842/.6615 and context .4576 with zero context repetition. DPO was considered and skipped. Weights/tokenizers/configs remain on EBS and six adapter backups match locally. Original Arm B and Live are unchanged; Git push and actual EC2 stop verification are recorded in operations.json.

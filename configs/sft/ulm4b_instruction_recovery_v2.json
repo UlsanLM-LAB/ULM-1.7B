@@ -1,0 +1,82 @@
+{
+  "experiment": "Instruction Recovery v2",
+  "candidate_name": "ULM-4B Arm B+",
+  "branch": "ulm4b-arm-b-plus",
+  "base_model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+  "initial_adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
+  "method": "continued LoRA SFT",
+  "arms": {
+    "a": {
+      "learning_rate": 2e-06
+    },
+    "b": {
+      "learning_rate": 4e-06
+    },
+    "c": {
+      "learning_rate": 7e-06
+    }
+  },
+  "max_steps_per_arm": 80,
+  "max_sft_arms": 3,
+  "checkpoint_and_gate_interval": 20,
+  "per_device_train_batch_size": 8,
+  "gradient_accumulation_steps": 2,
+  "optimizer": "adamw_torch",
+  "lr_scheduler": "cosine",
+  "warmup_steps": 2,
+  "weight_decay": 0.01,
+  "seed": 420929,
+  "completion_only_loss": true,
+  "max_length": 1024,
+  "bf16": true,
+  "gradient_checkpointing": true,
+  "lora": {
+    "r": 8,
+    "alpha": 16,
+    "dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj",
+      "in_proj_qkv",
+      "in_proj_a",
+      "in_proj_b",
+      "in_proj_z",
+      "out_proj"
+    ]
+  },
+  "mixture_examples": 2160,
+  "maximum_fraction_of_epoch": 0.592593,
+  "baseline_adapter_read_only": true,
+  "automatic_deployment": false,
+  "aws_instance": "i-0f732bf7d1cc409b4",
+  "aws_region": "ap-northeast-2",
+  "instance_completion_action": "stop",
+  "evaluation": {
+    "comparable_policy": "greedy; non-thinking; context only repetition_penalty=1.1, no_repeat_ngram_size=3 (identical to archived evaluations)",
+    "serving_counterfactual": "greedy; non-thinking; repetition_penalty=1.1, no_repeat_ngram_size=3 on all instruction items",
+    "synthetic_hidden_monitor_n": 32,
+    "synthetic_hidden_final_n": 135,
+    "benchmark_used_for_training": false,
+    "final_hidden_template_family_never_monitored": true,
+    "fast_general_repetition_items": 10
+  },
+  "learning_rate_adjustment": {
+    "original_plan": [
+      2e-07,
+      4e-07,
+      7e-07
+    ],
+    "actual": [
+      2e-06,
+      4e-06,
+      7e-06
+    ],
+    "evidence": "Previous 80-step Arm A at 2e-7 did not improve corrected instruction (60%); its adapter movement was minimal. Previous 4e-6/7e-6 arms preserved factual/dialect absolute floors but introduced an extra general loop. This fresh-data run adds an explicit fast general-loop stop gate and preserves the 80-step cap."
+  },
+  "run_id": "arm-b-plus-fresh-20260928"
+}

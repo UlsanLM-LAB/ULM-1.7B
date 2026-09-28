@@ -1,0 +1,66 @@
+{
+  "/home/ubuntu/models/ULM-4B-Arm-B/adapter_model.safetensors": {
+    "sha256": "fee03f872aaff55283be0413536e20b0930334333a20c6ee01cad63f57f43716",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_a/checkpoint-20/adapter_model.safetensors": {
+    "sha256": "1c116fbf32f444bc44b254ee3a2e75e4a36e69a45132ec1889da91b692a85c16",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_a/checkpoint-40/adapter_model.safetensors": {
+    "sha256": "b6666dd16f944b754fbce0449b8e5b9690648ddf5588f8295600a17ab7567fb4",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_a/checkpoint-60/adapter_model.safetensors": {
+    "sha256": "da9881835130cb557e80e066e438496a16cb75c2b9500177900cfeefb22c09f3",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_a/checkpoint-80/adapter_model.safetensors": {
+    "sha256": "e46c666065b9399b4bef0eb369f086490f4a9f8e8bf4cca2048985aeed724663",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_a/final_adapter/adapter_model.safetensors": {
+    "sha256": "e46c666065b9399b4bef0eb369f086490f4a9f8e8bf4cca2048985aeed724663",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_b/checkpoint-20/adapter_model.safetensors": {
+    "sha256": "2cbd16a65d2070c7bc04f49395e708bb40d8423644f4bbc661283ef00cff8bca",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_b/checkpoint-40/adapter_model.safetensors": {
+    "sha256": "4f73ad3e12e47a90997f6e98f50769822cbac4c8b3a5a870b91acbfdd117f60c",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_b/checkpoint-60/adapter_model.safetensors": {
+    "sha256": "afe5aafeb73787caf68e0cd87847c7e70db15c033b74ad1524416c4a784fb8e3",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_b/checkpoint-80/adapter_model.safetensors": {
+    "sha256": "d9b4cce82e7506187c6fcf414df01900e7131b115f1e8e83f9b48de678ff26d4",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_b/final_adapter/adapter_model.safetensors": {
+    "sha256": "d9b4cce82e7506187c6fcf414df01900e7131b115f1e8e83f9b48de678ff26d4",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_c/checkpoint-20/adapter_model.safetensors": {
+    "sha256": "fb351f5b79c484f63f6919ac2acb14dfd9832c92c0f44871c1513ecf1f3bc7b3",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_c/checkpoint-40/adapter_model.safetensors": {
+    "sha256": "462ed82d7cd9ff771addf885a201d3eace3fb8cd54ee8edbad9bff95888e59bf",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_c/checkpoint-60/adapter_model.safetensors": {
+    "sha256": "9f8a04b5ae57b233672bc3446be76bb91f20e3f9f06f07bada82d96bed8265d6",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_c/checkpoint-80/adapter_model.safetensors": {
+    "sha256": "eb842f38740f051397189725865e25c98e6b4c28ec52856caa89f84c948d0a37",
+    "bytes": 64996408
+  },
+  "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_c/final_adapter/adapter_model.safetensors": {
+    "sha256": "eb842f38740f051397189725865e25c98e6b4c28ec52856caa89f84c948d0a37",
+    "bytes": 64996408
+  }
+}

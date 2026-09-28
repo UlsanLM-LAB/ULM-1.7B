@@ -1,0 +1,20 @@
+{
+  "verified_at_utc": "2026-09-28T00:42:53.777641+00:00",
+  "aws_instance": "i-0f732bf7d1cc409b4",
+  "public_ip": "15.165.18.219",
+  "region": "ap-northeast-2",
+  "gpu": "NVIDIA L40S 46068 MiB",
+  "gpu_jobs_at_start": 0,
+  "available_ebs_gib": 97,
+  "root": "/home/ubuntu/ulm4b-arm-b-plus",
+  "branch": "ulm4b-arm-b-plus",
+  "main_source_commit": "60f4a926ae0006dbf3fa40c553dc19b222b1078a",
+  "python": "/home/ubuntu/ULM-1.7B/.venv/bin/python",
+  "base_model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+  "release_initial_adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
+  "historical_adapter_identical": true,
+  "release_adapter_sha256": "fee03f872aaff55283be0413536e20b0930334333a20c6ee01cad63f57f43716",
+  "previous_run_preserved": "/home/ubuntu/ulm-instruction-recovery-v2",
+  "runtime_and_release_files_verified": 29,
+  "user_authorized_new_data_three_new_arms": true
+}

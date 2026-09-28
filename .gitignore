@@ -59,3 +59,10 @@ reports/experiments/*
 .ipynb_checkpoints/
 .DS_Store
 Thumbs.db
+
+# Arm B+ private data, raw predictions and training logs.
+reports/instruction-recovery-v2/**/predictions.jsonl
+reports/instruction-recovery-v2/**/manual_review_30.jsonl
+reports/instruction-recovery-v2/*.log
+reports/instruction-recovery-v2/*pid*.json
+data/instruction_recovery_v2/

@@ -1,0 +1,32 @@
+{
+  "factual_qa": {
+    "n": 50,
+    "accuracy_pct": 84.0,
+    "repetition_count": 0,
+    "empty_count": 0
+  },
+  "multi_turn": {
+    "n": 25,
+    "accuracy_pct": 100.0,
+    "repetition_count": 0,
+    "empty_count": 0
+  },
+  "instruction_trap": {
+    "n": 20,
+    "accuracy_pct": 65.0,
+    "repetition_count": 1,
+    "empty_count": 0
+  },
+  "dialect_eval": {
+    "n": 35,
+    "accuracy_pct": 25.71,
+    "repetition_count": 0,
+    "empty_count": 0
+  },
+  "config": {
+    "do_sample": false,
+    "temperature": 0,
+    "enable_thinking": false,
+    "max_new_tokens": 128
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "paused_pid": 1820,
+  "three_sft_arms_complete": true,
+  "adapters_saved": 3,
+  "reason": "Re-score legitimate denial expressions before selecting two full evaluations; no SFT is repeated."
+}
