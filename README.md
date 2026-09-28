@@ -137,10 +137,12 @@ ULM-4B Arm B LoRA
 개발 환경:
 
 ```bash
-uv sync --extra dev --extra ml
+uv sync --extra dev --extra ml --extra tts
 uv run pytest
-uv run ruff check .
+uv run ruff check src
 ```
+
+전체 테스트에는 TTS 전처리·추론 테스트도 포함되어 `tts` extra가 필요합니다. 전체 저장소의 스타일 검사는 `uv run ruff check .`로 실행하며, 실험 스크립트의 기존 위반 사항은 [프로젝트 리뷰](reports/PROJECT_REVIEW.md)에 기록되어 있습니다.
 
 모델 가중치와 원본 대형 데이터는 저장소에 포함하지 않습니다.
 
@@ -246,6 +248,10 @@ tests/                   회귀 및 API 테스트
 - [data/README.md](data/README.md): 데이터 거버넌스
 - [EXPERIMENTS.md](EXPERIMENTS.md): 실험 기록 규칙
 - [GPU.md](GPU.md): GPU 운영 가이드
+- [scripts/README.md](scripts/README.md): 실행 진입점과 실험 스크립트 구분
+- [reports/README.md](reports/README.md): 릴리스·벤치마크·연구 보고서 안내
+- [프로젝트 상세 리뷰](reports/PROJECT_REVIEW.md): 코드 검토 결과와 개선 우선순위
+- [저장소 정리 기록](reports/REPOSITORY_CLEANUP.md): Git 동기화·브랜치 정리와 복구 정보
 
 ## Limitations
 

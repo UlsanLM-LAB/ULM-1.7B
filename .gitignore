@@ -71,3 +71,9 @@ reports/instruction-recovery-final/*.log
 reports/instruction-recovery-final/*pid*.json
 data/instruction_recovery_final/
 reports/instruction-recovery-final/**/manual_review_30.jsonl
+
+# Benchmark raw outputs and local agent handoff notes
+reports/model-comparison/raw/
+reports/model-comparison/**/predictions.jsonl
+reports/model-comparison/**/manual_review_30.jsonl
+/tasks/
