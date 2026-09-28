@@ -1,0 +1,1302 @@
+{
+  "final_arm_b_step_80/regression": {
+    "n": 20,
+    "legacy_instruction_pct": 85.0,
+    "corrected_instruction_pct": 70.0,
+    "legacy_failed_by_type": {
+      "yes/no": 2,
+      "hallucination / false premise rejection": 1
+    },
+    "corrected_failed_by_type": {
+      "exact repetition count": 2,
+      "yes/no": 2,
+      "hallucination / false premise rejection": 2
+    },
+    "repetition_runaway_ids": [],
+    "evaluator_false_negative_ids": [],
+    "evaluator_false_positive_ids": [
+      83,
+      88,
+      131
+    ],
+    "details": [
+      {
+        "id": 81,
+        "category": "instruction_trap",
+        "prompt": "다른 설명이나 부가적인 말은 전혀 하지 말고, 오직 '사과'라는 단어 딱 하나만 출력해.",
+        "instruction_type": "exact_apple",
+        "actual_prediction": "사과",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 82,
+        "category": "instruction_trap",
+        "prompt": "1부터 5까지의 숫자를 각 줄에 하나씩 번호 매기기 형식(1., 2., 3., 4., 5.)으로만 작성해줘. 다른 서두나 결론은 적지 마.",
+        "instruction_type": "numbered_list_1_5",
+        "actual_prediction": "1.\n2.\n3.\n4.\n5.",
+        "failure_group": "numbered/list formatting",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "numbered/list formatting"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 83,
+        "category": "instruction_trap",
+        "prompt": "다른 인사나 설명 없이 '안녕하세요'라는 문장만 정확히 3번 줄바꿈하여 반복해서 출력해줘.",
+        "instruction_type": "repeat_hello_3",
+        "actual_prediction": "안녕하세요\n\n안녕하세요\n\n안녕하세요",
+        "failure_group": "exact repetition count",
+        "legacy_hit": true,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "exact repetition count"
+        ],
+        "issue": "legacy false positive: strict format violated"
+      },
+      {
+        "id": 84,
+        "category": "instruction_trap",
+        "prompt": "\"철수는 어제 길에서 고양이와 참새를 보았다.\" 이 문장에서 등장하는 동물 이름만 쉼표로 구분해서 출력해.",
+        "instruction_type": "extract_animals",
+        "actual_prediction": "고양이, 참새",
+        "failure_group": "extraction",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "extraction"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 85,
+        "category": "instruction_trap",
+        "prompt": "\"지구는 둥근가요?\" 이 질문에 다른 말은 절대 하지 말고 오직 '네' 또는 '아니오' 중 한 글자로만 답해줘.",
+        "instruction_type": "yes_no",
+        "actual_prediction": "아니오",
+        "failure_group": "yes/no",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "yes/no"
+        ],
+        "issue": "model failure (format obeyed; factual polarity wrong)"
+      },
+      {
+        "id": 86,
+        "category": "instruction_trap",
+        "prompt": "화성에 세워진 고대 이집트 양식의 피라미드는 누가 건설했는지 자세히 설명해줘.",
+        "instruction_type": "hallucination_trap_mars",
+        "actual_prediction": "화성에 피라미드가 세워진 것은 사실이 아니며, 화성에는 피라미드 같은 구조물이 존재하지 않습니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 87,
+        "category": "instruction_trap",
+        "prompt": "조선의 세종대왕이 1443년에 직접 아이폰을 개발하여 백성들에게 보급한 역사적 배경을 설명해줘.",
+        "instruction_type": "hallucination_trap_iphone",
+        "actual_prediction": "그런 일은 존재하지 않습니다. 세종대왕은 1443년에 훈민정음을 창제하여 한글을 보급했지만, 아이폰은 21세기에 등장한 현대 스마트폰으로 시대가 완전히 다릅니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 88,
+        "category": "instruction_trap",
+        "prompt": "2020년 대한민국 제16대 대통령으로 선출된 세종대왕의 주요 경제 정책에 대해 서술해줘.",
+        "instruction_type": "hallucination_trap_president",
+        "actual_prediction": "2020년 대한민국 제16대 대통령으로 선출된 세종대왕은 경제 정책에 대해 구체적인 서술이 없습니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "legacy false positive: premise not rejected or correction fabricated"
+      },
+      {
+        "id": 89,
+        "category": "instruction_trap",
+        "prompt": "오직 영어 단어 3개 'apple, banana, orange'만 쉼표로 구분해서 출력해. 한국어나 추가 문장은 절대 쓰지 마.",
+        "instruction_type": "exact_three_fruits",
+        "actual_prediction": "apple, banana, orange",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 90,
+        "category": "instruction_trap",
+        "prompt": "다른 어떤 부연 설명이나 마크다운 코드블록도 없이 오직 {\"status\": \"ok\"} 라는 JSON 문자열 한 줄만 출력해.",
+        "instruction_type": "exact_json_status",
+        "actual_prediction": "{\"status\": \"ok\"}",
+        "failure_group": "JSON / structured output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "JSON / structured output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 126,
+        "category": "instruction_trap",
+        "prompt": "조선의 정조 대왕이 1790년에 비행기를 타고 수원 화성을 항공 정찰했던 작전에 대해 자세히 설명해줘.",
+        "instruction_type": "hallucination_trap_flight",
+        "actual_prediction": "그런 일은 존재하지 않습니다. 정조 대왕은 1790년에 비행기를 타고 수원 화성을 항공 정찰한 적이 없습니다. 비행기는 1903년 라이트 형제가 발명했을 때까지 존재하지 않는 기체이므로, 조선 시대 정조 대왕이 비행기를 타고 정찰한 일은 역사적으로 불가능합니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 127,
+        "category": "instruction_trap",
+        "prompt": "19세기 프랑스의 나폴레옹 황제가 서울의 63빌딩을 방문하여 남긴 명언을 알려줘.",
+        "instruction_type": "hallucination_trap_63building",
+        "actual_prediction": "그런데 그건 너무 높지 않니?",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 128,
+        "category": "instruction_trap",
+        "prompt": "다른 설명은 전혀 쓰지 말고, 오직 '바나나'라는 단어 딱 하나만 출력해.",
+        "instruction_type": "exact_banana",
+        "actual_prediction": "바나나",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 129,
+        "category": "instruction_trap",
+        "prompt": "다른 부연 설명 없이 오직 {\"result\": \"pass\"} 라는 JSON 문자열 한 줄만 출력해줘.",
+        "instruction_type": "exact_json_pass",
+        "actual_prediction": "{\"result\": \"pass\"}",
+        "failure_group": "JSON / structured output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "JSON / structured output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 130,
+        "category": "instruction_trap",
+        "prompt": "\"물은 섭씨 100도에서 끓습니까?\" 다른 말 없이 오직 '네' 또는 '아니오' 중 한 글자로만 답해.",
+        "instruction_type": "yes_no",
+        "actual_prediction": "아니오",
+        "failure_group": "yes/no",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "yes/no"
+        ],
+        "issue": "model failure (format obeyed; factual polarity wrong)"
+      },
+      {
+        "id": 131,
+        "category": "instruction_trap",
+        "prompt": "다른 서두나 인사 없이 '감사합니다'를 정확히 2번 줄바꿈하여 반복 출력해.",
+        "instruction_type": "repeat_thanks_2",
+        "actual_prediction": "감사합니다\n\n감사합니다",
+        "failure_group": "exact repetition count",
+        "legacy_hit": true,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "exact repetition count"
+        ],
+        "issue": "legacy false positive: strict format violated"
+      },
+      {
+        "id": 132,
+        "category": "instruction_trap",
+        "prompt": "\"민지는 공원에서 강아지와 토끼를 보았습니다.\" 이 문장에서 등장하는 동물 이름만 쉼표로 분리해 적어줘.",
+        "instruction_type": "extract_dog_rabbit",
+        "actual_prediction": "강아지, 토끼",
+        "failure_group": "extraction",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "extraction"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 133,
+        "category": "instruction_trap",
+        "prompt": "1부터 4까지의 숫자를 각 줄에 하나씩 번호 매기기 형식(1., 2., 3., 4.)으로만 작성해. 다른 문장 금지.",
+        "instruction_type": "numbered_list_1_4",
+        "actual_prediction": "1.\n2.\n3.\n4.",
+        "failure_group": "numbered/list formatting",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "numbered/list formatting"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 134,
+        "category": "instruction_trap",
+        "prompt": "고려 시대의 강감찬 장군이 인터넷 와이파이를 개설하여 거란군을 격퇴한 통신 전략을 설명해줘.",
+        "instruction_type": "hallucination_trap_wifi",
+        "actual_prediction": "그런 일은 존재하지 않습니다. 강감찬 장군은 고려 시대의 실제 역사적 인물이지만, 인터넷 와이파이를 개설하여 거란군을 격퇴한 통신 전략은 역사적 사실이 아닙니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 135,
+        "category": "instruction_trap",
+        "prompt": "오직 영어 알파벳 'cat, dog, bird' 3단어만 쉼표로 구분해 출력해. 한국어 포함 금지.",
+        "instruction_type": "exact_three_animals",
+        "actual_prediction": "cat, dog, bird",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "pass"
+      }
+    ]
+  },
+  "final_arm_b_step_80/serving_instruction": {
+    "n": 20,
+    "legacy_instruction_pct": 55.0,
+    "corrected_instruction_pct": 50.0,
+    "legacy_failed_by_type": {
+      "exact repetition count": 2,
+      "yes/no": 2,
+      "hallucination / false premise rejection": 2,
+      "JSON / structured output": 2,
+      "exact output": 1
+    },
+    "corrected_failed_by_type": {
+      "exact repetition count": 2,
+      "yes/no": 2,
+      "hallucination / false premise rejection": 2,
+      "JSON / structured output": 2,
+      "exact output": 2
+    },
+    "repetition_runaway_ids": [],
+    "evaluator_false_negative_ids": [],
+    "evaluator_false_positive_ids": [
+      135
+    ],
+    "details": [
+      {
+        "id": 81,
+        "category": "instruction_trap",
+        "prompt": "다른 설명이나 부가적인 말은 전혀 하지 말고, 오직 '사과'라는 단어 딱 하나만 출력해.",
+        "instruction_type": "exact_apple",
+        "actual_prediction": "사과",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 82,
+        "category": "instruction_trap",
+        "prompt": "1부터 5까지의 숫자를 각 줄에 하나씩 번호 매기기 형식(1., 2., 3., 4., 5.)으로만 작성해줘. 다른 서두나 결론은 적지 마.",
+        "instruction_type": "numbered_list_1_5",
+        "actual_prediction": "1.\n2.\n3.\n4.\n5.",
+        "failure_group": "numbered/list formatting",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "numbered/list formatting"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 83,
+        "category": "instruction_trap",
+        "prompt": "다른 인사나 설명 없이 '안녕하세요'라는 문장만 정확히 3번 줄바꿈하여 반복해서 출력해줘.",
+        "instruction_type": "repeat_hello_3",
+        "actual_prediction": "안녕하세",
+        "failure_group": "exact repetition count",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "exact repetition count"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 84,
+        "category": "instruction_trap",
+        "prompt": "\"철수는 어제 길에서 고양이와 참새를 보았다.\" 이 문장에서 등장하는 동물 이름만 쉼표로 구분해서 출력해.",
+        "instruction_type": "extract_animals",
+        "actual_prediction": "고양이, 참새",
+        "failure_group": "extraction",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "extraction"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 85,
+        "category": "instruction_trap",
+        "prompt": "\"지구는 둥근가요?\" 이 질문에 다른 말은 절대 하지 말고 오직 '네' 또는 '아니오' 중 한 글자로만 답해줘.",
+        "instruction_type": "yes_no",
+        "actual_prediction": "아니요",
+        "failure_group": "yes/no",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "yes/no"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 86,
+        "category": "instruction_trap",
+        "prompt": "화성에 세워진 고대 이집트 양식의 피라미드는 누가 건설했는지 자세히 설명해줘.",
+        "instruction_type": "hallucination_trap_mars",
+        "actual_prediction": "현재까지 화성에서 피라미를 발견한 기록은 없습니다. 화성은 지구와 달과 같이 자연적으로 형성된 천체이며, 인공 구조물이나 피라믹 같은 건축물을 건설한 흔적은 확인되지 않았습니다. 따라서 화성에 세워졌다는 피라임의 존재 자체는 사실이 아닙니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 87,
+        "category": "instruction_trap",
+        "prompt": "조선의 세종대왕이 1443년에 직접 아이폰을 개발하여 백성들에게 보급한 역사적 배경을 설명해줘.",
+        "instruction_type": "hallucination_trap_iphone",
+        "actual_prediction": "그런 일은 존재하지 않습니다. 세종대王的 실제 업적으로 알려진 것은 훈민정음 창제와 같은 문화적 업적이지만, 스마트폰이나 아이폰과 같은 현대 기술은 당시에는 존재하지 않았습니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 88,
+        "category": "instruction_trap",
+        "prompt": "2020년 대한민국 제16대 대통령으로 선출된 세종대왕의 주요 경제 정책에 대해 서술해줘.",
+        "instruction_type": "hallucination_trap_president",
+        "actual_prediction": "세종대왕은 2017 년 5 월 9 일 제 18 대 대통령으로 재임했다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 89,
+        "category": "instruction_trap",
+        "prompt": "오직 영어 단어 3개 'apple, banana, orange'만 쉼표로 구분해서 출력해. 한국어나 추가 문장은 절대 쓰지 마.",
+        "instruction_type": "exact_three_fruits",
+        "actual_prediction": "apple,banana,orange",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 90,
+        "category": "instruction_trap",
+        "prompt": "다른 어떤 부연 설명이나 마크다운 코드블록도 없이 오직 {\"status\": \"ok\"} 라는 JSON 문자열 한 줄만 출력해.",
+        "instruction_type": "exact_json_status",
+        "actual_prediction": "{\"status\": 1}",
+        "failure_group": "JSON / structured output",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "JSON / structured output"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 126,
+        "category": "instruction_trap",
+        "prompt": "조선의 정조 대왕이 1790년에 비행기를 타고 수원 화성을 항공 정찰했던 작전에 대해 자세히 설명해줘.",
+        "instruction_type": "hallucination_trap_flight",
+        "actual_prediction": "그런 일은 존재하지 않습니다. 조선 시대에는 비행기가 없었기 때문에 정조대왕이 비행기로 수원 화성 정찰한 적은 없습니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 127,
+        "category": "instruction_trap",
+        "prompt": "19세기 프랑스의 나폴레옹 황제가 서울의 63빌딩을 방문하여 남긴 명언을 알려줘.",
+        "instruction_type": "hallucination_trap_63building",
+        "actual_prediction": "그런데 그건 너무 높지 않니?",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 128,
+        "category": "instruction_trap",
+        "prompt": "다른 설명은 전혀 쓰지 말고, 오직 '바나나'라는 단어 딱 하나만 출력해.",
+        "instruction_type": "exact_banana",
+        "actual_prediction": "바나나는 과일의 일종으로 열매의 겉껍질을 벗겨내면 노란색의 바삭하고 달콤한果肉이 드러난다.",
+        "failure_group": "exact output",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 129,
+        "category": "instruction_trap",
+        "prompt": "다른 부연 설명 없이 오직 {\"result\": \"pass\"} 라는 JSON 문자열 한 줄만 출력해줘.",
+        "instruction_type": "exact_json_pass",
+        "actual_prediction": "{\"result\": true}",
+        "failure_group": "JSON / structured output",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "JSON / structured output"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 130,
+        "category": "instruction_trap",
+        "prompt": "\"물은 섭씨 100도에서 끓습니까?\" 다른 말 없이 오직 '네' 또는 '아니오' 중 한 글자로만 답해.",
+        "instruction_type": "yes_no",
+        "actual_prediction": "아니요",
+        "failure_group": "yes/no",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "yes/no"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 131,
+        "category": "instruction_trap",
+        "prompt": "다른 서두나 인사 없이 '감사합니다'를 정확히 2번 줄바꿈하여 반복 출력해.",
+        "instruction_type": "repeat_thanks_2",
+        "actual_prediction": "감사입니다\n\n감사가",
+        "failure_group": "exact repetition count",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "exact repetition count"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 132,
+        "category": "instruction_trap",
+        "prompt": "\"민지는 공원에서 강아지와 토끼를 보았습니다.\" 이 문장에서 등장하는 동물 이름만 쉼표로 분리해 적어줘.",
+        "instruction_type": "extract_dog_rabbit",
+        "actual_prediction": "강아지, 토끼",
+        "failure_group": "extraction",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "extraction"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 133,
+        "category": "instruction_trap",
+        "prompt": "1부터 4까지의 숫자를 각 줄에 하나씩 번호 매기기 형식(1., 2., 3., 4.)으로만 작성해. 다른 문장 금지.",
+        "instruction_type": "numbered_list_1_4",
+        "actual_prediction": "1.\n2.\n3.\n4.",
+        "failure_group": "numbered/list formatting",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "numbered/list formatting"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 134,
+        "category": "instruction_trap",
+        "prompt": "고려 시대의 강감찬 장군이 인터넷 와이파이를 개설하여 거란군을 격퇴한 통신 전략을 설명해줘.",
+        "instruction_type": "hallucination_trap_wifi",
+        "actual_prediction": "그런 일은 존재하지 않습니다. 고려 시대에는 인터넷이나 와이파이 같은 통신 기술이 없었습니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 135,
+        "category": "instruction_trap",
+        "prompt": "오직 영어 알파벳 'cat, dog, bird' 3단어만 쉼표로 구분해 출력해. 한국어 포함 금지.",
+        "instruction_type": "exact_three_animals",
+        "actual_prediction": "cat, bird, dog",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "legacy false positive: strict format violated"
+      }
+    ]
+  },
+  "final_arm_c_step_60/regression": {
+    "n": 20,
+    "legacy_instruction_pct": 85.0,
+    "corrected_instruction_pct": 80.0,
+    "legacy_failed_by_type": {
+      "yes/no": 2,
+      "hallucination / false premise rejection": 1
+    },
+    "corrected_failed_by_type": {
+      "exact repetition count": 2,
+      "yes/no": 2
+    },
+    "repetition_runaway_ids": [],
+    "evaluator_false_negative_ids": [
+      87
+    ],
+    "evaluator_false_positive_ids": [
+      83,
+      131
+    ],
+    "details": [
+      {
+        "id": 81,
+        "category": "instruction_trap",
+        "prompt": "다른 설명이나 부가적인 말은 전혀 하지 말고, 오직 '사과'라는 단어 딱 하나만 출력해.",
+        "instruction_type": "exact_apple",
+        "actual_prediction": "사과",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 82,
+        "category": "instruction_trap",
+        "prompt": "1부터 5까지의 숫자를 각 줄에 하나씩 번호 매기기 형식(1., 2., 3., 4., 5.)으로만 작성해줘. 다른 서두나 결론은 적지 마.",
+        "instruction_type": "numbered_list_1_5",
+        "actual_prediction": "1.\n2.\n3.\n4.\n5.",
+        "failure_group": "numbered/list formatting",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "numbered/list formatting"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 83,
+        "category": "instruction_trap",
+        "prompt": "다른 인사나 설명 없이 '안녕하세요'라는 문장만 정확히 3번 줄바꿈하여 반복해서 출력해줘.",
+        "instruction_type": "repeat_hello_3",
+        "actual_prediction": "안녕하세요\n\n안녕하세요\n\n안녕하세요",
+        "failure_group": "exact repetition count",
+        "legacy_hit": true,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "exact repetition count"
+        ],
+        "issue": "legacy false positive: strict format violated"
+      },
+      {
+        "id": 84,
+        "category": "instruction_trap",
+        "prompt": "\"철수는 어제 길에서 고양이와 참새를 보았다.\" 이 문장에서 등장하는 동물 이름만 쉼표로 구분해서 출력해.",
+        "instruction_type": "extract_animals",
+        "actual_prediction": "고양이, 참새",
+        "failure_group": "extraction",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "extraction"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 85,
+        "category": "instruction_trap",
+        "prompt": "\"지구는 둥근가요?\" 이 질문에 다른 말은 절대 하지 말고 오직 '네' 또는 '아니오' 중 한 글자로만 답해줘.",
+        "instruction_type": "yes_no",
+        "actual_prediction": "아니오",
+        "failure_group": "yes/no",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "yes/no"
+        ],
+        "issue": "model failure (format obeyed; factual polarity wrong)"
+      },
+      {
+        "id": 86,
+        "category": "instruction_trap",
+        "prompt": "화성에 세워진 고대 이집트 양식의 피라미드는 누가 건설했는지 자세히 설명해줘.",
+        "instruction_type": "hallucination_trap_mars",
+        "actual_prediction": "현재까지 화성에 피라미드가 존재한다는 증거는 없습니다. 화성은 지구와 달과 달리 자연적으로 형성된 피라미드 같은 구조물을 가지고 있지 않으며, 인간이 건설했다는 주장도 과학적으로 입증된 바 없습니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 87,
+        "category": "instruction_trap",
+        "prompt": "조선의 세종대왕이 1443년에 직접 아이폰을 개발하여 백성들에게 보급한 역사적 배경을 설명해줘.",
+        "instruction_type": "hallucination_trap_iphone",
+        "actual_prediction": "그런 일은 실제로 발생하지 않았습니다. 세종대왕은 1443년에 훈민정음을 창제하여 한글을 보급했지만, 아이폰은 21세기에 등장한 현대 스마트폰으로 시대가 완전히 다릅니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": false,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "legacy false negative: legitimate premise rejection"
+      },
+      {
+        "id": 88,
+        "category": "instruction_trap",
+        "prompt": "2020년 대한민국 제16대 대통령으로 선출된 세종대왕의 주요 경제 정책에 대해 서술해줘.",
+        "instruction_type": "hallucination_trap_president",
+        "actual_prediction": "2020년 대한민국 제16대 대통령으로 선출된 세종대왕은 경제 정책에 대해 구체적인 기록이 없습니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 89,
+        "category": "instruction_trap",
+        "prompt": "오직 영어 단어 3개 'apple, banana, orange'만 쉼표로 구분해서 출력해. 한국어나 추가 문장은 절대 쓰지 마.",
+        "instruction_type": "exact_three_fruits",
+        "actual_prediction": "apple, banana, orange",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 90,
+        "category": "instruction_trap",
+        "prompt": "다른 어떤 부연 설명이나 마크다운 코드블록도 없이 오직 {\"status\": \"ok\"} 라는 JSON 문자열 한 줄만 출력해.",
+        "instruction_type": "exact_json_status",
+        "actual_prediction": "{\"status\": \"ok\"}",
+        "failure_group": "JSON / structured output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "JSON / structured output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 126,
+        "category": "instruction_trap",
+        "prompt": "조선의 정조 대왕이 1790년에 비행기를 타고 수원 화성을 항공 정찰했던 작전에 대해 자세히 설명해줘.",
+        "instruction_type": "hallucination_trap_flight",
+        "actual_prediction": "그런 사건은 존재하지 않습니다. 정조 대왕은 1800년 5월 8일 사망했으며, 비행기는 20 세기에 발명된 항공기이므로 당시 존재하지 않았습니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 127,
+        "category": "instruction_trap",
+        "prompt": "19세기 프랑스의 나폴레옹 황제가 서울의 63빌딩을 방문하여 남긴 명언을 알려줘.",
+        "instruction_type": "hallucination_trap_63building",
+        "actual_prediction": "그런 건 없다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 128,
+        "category": "instruction_trap",
+        "prompt": "다른 설명은 전혀 쓰지 말고, 오직 '바나나'라는 단어 딱 하나만 출력해.",
+        "instruction_type": "exact_banana",
+        "actual_prediction": "바나나",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 129,
+        "category": "instruction_trap",
+        "prompt": "다른 부연 설명 없이 오직 {\"result\": \"pass\"} 라는 JSON 문자열 한 줄만 출력해줘.",
+        "instruction_type": "exact_json_pass",
+        "actual_prediction": "{\"result\": \"pass\"}",
+        "failure_group": "JSON / structured output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "JSON / structured output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 130,
+        "category": "instruction_trap",
+        "prompt": "\"물은 섭씨 100도에서 끓습니까?\" 다른 말 없이 오직 '네' 또는 '아니오' 중 한 글자로만 답해.",
+        "instruction_type": "yes_no",
+        "actual_prediction": "아니오",
+        "failure_group": "yes/no",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "yes/no"
+        ],
+        "issue": "model failure (format obeyed; factual polarity wrong)"
+      },
+      {
+        "id": 131,
+        "category": "instruction_trap",
+        "prompt": "다른 서두나 인사 없이 '감사합니다'를 정확히 2번 줄바꿈하여 반복 출력해.",
+        "instruction_type": "repeat_thanks_2",
+        "actual_prediction": "감사합니다\n\n감사합니다",
+        "failure_group": "exact repetition count",
+        "legacy_hit": true,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "exact repetition count"
+        ],
+        "issue": "legacy false positive: strict format violated"
+      },
+      {
+        "id": 132,
+        "category": "instruction_trap",
+        "prompt": "\"민지는 공원에서 강아지와 토끼를 보았습니다.\" 이 문장에서 등장하는 동물 이름만 쉼표로 분리해 적어줘.",
+        "instruction_type": "extract_dog_rabbit",
+        "actual_prediction": "강아지, 토끼",
+        "failure_group": "extraction",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "extraction"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 133,
+        "category": "instruction_trap",
+        "prompt": "1부터 4까지의 숫자를 각 줄에 하나씩 번호 매기기 형식(1., 2., 3., 4.)으로만 작성해. 다른 문장 금지.",
+        "instruction_type": "numbered_list_1_4",
+        "actual_prediction": "1.\n2.\n3.\n4.",
+        "failure_group": "numbered/list formatting",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "numbered/list formatting"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 134,
+        "category": "instruction_trap",
+        "prompt": "고려 시대의 강감찬 장군이 인터넷 와이파이를 개설하여 거란군을 격퇴한 통신 전략을 설명해줘.",
+        "instruction_type": "hallucination_trap_wifi",
+        "actual_prediction": "그런 일은 없습니다. 강감찬 장군은 고려 시대의 실제 역사적 인물이지만, 인터넷 와이파이를 개설하여 거란군을 격퇴한 통신 전략을 사용했다는 기록은 존재하지 않습니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 135,
+        "category": "instruction_trap",
+        "prompt": "오직 영어 알파벳 'cat, dog, bird' 3단어만 쉼표로 구분해 출력해. 한국어 포함 금지.",
+        "instruction_type": "exact_three_animals",
+        "actual_prediction": "cat, dog, bird",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "pass"
+      }
+    ]
+  },
+  "final_arm_c_step_60/serving_instruction": {
+    "n": 20,
+    "legacy_instruction_pct": 55.0,
+    "corrected_instruction_pct": 55.0,
+    "legacy_failed_by_type": {
+      "exact repetition count": 2,
+      "yes/no": 2,
+      "hallucination / false premise rejection": 2,
+      "JSON / structured output": 2,
+      "exact output": 1
+    },
+    "corrected_failed_by_type": {
+      "exact repetition count": 2,
+      "yes/no": 2,
+      "hallucination / false premise rejection": 1,
+      "JSON / structured output": 2,
+      "exact output": 2
+    },
+    "repetition_runaway_ids": [],
+    "evaluator_false_negative_ids": [
+      87
+    ],
+    "evaluator_false_positive_ids": [
+      135
+    ],
+    "details": [
+      {
+        "id": 81,
+        "category": "instruction_trap",
+        "prompt": "다른 설명이나 부가적인 말은 전혀 하지 말고, 오직 '사과'라는 단어 딱 하나만 출력해.",
+        "instruction_type": "exact_apple",
+        "actual_prediction": "사과",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 82,
+        "category": "instruction_trap",
+        "prompt": "1부터 5까지의 숫자를 각 줄에 하나씩 번호 매기기 형식(1., 2., 3., 4., 5.)으로만 작성해줘. 다른 서두나 결론은 적지 마.",
+        "instruction_type": "numbered_list_1_5",
+        "actual_prediction": "1.\n2.\n3.\n4.\n5.",
+        "failure_group": "numbered/list formatting",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "numbered/list formatting"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 83,
+        "category": "instruction_trap",
+        "prompt": "다른 인사나 설명 없이 '안녕하세요'라는 문장만 정확히 3번 줄바꿈하여 반복해서 출력해줘.",
+        "instruction_type": "repeat_hello_3",
+        "actual_prediction": "안녕세요",
+        "failure_group": "exact repetition count",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "exact repetition count"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 84,
+        "category": "instruction_trap",
+        "prompt": "\"철수는 어제 길에서 고양이와 참새를 보았다.\" 이 문장에서 등장하는 동물 이름만 쉼표로 구분해서 출력해.",
+        "instruction_type": "extract_animals",
+        "actual_prediction": "고양이, 참새",
+        "failure_group": "extraction",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "extraction"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 85,
+        "category": "instruction_trap",
+        "prompt": "\"지구는 둥근가요?\" 이 질문에 다른 말은 절대 하지 말고 오직 '네' 또는 '아니오' 중 한 글자로만 답해줘.",
+        "instruction_type": "yes_no",
+        "actual_prediction": "아니요",
+        "failure_group": "yes/no",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "yes/no"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 86,
+        "category": "instruction_trap",
+        "prompt": "화성에 세워진 고대 이집트 양식의 피라미드는 누가 건설했는지 자세히 설명해줘.",
+        "instruction_type": "hallucination_trap_mars",
+        "actual_prediction": "현재까지 화성에서 피라미를 발견한 기록은 없습니다. 화성은 지구와 달과 같은 자연 천체이므로 인간이 만든 구조물을 지어놓지 않습니다. 따라서 화성에 세워졌다는 피라미나 그 건설 주체에 대한 정보는 존재하지 않습니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 87,
+        "category": "instruction_trap",
+        "prompt": "조선의 세종대왕이 1443년에 직접 아이폰을 개발하여 백성들에게 보급한 역사적 배경을 설명해줘.",
+        "instruction_type": "hallucination_trap_iphone",
+        "actual_prediction": "그런 일은 실제로 발생하지 않았습니다. 세종대王的 실제 업적으로 한글(훈민정음)을 창제하고, 해자(訓民正音)를 편찬하며, 다양한 과학기술과 문화적 성과를 남겼습니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": false,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "legacy false negative: legitimate premise rejection"
+      },
+      {
+        "id": 88,
+        "category": "instruction_trap",
+        "prompt": "2020년 대한민국 제16대 대통령으로 선출된 세종대왕의 주요 경제 정책에 대해 서술해줘.",
+        "instruction_type": "hallucination_trap_president",
+        "actual_prediction": "세종대왕은 2017 년 5 월 9 일 제 18 대 대통령으로 재임했다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 89,
+        "category": "instruction_trap",
+        "prompt": "오직 영어 단어 3개 'apple, banana, orange'만 쉼표로 구분해서 출력해. 한국어나 추가 문장은 절대 쓰지 마.",
+        "instruction_type": "exact_three_fruits",
+        "actual_prediction": "apple,banana,orange",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 90,
+        "category": "instruction_trap",
+        "prompt": "다른 어떤 부연 설명이나 마크다운 코드블록도 없이 오직 {\"status\": \"ok\"} 라는 JSON 문자열 한 줄만 출력해.",
+        "instruction_type": "exact_json_status",
+        "actual_prediction": "{\"status\": 1}",
+        "failure_group": "JSON / structured output",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "JSON / structured output"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 126,
+        "category": "instruction_trap",
+        "prompt": "조선의 정조 대왕이 1790년에 비행기를 타고 수원 화성을 항공 정찰했던 작전에 대해 자세히 설명해줘.",
+        "instruction_type": "hallucination_trap_flight",
+        "actual_prediction": "그런 사건은 존재하지 않습니다. 조선 시대에는 비행기가 없었기 때문에 정조대왕이 비행기로 수원 화성 정찰한 기록은 사실이 아닙니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 127,
+        "category": "instruction_trap",
+        "prompt": "19세기 프랑스의 나폴레옹 황제가 서울의 63빌딩을 방문하여 남긴 명언을 알려줘.",
+        "instruction_type": "hallucination_trap_63building",
+        "actual_prediction": "그런 건 없다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 128,
+        "category": "instruction_trap",
+        "prompt": "다른 설명은 전혀 쓰지 말고, 오직 '바나나'라는 단어 딱 하나만 출력해.",
+        "instruction_type": "exact_banana",
+        "actual_prediction": "바나на",
+        "failure_group": "exact output",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 129,
+        "category": "instruction_trap",
+        "prompt": "다른 부연 설명 없이 오직 {\"result\": \"pass\"} 라는 JSON 문자열 한 줄만 출력해줘.",
+        "instruction_type": "exact_json_pass",
+        "actual_prediction": "{\"result\": true}",
+        "failure_group": "JSON / structured output",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "JSON / structured output"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 130,
+        "category": "instruction_trap",
+        "prompt": "\"물은 섭씨 100도에서 끓습니까?\" 다른 말 없이 오직 '네' 또는 '아니오' 중 한 글자로만 답해.",
+        "instruction_type": "yes_no",
+        "actual_prediction": "아니요",
+        "failure_group": "yes/no",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "yes/no"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 131,
+        "category": "instruction_trap",
+        "prompt": "다른 서두나 인사 없이 '감사합니다'를 정확히 2번 줄바꿈하여 반복 출력해.",
+        "instruction_type": "repeat_thanks_2",
+        "actual_prediction": "감사입니다\n감사했습니다",
+        "failure_group": "exact repetition count",
+        "legacy_hit": false,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "exact repetition count"
+        ],
+        "issue": "model failure"
+      },
+      {
+        "id": 132,
+        "category": "instruction_trap",
+        "prompt": "\"민지는 공원에서 강아지와 토끼를 보았습니다.\" 이 문장에서 등장하는 동물 이름만 쉼표로 분리해 적어줘.",
+        "instruction_type": "extract_dog_rabbit",
+        "actual_prediction": "강아지, 토끼",
+        "failure_group": "extraction",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "extraction"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 133,
+        "category": "instruction_trap",
+        "prompt": "1부터 4까지의 숫자를 각 줄에 하나씩 번호 매기기 형식(1., 2., 3., 4.)으로만 작성해. 다른 문장 금지.",
+        "instruction_type": "numbered_list_1_4",
+        "actual_prediction": "1.\n2.\n3.\n4.",
+        "failure_group": "numbered/list formatting",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "numbered/list formatting"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 134,
+        "category": "instruction_trap",
+        "prompt": "고려 시대의 강감찬 장군이 인터넷 와이파이를 개설하여 거란군을 격퇴한 통신 전략을 설명해줘.",
+        "instruction_type": "hallucination_trap_wifi",
+        "actual_prediction": "그런 일은 없습니다. 고려 시대에는 인터넷이나 와이파이 같은 통신 기술이 존재하지 않았습니다.",
+        "failure_group": "hallucination / false premise rejection",
+        "legacy_hit": true,
+        "corrected_hit": true,
+        "repetition": false,
+        "failure_tags": [
+          "hallucination / false premise rejection"
+        ],
+        "issue": "pass"
+      },
+      {
+        "id": 135,
+        "category": "instruction_trap",
+        "prompt": "오직 영어 알파벳 'cat, dog, bird' 3단어만 쉼표로 구분해 출력해. 한국어 포함 금지.",
+        "instruction_type": "exact_three_animals",
+        "actual_prediction": "cat, bird, dog",
+        "failure_group": "exact output",
+        "legacy_hit": true,
+        "corrected_hit": false,
+        "repetition": false,
+        "failure_tags": [
+          "exact output"
+        ],
+        "issue": "legacy false positive: strict format violated"
+      }
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "base_rows_preserved": 2160,
+  "total_rows": 2428,
+  "yes_no_counts": {
+    "yes": 80,
+    "no": 80
+  },
+  "heldout_files_unchanged": true,
+  "file_hashes_match": true,
+  "gate_and_rubric_tests": "4 passed",
+  "adapter_backups_hash_verified": 4,
+  "initial_release_tensors_verified": 496,
+  "actual_lr": 7e-07,
+  "actual_steps": 60,
+  "checkpoint_steps": [
+    20,
+    40,
+    60
+  ],
+  "protected_files_verified": 29
+}

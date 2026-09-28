@@ -1,0 +1,306 @@
+{
+  "run_id": "arm-b-plus-fresh-20260928",
+  "name": "ULM-4B instruction candidate (rejected)",
+  "accepted": false,
+  "status": "rejected",
+  "selected_arm": null,
+  "best_experimental_candidate": {
+    "arm": "c",
+    "step": 60,
+    "adapter": "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_c/checkpoint-60",
+    "metrics": {
+      "instruction_legacy_pct": 85.0,
+      "instruction_corrected_pct": 80.0,
+      "instruction_serving_legacy_pct": 55.0,
+      "instruction_serving_corrected_pct": 55.0,
+      "factual_qa_pct": 86.0,
+      "multi_turn_pct": 92.0,
+      "generation_semantic": 0.9842,
+      "generation_dialectness": 0.6615,
+      "grammar_semantic": 0.9777,
+      "grammar_dialectness": 0.8975,
+      "context_semantic": 0.4576,
+      "context_repetition_count": 0,
+      "context_malformed_count": 0,
+      "comprehension_semantic": 0.9821,
+      "identification_accuracy": 0.34,
+      "synthetic_final_hidden_pct": 90.37,
+      "synthetic_dev_pct": 50.37,
+      "general_regression_repetition_count": 3
+    },
+    "delta": {
+      "instruction_legacy_pct": 20.0,
+      "instruction_corrected_pct": 20.0,
+      "instruction_serving_legacy_pct": 10.0,
+      "instruction_serving_corrected_pct": 25.0,
+      "factual_qa_pct": 2.0,
+      "multi_turn_pct": -8.0,
+      "generation_semantic": -0.0001,
+      "generation_dialectness": 0.0026,
+      "grammar_semantic": -0.0069,
+      "grammar_dialectness": 0.002,
+      "context_semantic": -0.0002,
+      "context_repetition_count": 0,
+      "context_malformed_count": 0,
+      "comprehension_semantic": 0.0019,
+      "identification_accuracy": 0.02,
+      "synthetic_final_hidden_pct": 33.33,
+      "general_regression_repetition_count": 1
+    },
+    "accepted": false,
+    "failed_gates": [
+      "instruction_legacy_pct=85.0 < 90",
+      "instruction_corrected_pct=80.0 < 90",
+      "instruction_serving_legacy_pct=55.0 < 90",
+      "instruction_serving_corrected_pct=55.0 < 90",
+      "multi_turn_pct=92.0 < 95",
+      "grammar_semantic delta -0.0069 < -0.005",
+      "General-language runaway increased above the original Arm B"
+    ]
+  },
+  "best_monitor_candidate": {
+    "arm": "c",
+    "lr": 7e-06,
+    "step": 60,
+    "result": {
+      "regression": {
+        "factual_qa": {
+          "n": 10,
+          "accuracy_pct": 90.0
+        },
+        "multi_turn": {
+          "n": 5,
+          "accuracy_pct": 100.0
+        },
+        "instruction_trap": {
+          "n": 20,
+          "accuracy_pct": 85.0
+        },
+        "corrected_instruction_pct": 80.0,
+        "policy": "comparable",
+        "repetition_count": 0,
+        "general_regression_repetition_count": 0,
+        "pre_hardening_corrected_instruction_pct": 65.0,
+        "corrected_rubric_version": "v2.5-denial-and-quoted-claim-audit"
+      },
+      "ulsanbench": {
+        "generation": {
+          "n": 16,
+          "compliance": 1.0,
+          "semantic_similarity": 0.9814,
+          "reference_similarity": 0.9817,
+          "dialectness_proxy": 0.6381,
+          "lexical_marker_mean": 0.0,
+          "repetition_count": 0,
+          "malformed_count": 0
+        },
+        "grammar": {
+          "n": 8,
+          "compliance": 1.0,
+          "semantic_similarity": 0.9841,
+          "reference_similarity": 0.9814,
+          "dialectness_proxy": 0.9442,
+          "lexical_marker_mean": 0.125,
+          "repetition_count": 0,
+          "malformed_count": 0
+        },
+        "context": {
+          "n": 12,
+          "compliance": 1.0,
+          "semantic_similarity": 0.4992,
+          "reference_similarity": 0.4992,
+          "dialectness_proxy": 0.3245,
+          "lexical_marker_mean": 0.0,
+          "repetition_count": 0,
+          "malformed_count": 0
+        }
+      },
+      "synthetic": {
+        "n": 32,
+        "accuracy_pct": 65.62,
+        "by_task": {
+          "exact": 25.0,
+          "yes_no": 100.0,
+          "repeat": 100.0,
+          "list": 25.0,
+          "json": 100.0,
+          "extraction": 100.0,
+          "false_premise": 75.0,
+          "stopping": 0.0
+        },
+        "policy": "comparable",
+        "pre_hardening_accuracy_pct": 65.62,
+        "corrected_rubric_version": "v2.5-denial-and-quoted-claim-audit"
+      }
+    },
+    "stop_reasons": []
+  },
+  "best_candidate_instruction_failure_types": {
+    "exact repetition count": 2,
+    "yes/no": 2
+  },
+  "baseline": {
+    "factual_qa_pct": 84.0,
+    "multi_turn_pct": 100.0,
+    "generation_semantic": 0.9843,
+    "generation_dialectness": 0.6589,
+    "grammar_semantic": 0.9846,
+    "grammar_dialectness": 0.8955,
+    "context_semantic": 0.4578,
+    "context_repetition_count": 0,
+    "context_malformed_count": 0,
+    "identification_accuracy": 0.32,
+    "instruction_legacy_pct": 65.0,
+    "instruction_corrected_pct": 60.0,
+    "instruction_serving_legacy_pct": 45.0,
+    "instruction_serving_corrected_pct": 30.0,
+    "comprehension_semantic": 0.9802,
+    "general_regression_repetition_count": 2,
+    "synthetic_final_hidden_pct": 57.04
+  },
+  "candidates": [
+    {
+      "arm": "c",
+      "step": 60,
+      "adapter": "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_c/checkpoint-60",
+      "metrics": {
+        "instruction_legacy_pct": 85.0,
+        "instruction_corrected_pct": 80.0,
+        "instruction_serving_legacy_pct": 55.0,
+        "instruction_serving_corrected_pct": 55.0,
+        "factual_qa_pct": 86.0,
+        "multi_turn_pct": 92.0,
+        "generation_semantic": 0.9842,
+        "generation_dialectness": 0.6615,
+        "grammar_semantic": 0.9777,
+        "grammar_dialectness": 0.8975,
+        "context_semantic": 0.4576,
+        "context_repetition_count": 0,
+        "context_malformed_count": 0,
+        "comprehension_semantic": 0.9821,
+        "identification_accuracy": 0.34,
+        "synthetic_final_hidden_pct": 90.37,
+        "synthetic_dev_pct": 50.37,
+        "general_regression_repetition_count": 3
+      },
+      "delta": {
+        "instruction_legacy_pct": 20.0,
+        "instruction_corrected_pct": 20.0,
+        "instruction_serving_legacy_pct": 10.0,
+        "instruction_serving_corrected_pct": 25.0,
+        "factual_qa_pct": 2.0,
+        "multi_turn_pct": -8.0,
+        "generation_semantic": -0.0001,
+        "generation_dialectness": 0.0026,
+        "grammar_semantic": -0.0069,
+        "grammar_dialectness": 0.002,
+        "context_semantic": -0.0002,
+        "context_repetition_count": 0,
+        "context_malformed_count": 0,
+        "comprehension_semantic": 0.0019,
+        "identification_accuracy": 0.02,
+        "synthetic_final_hidden_pct": 33.33,
+        "general_regression_repetition_count": 1
+      },
+      "accepted": false,
+      "failed_gates": [
+        "instruction_legacy_pct=85.0 < 90",
+        "instruction_corrected_pct=80.0 < 90",
+        "instruction_serving_legacy_pct=55.0 < 90",
+        "instruction_serving_corrected_pct=55.0 < 90",
+        "multi_turn_pct=92.0 < 95",
+        "grammar_semantic delta -0.0069 < -0.005",
+        "General-language runaway increased above the original Arm B"
+      ]
+    },
+    {
+      "arm": "b",
+      "step": 80,
+      "adapter": "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_b/checkpoint-80",
+      "metrics": {
+        "instruction_legacy_pct": 85.0,
+        "instruction_corrected_pct": 70.0,
+        "instruction_serving_legacy_pct": 55.0,
+        "instruction_serving_corrected_pct": 50.0,
+        "factual_qa_pct": 84.0,
+        "multi_turn_pct": 96.0,
+        "generation_semantic": 0.9842,
+        "generation_dialectness": 0.6592,
+        "grammar_semantic": 0.979,
+        "grammar_dialectness": 0.9025,
+        "context_semantic": 0.4539,
+        "context_repetition_count": 0,
+        "context_malformed_count": 0,
+        "comprehension_semantic": 0.979,
+        "identification_accuracy": 0.34,
+        "synthetic_final_hidden_pct": 82.22,
+        "synthetic_dev_pct": 44.07,
+        "general_regression_repetition_count": 3
+      },
+      "delta": {
+        "instruction_legacy_pct": 20.0,
+        "instruction_corrected_pct": 10.0,
+        "instruction_serving_legacy_pct": 10.0,
+        "instruction_serving_corrected_pct": 20.0,
+        "factual_qa_pct": 0.0,
+        "multi_turn_pct": -4.0,
+        "generation_semantic": -0.0001,
+        "generation_dialectness": 0.0003,
+        "grammar_semantic": -0.0056,
+        "grammar_dialectness": 0.007,
+        "context_semantic": -0.0039,
+        "context_repetition_count": 0,
+        "context_malformed_count": 0,
+        "comprehension_semantic": -0.0012,
+        "identification_accuracy": 0.02,
+        "synthetic_final_hidden_pct": 25.18,
+        "general_regression_repetition_count": 1
+      },
+      "accepted": false,
+      "failed_gates": [
+        "instruction_legacy_pct=85.0 < 90",
+        "instruction_corrected_pct=70.0 < 90",
+        "instruction_serving_legacy_pct=55.0 < 90",
+        "instruction_serving_corrected_pct=50.0 < 90",
+        "grammar_semantic delta -0.0056 < -0.005",
+        "General-language runaway increased above the original Arm B"
+      ]
+    }
+  ],
+  "thresholds": {
+    "instruction_legacy_pct": 90,
+    "instruction_corrected_pct": 90,
+    "instruction_serving_legacy_pct": 90,
+    "instruction_serving_corrected_pct": 90,
+    "factual_qa_pct": 80,
+    "multi_turn_pct": 95,
+    "generation_semantic": 0.98,
+    "generation_dialectness": 0.65,
+    "grammar_semantic": 0.97,
+    "grammar_dialectness": 0.88,
+    "context_semantic": 0.44
+  },
+  "maximum_preservation_drops": {
+    "generation_semantic": -0.005,
+    "generation_dialectness": -0.015,
+    "grammar_semantic": -0.005,
+    "grammar_dialectness": -0.02,
+    "context_semantic": -0.02,
+    "comprehension_semantic": -0.01
+  },
+  "original_arm_b_and_live_unchanged": true,
+  "automatic_deployment": false,
+  "dpo_condition_reached": true,
+  "dpo_executed": false,
+  "evaluation_limitations": [
+    "The 20 instruction traps and declared UlsanBench subsets were monitored as requested; they are not untouched final benchmarks. No benchmark prompt or target was copied into synthetic training data.",
+    "Final synthetic template family 11 is withheld from all training, dev evaluation and checkpoint monitoring; monitor items come only from family 10.",
+    "Conservative rejection expressions plus manual prediction review are used. These are not universal semantic entailment checks.",
+    "Serving-policy instruction scores apply the Live decoding values to benchmark prompts; they are not a test of the Live HTTP endpoint or its exact system prompt.",
+    "The existing global no-repeat-ngram rule conflicts with verbatim repetition and prompt copying. Training cannot override forbidden logits. Live decoding is unchanged.",
+    "UlsanBench embedding and dialectness values are existing evaluator proxies, not human judgments.",
+    "Archived full baseline is reused only after all protected release files match their SHA256 manifest; fresh instruction and fast preservation baselines are also measured."
+  ],
+  "dpo_decision": "Considered, not executed: keep the explicitly requested three-arm SFT experiment bounded. Strict serving repetition targets are prohibited by the existing native no-repeat processor; preference training cannot make prohibited tokens available. Saved SFT results remain available for a separately designed preference experiment.",
+  "next_single_experiment": "Test a narrowly scoped decoding exception for explicit exact-output contracts on new held-out prompts, while retaining the existing loop controls for ordinary conversation. This is a proposal only; no Live policy is changed in this experiment."
+}

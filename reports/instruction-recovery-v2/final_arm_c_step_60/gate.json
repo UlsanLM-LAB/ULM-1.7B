@@ -1,0 +1,121 @@
+{
+  "regression": {
+    "factual_qa": {
+      "n": 50,
+      "accuracy_pct": 86.0
+    },
+    "multi_turn": {
+      "n": 25,
+      "accuracy_pct": 92.0
+    },
+    "instruction_trap": {
+      "n": 20,
+      "accuracy_pct": 85.0
+    },
+    "corrected_instruction_pct": 80.0,
+    "policy": "comparable",
+    "repetition_count": 3,
+    "general_regression_repetition_count": 3,
+    "pre_hardening_corrected_instruction_pct": 80.0,
+    "corrected_rubric_version": "v2.5-denial-and-quoted-claim-audit"
+  },
+  "ulsanbench": {
+    "comprehension": {
+      "n": 100,
+      "compliance": 1.0,
+      "semantic_similarity": 0.9821,
+      "reference_similarity": 0.9821,
+      "dialectness_proxy": 0.0,
+      "lexical_marker_mean": 0.06,
+      "repetition_count": 0,
+      "malformed_count": 0
+    },
+    "generation": {
+      "n": 150,
+      "compliance": 1.0,
+      "semantic_similarity": 0.9842,
+      "reference_similarity": 0.9889,
+      "dialectness_proxy": 0.6615,
+      "lexical_marker_mean": 0.0533,
+      "repetition_count": 0,
+      "malformed_count": 0
+    },
+    "identification": {
+      "n": 100,
+      "compliance": 1.0,
+      "semantic_similarity": 0.0,
+      "reference_similarity": 0.6174,
+      "dialectness_proxy": 0.0,
+      "lexical_marker_mean": 0.0,
+      "repetition_count": 0,
+      "malformed_count": 0,
+      "accuracy": 0.34
+    },
+    "grammar": {
+      "n": 75,
+      "compliance": 1.0,
+      "semantic_similarity": 0.9777,
+      "reference_similarity": 0.9715,
+      "dialectness_proxy": 0.8975,
+      "lexical_marker_mean": 0.12,
+      "repetition_count": 0,
+      "malformed_count": 0
+    },
+    "context": {
+      "n": 75,
+      "compliance": 1.0,
+      "semantic_similarity": 0.4576,
+      "reference_similarity": 0.4576,
+      "dialectness_proxy": 0.3114,
+      "lexical_marker_mean": 0.04,
+      "repetition_count": 0,
+      "malformed_count": 0
+    }
+  },
+  "synthetic": {
+    "n": 135,
+    "accuracy_pct": 90.37,
+    "by_task": {
+      "exact": 100.0,
+      "yes_no": 75.0,
+      "repeat": 80.0,
+      "list": 75.0,
+      "json": 100.0,
+      "extraction": 100.0,
+      "false_premise": 100.0,
+      "stopping": 100.0
+    },
+    "policy": "comparable",
+    "pre_hardening_accuracy_pct": 90.37,
+    "corrected_rubric_version": "v2.5-denial-and-quoted-claim-audit"
+  },
+  "dev": {
+    "n": 270,
+    "accuracy_pct": 50.37,
+    "by_task": {
+      "exact": 0.0,
+      "yes_no": 50.0,
+      "repeat": 26.67,
+      "list": 72.5,
+      "json": 100.0,
+      "extraction": 50.0,
+      "false_premise": 56.0,
+      "stopping": 55.0
+    },
+    "policy": "comparable",
+    "pre_hardening_accuracy_pct": 50.37,
+    "corrected_rubric_version": "v2.5-denial-and-quoted-claim-audit"
+  },
+  "serving_instruction": {
+    "instruction_trap": {
+      "n": 20,
+      "accuracy_pct": 55.0
+    },
+    "corrected_instruction_pct": 55.0,
+    "policy": "serving",
+    "repetition_count": 0,
+    "general_regression_repetition_count": 0,
+    "pre_hardening_corrected_instruction_pct": 55.0,
+    "corrected_rubric_version": "v2.5-denial-and-quoted-claim-audit"
+  }
+}

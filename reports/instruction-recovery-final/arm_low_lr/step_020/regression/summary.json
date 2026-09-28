@@ -1,0 +1,18 @@
+{
+  "factual_qa": {
+    "n": 50,
+    "accuracy_pct": 84.0
+  },
+  "multi_turn": {
+    "n": 25,
+    "accuracy_pct": 92.0
+  },
+  "instruction_trap": {
+    "n": 20,
+    "accuracy_pct": 70.0
+  },
+  "corrected_instruction_pct": 60.0,
+  "policy": "comparable",
+  "repetition_count": 2,
+  "general_regression_repetition_count": 0
+}

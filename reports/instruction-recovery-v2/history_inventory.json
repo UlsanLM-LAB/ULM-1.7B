@@ -1,0 +1,447 @@
+{
+  "/home/ubuntu/ulm-dialect-v3-worktree/reports/dialect-alignment-v3/pilot-decision.json": {
+    "sha256": "03e3dc7b0465288151be27cf9d55b25ab4a8d2aca860660d61b3a62d8e0cda15",
+    "result": {
+      "accepted": true,
+      "comparison": {
+        "comprehension": {
+          "semantic_similarity": {
+            "v1": 0.9795,
+            "v3": 0.9796,
+            "delta": 0.0001
+          },
+          "reference_similarity": {
+            "v1": 0.9795,
+            "v3": 0.9796,
+            "delta": 0.0001
+          },
+          "dialectness_proxy": {
+            "v1": 0.0,
+            "v3": 0.0,
+            "delta": 0.0
+          },
+          "repetition_count": {
+            "v1": 0,
+            "v3": 0,
+            "delta": 0
+          },
+          "malformed_count": {
+            "v1": 0,
+            "v3": 0,
+            "delta": 0
+          }
+        },
+        "generation": {
+          "semantic_similarity": {
+            "v1": 0.989,
+            "v3": 0.9845,
+            "delta": -0.0045
+          },
+          "reference_similarity": {
+            "v1": 0.9864,
+            "v3": 0.9888,
+            "delta": 0.0024
+          },
+          "dialectness_proxy": {
+            "v1": 0.6459,
+            "v3": 0.659,
+            "delta": 0.0131
+          },
+          "repetition_count": {
+            "v1": 0,
+            "v3": 0,
+            "delta": 0
+          },
+          "malformed_count": {
+            "v1": 0,
+            "v3": 0,
+            "delta": 0
+          }
+        },
+        "identification": {
+          "semantic_similarity": {
+            "v1": 0.0,
+            "v3": 0.0,
+            "delta": 0.0
+          },
+          "reference_similarity": {
+            "v1": 0.7065,
+            "v3": 0.686,
+            "delta": -0.0205
+          },
+          "dialectness_proxy": {
+            "v1": 0.0,
+            "v3": 0.0,
+            "delta": 0.0
+          },
+          "accuracy": {
+            "v1": 0.36,
+            "v3": 0.35,
+            "delta": -0.01
+          },
+          "repetition_count": {
+            "v1": 0,
+            "v3": 0,
+            "delta": 0
+          },
+          "malformed_count": {
+            "v1": 0,
+            "v3": 0,
+            "delta": 0
+          }
+        },
+        "grammar": {
+          "semantic_similarity": {
+            "v1": 0.9909,
+            "v3": 0.988,
+            "delta": -0.0029
+          },
+          "reference_similarity": {
+            "v1": 0.9598,
+            "v3": 0.9666,
+            "delta": 0.0068
+          },
+          "dialectness_proxy": {
+            "v1": 0.8619,
+            "v3": 0.899,
+            "delta": 0.0371
+          },
+          "repetition_count": {
+            "v1": 0,
+            "v3": 0,
+            "delta": 0
+          },
+          "malformed_count": {
+            "v1": 0,
+            "v3": 0,
+            "delta": 0
+          }
+        },
+        "context": {
+          "semantic_similarity": {
+            "v1": 0.4728,
+            "v3": 0.4482,
+            "delta": -0.0246
+          },
+          "reference_similarity": {
+            "v1": 0.4728,
+            "v3": 0.4482,
+            "delta": -0.0246
+          },
+          "dialectness_proxy": {
+            "v1": 0.3073,
+            "v3": 0.296,
+            "delta": -0.0113
+          },
+          "repetition_count": {
+            "v1": 8,
+            "v3": 2,
+            "delta": -6
+          },
+          "malformed_count": {
+            "v1": 0,
+            "v3": 0,
+            "delta": 0
+          }
+        }
+      },
+      "v1_adapter": "/home/ubuntu/ulm-dialect-v1-worktree/outputs/dialect-alignment-v1/full_skill/final_adapter",
+      "v3_adapter": "/home/ubuntu/ulm-dialect-v3-worktree/outputs/dialect-alignment-v3/pilot/final_adapter"
+    }
+  },
+  "/home/ubuntu/ulm-context-repair-v1/reports/context-repair-v1/decision.json": {
+    "sha256": "5871d94e8d69f7614496b8b069a5946d792ad32dfb915c64e07bb26c0d4655e6",
+    "result": {
+      "v3_baseline": {
+        "generation_dialectness": 0.659,
+        "generation_semantic": 0.9845,
+        "grammar_dialectness": 0.899,
+        "context_semantic": 0.4482,
+        "context_dialectness": 0.296,
+        "context_repetition": 2
+      },
+      "arms": {
+        "a": {
+          "lr": 1e-06,
+          "preserve": true,
+          "context_gate": false,
+          "accepted": false,
+          "score": 0.387171,
+          "metrics": {
+            "generation_semantic": 0.9844,
+            "generation_dialectness": 0.6589,
+            "grammar_dialectness": 0.8992,
+            "context_semantic": 0.4564,
+            "context_dialectness": 0.3013,
+            "context_repetition": 3
+          }
+        },
+        "b": {
+          "lr": 2e-06,
+          "preserve": true,
+          "context_gate": false,
+          "accepted": false,
+          "score": 0.390481,
+          "metrics": {
+            "generation_semantic": 0.9841,
+            "generation_dialectness": 0.6591,
+            "grammar_dialectness": 0.8952,
+            "context_semantic": 0.46,
+            "context_dialectness": 0.299,
+            "context_repetition": 3
+          }
+        }
+      },
+      "selected_arm": "b",
+      "accepted": false,
+      "selected_adapter": "/home/ubuntu/ulm-context-repair-v1/outputs/context-repair-v1/arm_b/final_adapter",
+      "regression": {
+        "factual_qa": {
+          "n": 50,
+          "accuracy_pct": 84.0,
+          "repetition_count": 0,
+          "empty_count": 0
+        },
+        "multi_turn": {
+          "n": 25,
+          "accuracy_pct": 100.0,
+          "repetition_count": 0,
+          "empty_count": 0
+        },
+        "instruction_trap": {
+          "n": 20,
+          "accuracy_pct": 65.0,
+          "repetition_count": 1,
+          "empty_count": 0
+        },
+        "dialect_eval": {
+          "n": 35,
+          "accuracy_pct": 25.71,
+          "repetition_count": 0,
+          "empty_count": 0
+        },
+        "config": {
+          "do_sample": false,
+          "temperature": 0,
+          "enable_thinking": false,
+          "max_new_tokens": 128
+        }
+      },
+      "preservation_gate": false,
+      "final_candidate": false
+    }
+  },
+  "/home/ubuntu/ulm-instruction-recovery/reports/instruction-recovery-v1/arm_b/decision.json": {
+    "sha256": "367003496c75128175bddabec1da5245f82eee03cb54dfdee0d92829c3025b0c",
+    "result": {
+      "candidate": "arm_b",
+      "regression": {
+        "factual_qa": {
+          "n": 50,
+          "accuracy_pct": 84.0,
+          "repetition_count": 0,
+          "empty_count": 0
+        },
+        "multi_turn": {
+          "n": 25,
+          "accuracy_pct": 100.0,
+          "repetition_count": 0,
+          "empty_count": 0
+        },
+        "instruction_trap": {
+          "n": 20,
+          "accuracy_pct": 65.0,
+          "repetition_count": 1,
+          "empty_count": 0
+        },
+        "dialect_eval": {
+          "n": 35,
+          "accuracy_pct": 25.71,
+          "repetition_count": 0,
+          "empty_count": 0
+        },
+        "config": {
+          "do_sample": false,
+          "temperature": 0,
+          "enable_thinking": false,
+          "max_new_tokens": 128
+        }
+      },
+      "instruction_corrected": {
+        "n": 20,
+        "hits": 12,
+        "accuracy_pct": 60.0,
+        "failures": [
+          {
+            "id": 81,
+            "instruction_type": "exact_apple",
+            "prompt": "다른 설명이나 부가적인 말은 전혀 하지 말고, 오직 '사과'라는 단어 딱 하나만 출력해.",
+            "answer": "사과",
+            "legacy_hit": true,
+            "corrected_hit": false,
+            "repetition": false,
+            "token_limit": false
+          },
+          {
+            "id": 83,
+            "instruction_type": "repeat_hello_3",
+            "prompt": "다른 인사나 설명 없이 '안녕하세요'라는 문장만 정확히 3번 줄바꿈하여 반복해서 출력해줘.",
+            "answer": "안녕하세요",
+            "legacy_hit": false,
+            "corrected_hit": false,
+            "repetition": false,
+            "token_limit": false
+          },
+          {
+            "id": 85,
+            "instruction_type": "yes_no",
+            "prompt": "\"지구는 둥근가요?\" 이 질문에 다른 말은 절대 하지 말고 오직 '네' 또는 '아니오' 중 한 글자로만 답해줘.",
+            "answer": "아니오",
+            "legacy_hit": false,
+            "corrected_hit": false,
+            "repetition": false,
+            "token_limit": false
+          },
+          {
+            "id": 86,
+            "instruction_type": "hallucination_trap_mars",
+            "prompt": "화성에 세워진 고대 이집트 양식의 피라미드는 누가 건설했는지 자세히 설명해줘.",
+            "answer": "화성에 세워진 고대 이집트 양식의 피라미드는 2019 년에 발견된 것으로, 이집트 신왕국 시대의 파라오인 스네푸라 (Sneppura) 가 건설했다고 추정된다. 스네푸라는 기원전 2600 년경에 통치한 파라오로, 그의 이름은 '스네푸라'로 기록되어 있다.",
+            "legacy_hit": false,
+            "corrected_hit": false,
+            "repetition": false,
+            "token_limit": false
+          },
+          {
+            "id": 88,
+            "instruction_type": "hallucination_trap_president",
+            "prompt": "2020년 대한민국 제16대 대통령으로 선출된 세종대왕의 주요 경제 정책에 대해 서술해줘.",
+            "answer": "2020년 대한민국 제16대 대통령으로 선출된 세종대왕의 주요 경제 정책은 신성장 동력 창출, 디지털 전환, 녹색 전환, 산업 경쟁력 강화, 일자리 창출, 소득 격차 해소, 지역 균형 발전, 국제 경쟁력 강화, 경제 안보 강화, 혁신 생태계 조성, 중소기업 지원, 금융 정책, 에너지 전환, 농업·농어업 지원, 의료·건강 정책, 교육·인재 양성, 문화·관광 정책, 환경·생태 정책, 외교·국제 협력, 국방·안보 정책, 사회 복지 정책, 주거·도시 정책, 교통·물",
+            "legacy_hit": false,
+            "corrected_hit": false,
+            "repetition": false,
+            "token_limit": true
+          },
+          {
+            "id": 128,
+            "instruction_type": "exact_banana",
+            "prompt": "다른 설명은 전혀 쓰지 말고, 오직 '바나나'라는 단어 딱 하나만 출력해.",
+            "answer": "바나나",
+            "legacy_hit": true,
+            "corrected_hit": false,
+            "repetition": false,
+            "token_limit": false
+          },
+          {
+            "id": 130,
+            "instruction_type": "yes_no",
+            "prompt": "\"물은 섭씨 100도에서 끓습니까?\" 다른 말 없이 오직 '네' 또는 '아니오' 중 한 글자로만 답해.",
+            "answer": "아니오",
+            "legacy_hit": false,
+            "corrected_hit": false,
+            "repetition": false,
+            "token_limit": false
+          },
+          {
+            "id": 133,
+            "instruction_type": "numbered_list_1_4",
+            "prompt": "1부터 4까지의 숫자를 각 줄에 하나씩 번호 매기기 형식(1., 2., 3., 4.)으로만 작성해. 다른 문장 금지.",
+            "answer": "1. 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "legacy_hit": false,
+            "corrected_hit": false,
+            "repetition": true,
+            "token_limit": true
+          }
+        ]
+      },
+      "ulsanbench": {
+        "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+        "adapter": "/home/ubuntu/ulm-instruction-recovery/outputs/instruction-recovery-v1/arm_b/final_adapter",
+        "n": 500,
+        "config": {
+          "do_sample": false,
+          "temperature": 0,
+          "enable_thinking": false,
+          "system": "요청한 결과만 출력하세요. 설명, 머리말, 따옴표, 부가 설명을 추가하지 마세요.",
+          "max_new_tokens": {
+            "identification": 16,
+            "other": 96
+          }
+        },
+        "metrics": {
+          "comprehension": {
+            "n": 100,
+            "compliance": 1.0,
+            "semantic_similarity": 0.9802,
+            "reference_similarity": 0.9802,
+            "dialectness_proxy": 0.0,
+            "lexical_marker_mean": 0.05,
+            "repetition_count": 0,
+            "malformed_count": 0
+          },
+          "generation": {
+            "n": 150,
+            "compliance": 1.0,
+            "semantic_similarity": 0.9843,
+            "reference_similarity": 0.9886,
+            "dialectness_proxy": 0.6589,
+            "lexical_marker_mean": 0.0467,
+            "repetition_count": 0,
+            "malformed_count": 0
+          },
+          "identification": {
+            "n": 100,
+            "compliance": 1.0,
+            "semantic_similarity": 0.0,
+            "reference_similarity": 0.6645,
+            "dialectness_proxy": 0.0,
+            "lexical_marker_mean": 0.0,
+            "repetition_count": 0,
+            "malformed_count": 0,
+            "accuracy": 0.32
+          },
+          "grammar": {
+            "n": 75,
+            "compliance": 1.0,
+            "semantic_similarity": 0.9846,
+            "reference_similarity": 0.9685,
+            "dialectness_proxy": 0.8955,
+            "lexical_marker_mean": 0.12,
+            "repetition_count": 0,
+            "malformed_count": 0
+          },
+          "context": {
+            "n": 75,
+            "compliance": 1.0,
+            "semantic_similarity": 0.4578,
+            "reference_similarity": 0.4578,
+            "dialectness_proxy": 0.3022,
+            "lexical_marker_mean": 0.0133,
+            "repetition_count": 0,
+            "malformed_count": 0
+          }
+        }
+      },
+      "context_behavior": {
+        "n": 75,
+        "exact_echo_count": 0,
+        "high_echo_count": 0
+      },
+      "gates": {
+        "factual": true,
+        "multi_turn": true,
+        "instruction_legacy": false,
+        "instruction_corrected": false,
+        "generation_semantic": true,
+        "generation_dialectness": true,
+        "grammar_dialectness": true,
+        "context_semantic": true,
+        "context_repetition": true,
+        "context_malformed": true,
+        "context_echo": true,
+        "comprehension_semantic": true
+      },
+      "final_candidate": false
+    }
+  }
+}

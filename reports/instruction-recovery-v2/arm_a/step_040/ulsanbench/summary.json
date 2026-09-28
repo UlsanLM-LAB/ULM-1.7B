@@ -1,0 +1,47 @@
+{
+  "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+  "adapter": "/home/ubuntu/ulm4b-arm-b-plus/outputs/instruction-recovery-v2/arm_a/checkpoint-40",
+  "n": 36,
+  "config": {
+    "do_sample": false,
+    "temperature": 0,
+    "enable_thinking": false,
+    "system": "요청한 결과만 출력하세요. 설명, 머리말, 따옴표, 부가 설명을 추가하지 마세요.",
+    "max_new_tokens": {
+      "identification": 16,
+      "other": 96
+    }
+  },
+  "metrics": {
+    "generation": {
+      "n": 16,
+      "compliance": 1.0,
+      "semantic_similarity": 0.9832,
+      "reference_similarity": 0.9808,
+      "dialectness_proxy": 0.6375,
+      "lexical_marker_mean": 0.0,
+      "repetition_count": 0,
+      "malformed_count": 0
+    },
+    "grammar": {
+      "n": 8,
+      "compliance": 1.0,
+      "semantic_similarity": 0.9866,
+      "reference_similarity": 0.9786,
+      "dialectness_proxy": 0.9423,
+      "lexical_marker_mean": 0.125,
+      "repetition_count": 0,
+      "malformed_count": 0
+    },
+    "context": {
+      "n": 12,
+      "compliance": 1.0,
+      "semantic_similarity": 0.4764,
+      "reference_similarity": 0.4764,
+      "dialectness_proxy": 0.3097,
+      "lexical_marker_mean": 0.0,
+      "repetition_count": 0,
+      "malformed_count": 0
+    }
+  }
+}

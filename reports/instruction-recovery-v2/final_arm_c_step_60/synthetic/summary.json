@@ -1,0 +1,17 @@
+{
+  "n": 135,
+  "accuracy_pct": 90.37,
+  "by_task": {
+    "exact": 100.0,
+    "yes_no": 75.0,
+    "repeat": 80.0,
+    "list": 75.0,
+    "json": 100.0,
+    "extraction": 100.0,
+    "false_premise": 100.0,
+    "stopping": 100.0
+  },
+  "policy": "comparable",
+  "pre_hardening_accuracy_pct": 90.37,
+  "corrected_rubric_version": "v2.5-denial-and-quoted-claim-audit"
+}

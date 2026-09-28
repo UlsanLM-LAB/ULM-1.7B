@@ -1,0 +1,23 @@
+{
+  "base_rows": 2160,
+  "base_sha256": "165892dcc9c900c7f8d52b6ef4d5cdfffde39ce1fcab2484ec81527ce365d1ab",
+  "yes_no_added": 160,
+  "yes": 80,
+  "no": 80,
+  "contrastive_pairs": 80,
+  "context_added": 108,
+  "total_rows": 2428,
+  "context_share_before": 0.1,
+  "context_share_after": 0.13344316309719934,
+  "benchmark_exact_overlap": 0,
+  "shared_24char_overlap": 0,
+  "heldout_overlap": 0,
+  "excluded_sessions": 170,
+  "old_rows_preserved": true,
+  "files": {
+    "synthetic_train.jsonl": "ab04e422fd16a7082609fc80a57f4abe8f73508ce4faba343dcda1841fc2c48a",
+    "train.jsonl": "0db162af79df2b572eb699d28562221fda1d10f640a0cbd4edb2bdd2e4787cb5",
+    "synthetic_hidden.jsonl": "e50681dd5b1d079d50f2606df66e9891f6c36792fa4f8a56355efe2559498409",
+    "synthetic_dev.jsonl": "9b23599782e37f3302e07c7a8fc8658df2f56b084ecc12f29615c403ffee1125"
+  }
+}

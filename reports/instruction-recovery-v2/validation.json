@@ -1,0 +1,23 @@
+{
+  "local_and_aws_dataset_hashes_match": 4,
+  "synthetic_prompts_unique": 1620,
+  "prior_synthetic_prompt_exact_overlap": 0,
+  "yes_no_balanced_in_every_split": true,
+  "train_dev_hidden_template_families_disjoint": true,
+  "final_hidden_and_monitor_template_families_disjoint": true,
+  "benchmark_exact_prompt_overlap": 0,
+  "benchmark_normalized_shared_24char_overlap": 0,
+  "evaluator_adversarial_tests_passed": 3,
+  "max_sequence_tokens": 213,
+  "sequence_truncations": 0,
+  "all_examples_eos_supervised": 2160,
+  "new_instruction_example_share": 0.5,
+  "dialect_target_token_share": 0.32002,
+  "original_release_adapter_path": "/home/ubuntu/models/ULM-4B-Arm-B",
+  "corrected_rubric": "v2.5-denial-and-quoted-claim-audit",
+  "completed_independent_sft_arms": 3,
+  "all_original_496_lora_tensors_verified_per_arm": true,
+  "full_evaluated_candidates": 2,
+  "frozen_base_and_immutable_release_preserved": true,
+  "release_candidate_accepted": false
+}
