@@ -90,7 +90,7 @@ started. Full training and final evaluation are automatic and conditional.
 - [x] Run exactly three independent bounded continued SFT arms from the release adapter, with 20-step preservation gates.
 - [x] Fully evaluate at most two candidates; consider at most one small DPO only if permitted by instruction gate.
 - [x] Save adapters/tokenizers/configs, per-arm results, final comparison, decision/report; verify original Arm B and Live unchanged.
-- [ ] Commit/push code/config/summaries to experiment branch only, stop EC2 and confirm stopped.
+- [x] Commit/push code/config/summaries to experiment branch only, stop EC2 and confirm stopped.
 
 User explicitly requested a new dataset and three new arms; previous instruction-recovery-v2 artifacts remain unchanged. No automatic main merge or Live deployment.
 
