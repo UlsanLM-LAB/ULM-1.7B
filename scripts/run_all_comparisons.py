@@ -35,15 +35,15 @@ MODELS_CONFIG = [
         "type": "dialect_specialized",
     },
     {
-        "id": "ulm-4b-arm-b-deployed",
-        "display_name": "ULM-4B Arm B (Deployed)",
+        "id": "ulm-4b-arm-b-context-guard",
+        "display_name": "ULM-4B Arm B (Context Guard)",
         "model": "/home/ubuntu/models/Qwen3.8-4B-Distill",
         "adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
         "model_id": "UlsanLM-LAB/ULM-4B-Arm-B (Base: empero-ai/Qwen3.8-4B-Distill)",
         "params": "4.21B",
-        "decoding_mode": "deployed",
+        "decoding_mode": "context_guard",
         "quantization": "None (bf16)",
-        "type": "dialect_specialized_deployed",
+        "type": "dialect_specialized_context_guard",
     },
     {
         "id": "qwen3.8-4b-base",
@@ -174,12 +174,13 @@ def main():
                 "enable_thinking": False,
                 "max_new_tokens": {"identification": 16, "other": 96},
             },
-            "deployed": {
+            "context_guard": {
                 "do_sample": False,
                 "temperature": 0.0,
                 "enable_thinking": False,
                 "max_new_tokens": {"identification": 16, "other": 96},
                 "context_task_extra": {"repetition_penalty": 1.10, "no_repeat_ngram_size": 3},
+                "scope": "context task only; supplementary ablation, not a full deployed-mode benchmark",
             },
         },
     }
