@@ -197,9 +197,8 @@ def test_phase4_template_and_generation_settings() -> None:
     kwargs = engine._prepare_generation(request, streamer=object())
 
     assert [m["role"] for m in tokenizer.messages] == ["system", "user", "assistant", "user"]
-    assert tokenizer.messages[0]["content"] == (
-        PHASE4_SYSTEM_PROMPT + "\n\n" + build_dialect_instruction(2)
-    )
+    assert build_dialect_instruction(2) == ""
+    assert tokenizer.messages[0]["content"] == PHASE4_SYSTEM_PROMPT
     assert tokenizer.template_options == {
         "tokenize": False,
         "add_generation_prompt": True,
@@ -270,10 +269,14 @@ def test_dialect_strength_reaches_generation_template(endpoint, stream) -> None:
             })
             assert response.status_code == 200
             prepared = tokenizer.messages[-1]
-            assert prepared[0]["content"].startswith(messages[0]["content"] + "\n\n")
-            assert prepared[0]["content"].endswith(build_dialect_instruction(strength))
+            if strength == 2:
+                assert prepared[0]["content"] == messages[0]["content"]
+                assert "[기본 응답 말투 설정]" not in prepared[0]["content"]
+            else:
+                assert prepared[0]["content"].startswith(messages[0]["content"] + "\n\n")
+                assert prepared[0]["content"].endswith(build_dialect_instruction(strength))
+                assert prepared[0]["content"].count("[기본 응답 말투 설정]") == 1
             assert prepared[1:] == messages[1:]
-            assert prepared[0]["content"].count("[기본 응답 말투 설정]") == 1
     assert len({turn[0]["content"] for turn in tokenizer.messages}) == 4
     assert messages[0]["content"] == "서비스 규칙: 비밀을 공개하지 않는다."
 

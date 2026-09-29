@@ -1,0 +1,31 @@
+{
+  "name": "ULM-4B Serving Rollback v1",
+  "status": "serving-hotfix",
+  "date": "2026-09-29",
+  "base": {
+    "hub": "empero-ai/Qwen3.8-4B-Distill",
+    "revision": "c83cb7aa2999d2f35c43e9ae0634a30eb8985a1e"
+  },
+  "adapter": {
+    "lineage": "Dialect Alignment v1 Arm A",
+    "sha256": "ecf79681783a2e868ebb00a640b1ba7f151c8e394deaf287a630b29454547b01",
+    "weights_in_git": false
+  },
+  "reason": "Real-model smoke tests found weak dialect expression and a degenerate-response regression in the frozen v1.0 Arm B serving path. The earlier Arm A checkpoint is used only as a serving rollback; v1.0.0 remains immutable.",
+  "inference": {
+    "enable_thinking": false,
+    "repetition_penalty": 1.1,
+    "no_repeat_ngram_size": 3,
+    "default_dialect_strength": 2,
+    "strength_control": "prompt-based"
+  },
+  "compatibility": {
+    "v1_0_0_tag_unchanged": true,
+    "frozen_arm_b_unchanged": true
+  },
+  "limitations": [
+    "Dialect strength is prompt-based and is not guaranteed to be monotonic on every prompt.",
+    "The rollback restores an earlier, more stable serving checkpoint but does not establish native-speaker authenticity.",
+    "Strong lexical Ulsan forms remain limited; native-speaker evaluation and a targeted data pass are still pending."
+  ]
+}

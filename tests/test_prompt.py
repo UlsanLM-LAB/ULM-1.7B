@@ -9,20 +9,20 @@ from ulm.training.sft import _model_dtype_kwargs, _partition_embedded_splits, bu
 
 def test_inference_strength_is_explicit() -> None:
     messages = build_inference_messages("오늘 뭐 해?", dialect_strength=3)
-    assert "강한 울산" in messages[0]["content"]
+    assert "조금 더 적극적으로 사용한다" in messages[0]["content"]
     with pytest.raises(ValueError):
         build_inference_messages("입력", dialect_strength=4)
 
 
-def test_inference_default_remains_strength_two_without_style_conflict() -> None:
+def test_inference_default_uses_restored_dialect_baseline_without_extra_override() -> None:
     messages = build_inference_messages("오늘 뭐 해?")
     system = messages[0]["content"]
-    assert "의미 전달과 사실성을 우선" in system
-    assert "울산 지역 일상 대화" in system
-    assert "울산 말투를 기본으로 구사" not in system
+    assert "자연스럽고 편안한 일상 울산 말투를 기본으로 구사" in system
+    assert "의미와 사실을 정확히 유지" in system
+    assert "[기본 응답 말투 설정]" not in system
 
 
-def test_strength_zero_has_no_conflicting_default_dialect_instruction() -> None:
+def test_strength_zero_adds_standard_override_without_mutating_baseline() -> None:
     from ulm.inference.prompt import build_chat_messages
 
     prepared = build_chat_messages(
@@ -30,8 +30,9 @@ def test_strength_zero_has_no_conflicting_default_dialect_instruction() -> None:
         dialect_strength=0,
     )
     system = prepared[0]["content"]
-    assert "표준 한국어로 답한다" in system
-    assert "울산 말투를 기본으로 구사" not in system
+    assert "울산 말투를 기본으로 구사" in system
+    assert "표준 한국어로 답하고" in system
+    assert "별도 말투 요청이 없으면" in system
 
 
 def test_model_dtype_argument_has_one_supported_name() -> None:
@@ -104,21 +105,22 @@ def test_embedded_split_field_rejects_unknown_values() -> None:
         _partition_embedded_splits({"train": _FakeDataset([{"split": "unknown", "text": "a"}])})
 
 
-@pytest.mark.parametrize("strength, phrase", [
-    (0, "의도적으로 사용하지 않는다"),
-    (1, "간헐적으로 사용한다"),
-    (2, "울산 지역 일상 대화"),
-    (3, "적극적으로 사용한다"),
-])
-def test_dialect_instruction_and_priority(strength, phrase) -> None:
+@pytest.mark.parametrize(
+    "strength, phrase",
+    [
+        (0, "표준 한국어"),
+        (1, "지역 표현을 약하게"),
+        (2, ""),
+        (3, "조금 더 적극적으로"),
+    ],
+)
+def test_dialect_instruction_levels(strength, phrase) -> None:
     from ulm.inference.prompt import build_dialect_instruction
 
     instruction = build_dialect_instruction(strength)
     assert phrase in instruction
-    assert "서비스의 안전 및 시스템 지시를 우선" in instruction
-    assert "사용자의 명시적인 요청" in instruction
-    assert "'표준어로 말해', '사투리 쓰지 마'" in instruction
-    assert "의미 전달과 정보 품질을 유지" in instruction
+    if strength != 2:
+        assert "별도 말투 요청이 없으면" in instruction
 
 
 def test_chat_prompt_preserves_system_and_history_without_accumulating() -> None:
@@ -134,13 +136,18 @@ def test_chat_prompt_preserves_system_and_history_without_accumulating() -> None
         {"role": "user", "content": "계속 설명해 줘."},
     ]
     original = deepcopy(messages)
-    for strength in (3, 0, 1, 2):
+    for strength in (3, 0, 1):
         prepared = build_chat_messages(messages, dialect_strength=strength, system_prompt="미사용")
         assert prepared[0]["content"].startswith("상위 서비스 규칙.\n\n")
         assert prepared[0]["content"].count("[기본 응답 말투 설정]") == 1
         assert prepared[1:] == original[1:]
         assert "미사용" not in prepared[0]["content"]
         assert messages == original
+
+    default_prepared = build_chat_messages(messages, dialect_strength=2, system_prompt="미사용")
+    assert default_prepared[0]["content"] == "상위 서비스 규칙."
+    assert default_prepared[1:] == original[1:]
+    assert messages == original
 
 
 @pytest.mark.parametrize("system_prompt", [None, "추가 서비스 지시."])
@@ -149,7 +156,7 @@ def test_chat_prompt_composes_default_or_system_prompt(system_prompt) -> None:
 
     history = [{"role": "user", "content": "안녕"}]
     prepared = build_chat_messages(history, system_prompt=system_prompt)
-    assert prepared[0]["content"].startswith((system_prompt or PHASE4_SYSTEM_PROMPT) + "\n\n")
+    assert prepared[0]["content"] == (system_prompt or PHASE4_SYSTEM_PROMPT)
     assert prepared[1:] == history
     assert len(history) == 1
 
