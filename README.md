@@ -47,7 +47,7 @@ empero-ai/Qwen3.8-4B-Distill
   → ULM-4B v1.0 (Arm B frozen)
 ```
 
-학습은 LoRA 기반 supervised fine-tuning을 사용하며, v1.0 릴리스 설정은 [configs/release/ulm4b-v1.0.json](configs/release/ulm4b-v1.0.json)에 고정되어 있습니다. 기존 Arm B 실험 설정은 그대로 보존합니다.
+학습은 LoRA 기반 supervised fine-tuning을 사용하며, v1.0 릴리스 설정은 [configs/release/ulm4b-v1.0.json](configs/release/ulm4b-v1.0.json)에 고정되어 있습니다. 원 Arm B release config도 함께 보존합니다.
 
 주요 목적:
 
@@ -229,8 +229,8 @@ no_repeat_ngram_size = 3
 ```text
 src/ulm/                 모델 학습·추론 핵심 코드
 scripts/                 데이터 구축, 학습, 평가, 서빙 스크립트
-configs/                 SFT 및 release 설정
-data/                    공개 가능한 메타데이터·benchmark
+configs/                 release metadata 및 선택적 TTS 설정
+data/                    공개 fixture 및 데이터 운영 규칙
 benchmarks/              평가 설계 및 규칙
 reports/                 릴리스·벤치마크 결과
 portfolio/               포트폴리오용 시각 자료
