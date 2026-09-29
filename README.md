@@ -33,7 +33,7 @@ UlsanLM Lab에서 개발하는 울산 방언 특화 4B급 소형 언어모델입
 | Code license | Apache-2.0 |
 | Weights | 대형 체크포인트는 이 Git 저장소에 포함하지 않음 |
 
-ULM-4B v1.0은 기존 Arm B 가중치를 그대로 동결한 Stable Release입니다. 추가 학습 계획은 없으며 rejected Arm B+는 연구 기록으로만 유지합니다. Stable은 릴리즈 코드·설정·체크포인트의 고정을 뜻합니다. instruction-trap과 방언 식별 성능, 사람 평가 부재 등 아래 Known Limitations는 유지되며 모든 연구 gate 통과나 모든 production 용도의 적합성을 뜻하지 않습니다.
+ULM-4B v1.0은 기존 Arm B 가중치를 그대로 동결한 Stable Release입니다. `v1.0.0` tag와 Arm B는 변경하지 않습니다. 2026-09-29 실모델 자유대화에서 방언 표현 약화와 일부 퇴행 출력이 확인되어, 현재 `main`의 권장 serving path는 기존 Dialect Alignment v1 Arm A를 사용하는 별도 rollback hotfix로 분리했습니다. 해당 artifact 계약은 [ulm4b-serving-rollback-v1.json](configs/release/ulm4b-serving-rollback-v1.json)에 고정합니다. 이는 v1.0 가중치를 재작성하는 릴리즈가 아닙니다.
 
 ## Model overview
 
@@ -148,13 +148,13 @@ uv run python scripts/check_project.py
 
 모델 가중치와 원본 대형 데이터는 저장소에 포함하지 않습니다.
 
-### Run ULM-4B v1.0 API
+### Run ULM-4B API
 
-v1.0은 기존 Arm B의 base model과 LoRA adapter를 분리해서 로드합니다. 서버 기본값과 API 경로는 유지합니다.
+`v1.0.0` 재현에는 frozen Arm B를 사용합니다. 현재 `main`의 권장 serving hotfix는 Dialect Alignment v1 Arm A rollback adapter를 별도 경로에 두고 사용합니다. 서버 기본값과 API 경로는 동일합니다.
 
 ```bash
 export ULM_MODEL_PATH=/path/to/Qwen3.8-4B-Distill
-export ULM_ADAPTER_PATH=/path/to/ulm4b-arm-b/final_adapter
+export ULM_ADAPTER_PATH=/path/to/ulm4b-serving-rollback-v1
 
 uv run python scripts/serve.py \
   --model "$ULM_MODEL_PATH" \
@@ -189,10 +189,10 @@ Text API는 `dialect_strength` 정수 필드로 응답의 기본 방언 강도�
 
 | 값 | API 이름 | 동작 |
 | --- | --- | --- |
-| 0 | Standard | 방언을 의도적으로 억제 |
-| 1 | Mild | 표준어 중심 + 가벼운 울산 표현 |
-| 2 | Ulsan | 자연스러운 울산 일상 말투, 기본값 |
-| 3 | Strong | 울산 어휘와 종결어미를 적극 사용 |
+| 0 | Standard | 별도 말투 요청이 없으면 표준어로 억제 |
+| 1 | Mild | 기본 울산 말투보다 지역 표현을 약하게 사용 |
+| 2 | Ulsan | 복원된 기본 울산 일상 말투를 그대로 사용 |
+| 3 | Strong | 문맥에 맞는 지역 어휘·종결어미를 조금 더 적극 사용 |
 
 ```json
 {
@@ -210,11 +210,11 @@ Text API는 `dialect_strength` 정수 필드로 응답의 기본 방언 강도�
 - stream/non-stream 모두 동일한 prompt path 사용
 - 강도 지시는 history에 누적하지 않음
 
-현재 구현은 learned control token이 아니라 system prompt 기반 style control입니다. 사용자가 직접 지정한 말투·출력 형식은 기본 dialect strength보다 우선하도록 설계되어 있습니다.
+현재 구현은 learned control token이 아니라 system prompt 기반 style control입니다. strength 2는 추가 지시를 덧붙이지 않고 복원된 기본 울산 system prompt를 그대로 사용하며, 0/1/3만 작은 override를 추가합니다. 사용자가 직접 지정한 말투·출력 형식은 기본 dialect strength보다 우선합니다. 강도 차이가 모든 입력에서 단조롭게 나타난다고 보장하지 않습니다.
 
 ## Decoding policy
 
-v1.0의 기존 Arm B 기본 추론 정책:
+v1.0 Arm B와 serving rollback이 공유하는 기본 추론 정책:
 
 ```text
 enable_thinking = false

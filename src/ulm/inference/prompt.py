@@ -1,4 +1,4 @@
-"""inference prompt와 dialect strength control."""
+"""Inference prompt and prompt-based dialect strength control."""
 
 from __future__ import annotations
 
@@ -6,41 +6,31 @@ from collections.abc import Mapping, Sequence
 
 _STRENGTH_GUIDANCE = {
     0: (
-        "표준 한국어로 답한다. 울산 방언 어휘와 방언 종결어미를 의도적으로 사용하지 않는다."
+        "별도 말투 요청이 없으면 이번 응답은 표준 한국어로 답하고 "
+        "울산 방언 표현을 사용하지 않는다."
     ),
     1: (
-        "표준어를 기본으로 답한다. 울산 화자가 자연스럽게 섞어 쓸 정도의 가벼운 방언 어휘나 "
-        "종결 표현만 간헐적으로 사용한다. 문장마다 억지로 방언을 넣지 않는다."
+        "별도 말투 요청이 없으면 기본 울산 말투보다 지역 표현을 약하게 사용한다."
     ),
-    2: (
-        "울산 지역 일상 대화에서 자연스럽게 들릴 정도로 방언 어휘와 종결어미를 적절히 사용한다. "
-        "과장하거나 모든 문장을 방언으로 채우지 않는다."
-    ),
+    2: "",
     3: (
-        "강한 울산 지역 표현을 위해 방언 어휘와 특징적인 종결어미를 적극적으로 사용한다. "
-        "부자연스러운 사투리 나열, 같은 어미 반복, 과장된 캐릭터 말투는 피한다."
+        "별도 말투 요청이 없으면 기본 울산 말투보다 문맥에 맞는 지역 어휘와 "
+        "종결어미를 조금 더 적극적으로 사용한다. 같은 어미를 반복하거나 과장하지 않는다."
     ),
 }
 
 PHASE4_SYSTEM_PROMPT = (
-    "울산 지역어를 이해하는 대화 assistant로서 사용자의 요청에 정확하고 자연스럽게 답한다. "
-    "의미 전달과 사실성을 우선한다."
+    "울산 지역어 대화 assistant로서 자연스럽고 일상적인 울산 사투리로 상대방과 친근하게 대화한다. "
+    "자연스럽고 편안한 일상 울산 말투를 기본으로 구사한다. 의미와 사실을 정확히 유지한다. "
+    "사용자가 말투나 출력 형식을 직접 지정하면 그 요청을 우선한다."
 )
 
 
 def build_dialect_instruction(strength: int) -> str:
-    """Describe a default style, subordinate to service rules and explicit user requests."""
+    """Return the smallest style override needed for a dialect level."""
     if type(strength) is not int or strength not in _STRENGTH_GUIDANCE:
         raise ValueError("dialect_strength는 0~3 정수여야 합니다")
-    return (
-        "[기본 응답 말투 설정]\n"
-        "서비스의 안전 및 시스템 지시를 우선한다. 이 설정은 기본 말투만 조정하며 "
-        "사용자의 명시적인 요청, 출력 형식, 말투 지정이 있으면 그 요청을 따른다. "
-        "예를 들어 '표준어로 말해', '사투리 쓰지 마'라는 요청은 이 말투 설정보다 우선한다. "
-        "별도 말투 요청이 없다면 기존 기본 말투 안내를 다음 선택에 맞게 조정한다. "
-        "어느 강도에서도 의미 전달과 정보 품질을 유지한다.\n"
-        + _STRENGTH_GUIDANCE[strength]
-    )
+    return _STRENGTH_GUIDANCE[strength]
 
 
 def build_chat_messages(
@@ -49,13 +39,16 @@ def build_chat_messages(
     dialect_strength: int = 2,
     system_prompt: str | None = None,
 ) -> list[dict[str, str]]:
-    """Compose the current style on copies; never add it to client conversation history."""
+    """Compose style instructions on copies; never mutate client history."""
     prepared = [dict(message) for message in messages]
     system = next((message for message in prepared if message["role"] == "system"), None)
     if system is None:
         system = {"role": "system", "content": system_prompt or PHASE4_SYSTEM_PROMPT}
         prepared.insert(0, system)
-    system["content"] += "\n\n" + build_dialect_instruction(dialect_strength)
+
+    instruction = build_dialect_instruction(dialect_strength)
+    if instruction:
+        system["content"] += "\n\n[기본 응답 말투 설정]\n" + instruction
     return prepared
 
 
