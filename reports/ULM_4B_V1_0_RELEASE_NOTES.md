@@ -73,4 +73,4 @@ Stable은 명시된 연구·교육·데모 용도의 코드·설정·체크포�
 
 코드는 [Apache-2.0](../LICENSE)입니다. [Base model card](https://huggingface.co/empero-ai/Qwen3.8-4B-Distill)는 Apache-2.0을 표시하며 base·dataset·encoder·TTS·파생 가중치의 upstream notice와 이용 조건은 각각 유지됩니다. 코드 릴리즈를 모든 외부 artifact에 대한 이용 허가로 해석하지 않습니다.
 
-인용은 [CITATION.cff](../CITATION.cff) 또는 [README의 v1.0 BibTeX](../README.md#citation)를 사용하세요. 현재 URL은 `https://github.com/UlsanLM-LAB/ULM-1.7B`이며 repo rename 후 갱신해야 합니다. 연구·라이브러리 출처는 [README References](../README.md#references)에 있습니다.
+인용은 [CITATION.cff](../CITATION.cff) 또는 [README의 v1.0 BibTeX](../README.md#citation)를 사용하세요. 저장소 URL은 `https://github.com/UlsanLM-LAB/ULM-4B`입니다. 연구·라이브러리 출처는 [README References](../README.md#references)에 있습니다.

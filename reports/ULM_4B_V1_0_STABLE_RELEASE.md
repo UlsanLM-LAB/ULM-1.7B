@@ -129,4 +129,4 @@ dcb6df1da91287efd14f6c22b7ccaea162d493f90529ed1479ed834277343190
 
 코드는 [Apache-2.0](../LICENSE). [Base model card](https://huggingface.co/empero-ai/Qwen3.8-4B-Distill)는 Apache-2.0을 표시하며 모델·데이터·encoder·TTS·파생 가중치의 upstream notice와 이용 조건은 별도로 유지됩니다. 가중치는 이 코드 릴리즈에 포함하지 않습니다.
 
-[CITATION.cff](../CITATION.cff), [README Citation](../README.md#citation), [References](../README.md#references)를 사용합니다. 저장소 URL은 현재 slug `UlsanLM-LAB/ULM-1.7B`이며 rename 후 갱신합니다.
+[CITATION.cff](../CITATION.cff), [README Citation](../README.md#citation), [References](../README.md#references)를 사용합니다. 저장소 URL은 `https://github.com/UlsanLM-LAB/ULM-4B`입니다.

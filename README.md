@@ -2,7 +2,7 @@
 
 UlsanLM Lab에서 개발하는 울산 방언 특화 4B급 소형 언어모델입니다. 현재 Stable Release는 `ULM-4B v1.0`(내부 checkpoint lineage: Arm B)이며, 울산 방언 생성·이해와 일반 응답 능력 보존을 함께 목표로 합니다.
 
-> Repository note: 저장소 slug는 초기 1.7B 실험명인 `ULM-1.7B`를 유지하고 있지만, 현재 제품명은 ULM-4B v1.0입니다. 저장소 rename 후 URL과 citation을 갱신합니다.
+> Repository: [UlsanLM-LAB/ULM-4B](https://github.com/UlsanLM-LAB/ULM-4B) · ULM-4B v1.0
 
 ![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.x-orange)
@@ -278,12 +278,12 @@ tests/                   회귀 및 API 테스트
   title        = {ULM-4B v1.0: Ulsan Dialect Small Language Model},
   version      = {1.0.0},
   year         = {2026},
-  url          = {https://github.com/UlsanLM-LAB/ULM-1.7B},
+  url          = {https://github.com/UlsanLM-LAB/ULM-4B},
   note         = {Stable Release; frozen Arm B checkpoint}
 }
 ```
 
-저장소 이름이 추후 `ULM-4B`로 변경되면 citation URL도 새 주소로 갱신합니다.
+기계 판독 가능한 인용 정보는 [CITATION.cff](CITATION.cff)에 있습니다.
 
 ## References
 

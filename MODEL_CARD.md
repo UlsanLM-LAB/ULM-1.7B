@@ -102,6 +102,6 @@ Code is [Apache-2.0](LICENSE). The [base model card](https://huggingface.co/empe
 
 ## Citation and references
 
-Use [CITATION.cff](CITATION.cff) or the versioned BibTeX in [README](README.md#citation). The repository URL remains `https://github.com/UlsanLM-LAB/ULM-1.7B`; update it after any repository rename.
+Use [CITATION.cff](CITATION.cff) or the versioned BibTeX in [README](README.md#citation). The repository URL is `https://github.com/UlsanLM-LAB/ULM-4B`.
 
 Architecture and source references are listed in [README References](README.md#references). See the [original Arm B decision](reports/ULM_4B_ARM_B_RELEASE_CANDIDATE.md), [model comparison](reports/ULM_4B_MODEL_COMPARISON.md) and [v1.0 release notes](reports/ULM_4B_V1_0_RELEASE_NOTES.md).
