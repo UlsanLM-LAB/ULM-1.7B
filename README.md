@@ -144,7 +144,7 @@ uv sync --extra dev --extra ml --extra tts
 uv run python scripts/check_project.py
 ```
 
-전체 테스트에는 TTS 전처리·추론 테스트도 포함되어 `tts` extra가 필요합니다. 위 명령은 `ruff check src`와 CPU 회귀 테스트를 순서대로 실행하고 실패 시 중단합니다. 개별 검사는 `uv run pytest`, `uv run ruff check src`로 실행할 수 있습니다. 과거 연구 스크립트의 전체 Ruff 정리는 이번 릴리즈 범위에 포함하지 않습니다. 리뷰와 수정 내역은 [프로젝트 리뷰](reports/PROJECT_REVIEW.md)에 기록합니다.
+전체 테스트에는 TTS 전처리·추론 테스트도 포함되어 `tts` extra가 필요합니다. 위 명령은 `ruff check src`와 CPU 회귀 테스트를 순서대로 실행하고 실패 시 중단합니다. 개별 검사는 `uv run pytest`, `uv run ruff check src`로 실행할 수 있습니다. v1.0 검증 내역은 [Stable Release Report](reports/ULM_4B_V1_0_STABLE_RELEASE.md)에 기록합니다.
 
 모델 가중치와 원본 대형 데이터는 저장소에 포함하지 않습니다.
 
@@ -232,8 +232,7 @@ scripts/                 데이터 구축, 학습, 평가, 서빙 스크립트
 configs/                 SFT 및 release 설정
 data/                    공개 가능한 메타데이터·benchmark
 benchmarks/              평가 설계 및 규칙
-reports/                 실험 결과와 의사결정 기록
-docs/                    아키텍처 및 운영 문서
+reports/                 릴리스·벤치마크 결과
 portfolio/               포트폴리오용 시각 자료
 tests/                   회귀 및 API 테스트
 ```
@@ -251,12 +250,8 @@ tests/                   회귀 및 API 테스트
 - [ULM-4B Model Comparison Report](reports/ULM_4B_MODEL_COMPARISON.md): 500-item 비교 벤치마크
 - [benchmarks/README.md](benchmarks/README.md): benchmark 작성 및 검수 규칙
 - [data/README.md](data/README.md): 데이터 거버넌스
-- [EXPERIMENTS.md](EXPERIMENTS.md): 실험 기록 규칙
-- [GPU.md](GPU.md): GPU 운영 가이드
 - [scripts/README.md](scripts/README.md): 실행 진입점과 실험 스크립트 구분
 - [reports/README.md](reports/README.md): 릴리스·벤치마크·연구 보고서 안내
-- [프로젝트 상세 리뷰](reports/PROJECT_REVIEW.md): 코드 검토 결과와 개선 우선순위
-- [저장소 정리 기록](reports/REPOSITORY_CLEANUP.md): Git 동기화·브랜치 정리와 복구 정보
 
 ## Known Limitations
 

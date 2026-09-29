@@ -1,6 +1,6 @@
 # 데이터 운영 규칙
 
-이 디렉터리는 `ULM-1.7B` 내부 canonical data의 위치와 공개 경계를 설명한다. AI Hub 원본 JSON/WAV와 단순 가공 manifest는 저장소에 넣지 않는다.
+이 디렉터리는 `ULM-4B` 프로젝트의 canonical data 위치와 공개 경계를 설명한다. AI Hub 원본 JSON/WAV와 단순 가공 manifest는 저장소에 넣지 않는다.
 
 ## 허용되는 파일
 
