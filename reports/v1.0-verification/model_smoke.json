@@ -1,0 +1,172 @@
+{
+  "started_at": "2026-09-28T23:49:08.227471+00:00",
+  "completed_at": "2026-09-28T23:49:24.058930+00:00",
+  "hardware": {
+    "platform": "Linux-6.8.0-1063-aws-x86_64-with-glibc2.35",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "device": "cuda:0",
+    "cuda_version": "13.0",
+    "gpu": {
+      "name": "NVIDIA L40S",
+      "total_memory_bytes": 47667740672,
+      "compute_capability": [
+        8,
+        9
+      ]
+    },
+    "driver_version": [
+      "595.91.07"
+    ]
+  },
+  "software": {
+    "python": "3.11.16",
+    "torch": "2.14.0",
+    "transformers": "5.17.0",
+    "peft": "0.20.0",
+    "huggingface-hub": "1.31.0"
+  },
+  "adapter_model_sha256": "fee03f872aaff55283be0413536e20b0930334333a20c6ee01cad63f57f43716",
+  "base_revision": "c83cb7aa2999d2f35c43e9ae0634a30eb8985a1e",
+  "no_training": true,
+  "network_offline": true,
+  "health": {
+    "status": "ok",
+    "model_loaded": true,
+    "model": "ULM-4B",
+    "model_path": "/home/ubuntu/models/Qwen3.8-4B-Distill + /home/ubuntu/models/ULM-4B-Arm-B",
+    "device": "cuda:0",
+    "dtype": "bfloat16"
+  },
+  "requests": [
+    {
+      "strength": 0,
+      "endpoint": "/v1/chat/completions",
+      "stream": false,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 0,
+      "endpoint": "/v1/chat/completions",
+      "stream": true,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 0,
+      "endpoint": "/api/chat",
+      "stream": false,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 0,
+      "endpoint": "/api/chat",
+      "stream": true,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 1,
+      "endpoint": "/v1/chat/completions",
+      "stream": false,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 1,
+      "endpoint": "/v1/chat/completions",
+      "stream": true,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 1,
+      "endpoint": "/api/chat",
+      "stream": false,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 1,
+      "endpoint": "/api/chat",
+      "stream": true,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 2,
+      "endpoint": "/v1/chat/completions",
+      "stream": false,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 2,
+      "endpoint": "/v1/chat/completions",
+      "stream": true,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 2,
+      "endpoint": "/api/chat",
+      "stream": false,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 2,
+      "endpoint": "/api/chat",
+      "stream": true,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 3,
+      "endpoint": "/v1/chat/completions",
+      "stream": false,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 3,
+      "endpoint": "/v1/chat/completions",
+      "stream": true,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 3,
+      "endpoint": "/api/chat",
+      "stream": false,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    },
+    {
+      "strength": 3,
+      "endpoint": "/api/chat",
+      "stream": true,
+      "http_status": 200,
+      "finish_reason": "stop",
+      "output": "모르면 모른다."
+    }
+  ],
+  "scope": "HTTP text smoke; no human quality assessment or live TTS/STT verification"
+}

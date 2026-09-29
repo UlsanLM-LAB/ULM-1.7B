@@ -1,0 +1,40 @@
+{
+  "adapter_model_sha256": "fee03f872aaff55283be0413536e20b0930334333a20c6ee01cad63f57f43716",
+  "adapter_config_sha256": "3bc2e2f3ebe622362c74693450f4b3305e354b5864147bf69d7901f1412c6e32",
+  "base_model_safetensors_sha256": "e73742841e31c04332303abf6c0e730691f8d7a08ed0a9a55496f646d39d1f29",
+  "base_revision": "c83cb7aa2999d2f35c43e9ae0634a30eb8985a1e",
+  "before": {
+    "base": {
+      "source": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+      "kind": "local",
+      "path": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+      "sha256": "4dbf81b4d32edf375c38b179f833fb61d5ea15f9ec44024a68c7979f82faf295",
+      "file_count": 14
+    },
+    "adapter": {
+      "source": "/home/ubuntu/models/ULM-4B-Arm-B",
+      "kind": "local",
+      "path": "/home/ubuntu/models/ULM-4B-Arm-B",
+      "sha256": "3f9724baf54020d4bb3a11602d4163a261f527efa66b6be10ccda9ad371956c3",
+      "file_count": 7
+    }
+  },
+  "after": {
+    "base": {
+      "source": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+      "kind": "local",
+      "path": "/home/ubuntu/models/Qwen3.8-4B-Distill",
+      "sha256": "4dbf81b4d32edf375c38b179f833fb61d5ea15f9ec44024a68c7979f82faf295",
+      "file_count": 14
+    },
+    "adapter": {
+      "source": "/home/ubuntu/models/ULM-4B-Arm-B",
+      "kind": "local",
+      "path": "/home/ubuntu/models/ULM-4B-Arm-B",
+      "sha256": "3f9724baf54020d4bb3a11602d4163a261f527efa66b6be10ccda9ad371956c3",
+      "file_count": 7
+    }
+  },
+  "unchanged": true,
+  "verified_at": "2026-09-28T23:52:24.886429+00:00"
+}

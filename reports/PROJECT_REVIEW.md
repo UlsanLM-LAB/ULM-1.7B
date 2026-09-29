@@ -1,4 +1,36 @@
-# 프로젝트 상세 리뷰
+# 프로젝트 상세 리뷰 — v1.0 재검증
+
+재검증일: 2026-09-29 (Asia/Seoul). 작업 기준 main: `11b6ace27c10b59332ced7787f0746f7a3630bc3`. 최초 리뷰의 재현 기록은 아래에 보존합니다. 이 절의 상태가 현재 판정이며, 아래 원 리뷰의 결함 설명·136개 테스트·개선 순서는 수정 전 기록입니다.
+
+**릴리즈 경로 판정: 아래 9개 항목 모두 fixed.** 기존 Arm B와 평가 snapshot은 변경하지 않았고 추가 학습을 하지 않았습니다. 전체 CPU/offline 회귀는 230 passed, 관련 focused 회귀는 148 passed입니다. `ruff check src`, 변경된 비교 runner와 새 검증 테스트의 Ruff, `git diff --check`, `uv lock --offline --check`가 통과했습니다. GPU 검증과 동결 증거는 [v1.0 Stable Release 보고서](ULM_4B_V1_0_STABLE_RELEASE.md)에 기록합니다.
+
+| 항목 | 판정 | 수정 전 재현 → 수정 → 검증 |
+| --- | --- | --- |
+| 1. SFT/CPT embedded split 누수 | fixed | 외부 validation을 지정하면 train에 세 split이 남음 → 원 데이터를 먼저 partition하고 외부 validation 적용 → 실제 `datasets.Dataset`에서 train에는 train만, 원 test는 유지, validation은 외부 것으로 분리. 동일 canonical ID/화자와 같은 unsplit train/test 파일 재사용도 거부. `test_training_data.py`의 external/named validation·disjoint 회귀. CPT가 같은 로더를 재사용. |
+| 2. validation-only 디렉터리 | fixed | eager default 식의 `KeyError('train')` → validation/train을 명시적 분기 → validation.jsonl·dev.jsonl·train.jsonl 성공, test-only·split 파일 없는 디렉터리 실패. `test_evaluation_only_directory` 등. |
+| 3. 추론 취소 동시성 | fixed | 2초 join 뒤 살아 있는 worker와 다음 generate 중첩 → 실제 join 완료까지 생성 잠금 유지, 반복 cancel에도 stop 즉시 요청 → event barrier의 slow forward에서 disconnect·반복 cancel·stream 종료 후 cancel 모두 최대 active generate 1개. `test_generation_lock_is_held_until_worker_exits`. |
+| 4. context overflow | fixed | 입력 5 + 출력 4 > 한도 8에서 JSON 500 / SSE 200 error → CPU tokenization을 응답 헤더 전에 검사하고 HTTP 400 `invalid_request_error` → 두 endpoint의 JSON/SSE 전부 400 JSON, generate 호출 없음. 정확히 한도와 출력만 한도 초과도 검사. `test_context_overflow_is_rejected_before_headers` 등. |
+| 5. 명시 invalid adapter | fixed | 없는 adapter가 None으로 바뀌어 base fallback → 두 text CLI와 직접 chat 함수에서 모델 로딩 전 경로 오류 → missing·file·빈 문자열 실패, 생략·유효 디렉터리 유지. `test_chat.py`의 adapter 회귀. |
+| 6. generated token count | fixed | `[8, EOS, PAD]`·`[8, 9, EOS]`를 6개로 집계 → 첫 EOS 포함, 이후 패딩 제외 → CPU 실제 runner stub에서 5개, PAD=EOS·multi EOS·limit/no EOS 검증. GPU 500문항은 Neutral 8,271개, Guard 8,005개; 같은 run의 패딩 포함 값 16,184/13,913과 비교. 새 runtime JSON 별도 보존. |
+| 7. all-skip summary | fixed | 전 모델 skip이면 통합 JSON 미생성 → skip·새 결과를 처리할 때와 종료 때 atomic 저장 → all-skip 통합 생성, partial-skip 성공·후속 실패의 완료 결과 보존, 기존 결과 없는 새 실행 검증. `test_model_comparison.py`. |
+| 8. 비교 절대경로·provenance | fixed | EC2 Python/model/dataset 기본값에 의존 → `sys.executable`, 필수 dataset/models config, 안전한 `outputs/model-comparison` 기본 출력 → 두 CLI help, CPU subprocess mock, config/JSONL 경계 검사. 실제 dataset SHA·문항 수, 모델/adapter/tokenizer/encoder identity, 평가 코드·라이브러리·실제 hardware·원 실행 시각 기록. stale/legacy skip은 자동 GPU 재실행 없이 명시 실패. |
+| 9. CLI strength prompt 분리 | fixed | 강도 0에도 별도 사투리 기본 지시가 남음 → API의 `build_chat_messages`와 강도 logic 공유 → 0/1/2/3 및 기본 2의 실제 CLI stub과 기존 API 회귀 유지, history에 style 누적 없음. `test_chat.py`, `test_prompt.py`, `test_server.py`. |
+
+**원 리뷰의 추가 관찰**
+
+| 관찰 | 판정 | 릴리즈 판단 |
+| --- | --- | --- |
+| BenchmarkItem / UlsanBench의 서로 다른 계약 | fixed | 형식 안내와 UlsanBench 경계 검증으로 잘못된 fixture 혼용을 거부. 형식 설명 예시는 연구 gold로 취급하지 않음. |
+| 하드웨어·날짜 상수와 revision/checksum 부재 | fixed | 신규 실행은 실제 provenance와 immutable Hub commit 또는 local SHA를 기록. 과거 결과에 새로운 provenance를 소급해서 붙이지 않음. |
+| 원 500문항 평가 데이터 공개·입수 | partially fixed | 권한 보유자 준비 절차와 실제 SHA를 기록했고 EC2의 원 입력으로 재검증. 이용 권한을 새로 승인하거나 제한 데이터를 공개하지 않음. 외부 사용자의 재현 제한은 Known Limitations이며 코드 릴리즈를 막지 않음. |
+| 자동 dialectness proxy와 native speaker 검수 | still open | 산식은 그대로 유지. 사람 평가를 했다고 주장하지 않으며 모델 카드·릴리즈 노트의 한계로 남김. 연구/demo 사용의 한계이며 이번 코드 경로 blocker가 아님. |
+| Live 음성·STT·인터럽트와 TTS 품질 | still open | 실제 frozen 모델의 텍스트 API JSON/SSE 16요청과 Live token field만 검증. 라이브 TTS/STT 및 청취 평가는 범위 밖으로 명시. 기존 연동 계약 유지. |
+| 전체 연구 스크립트 Ruff 정리 | still open | 사용자가 이번 릴리즈 범위에서 제외. 관련 없는 앞선 수정 52파일은 로컬 backup에 보존 후 제외; core Ruff 통과. |
+| Instruction-trap 65%, identification 32% / 비교 30% | still open | 과거 품질 한계와 연구 gate fail을 삭제하지 않음. 사용자가 지정한 frozen research/demo 제품 범위의 알려진 한계이며 재학습 없이 v1.0으로 고정. |
+
+입력 사전 검증으로 요청당 CPU tokenization이 두 번 수행됩니다. 생성 전 재검사는 유지하며 device 전송은 생성 때만 합니다. 내부 주입용 `ChatEngine`은 이제 `validate_request()`를 구현해야 합니다. 외부 HTTP payload·기본 디코딩·응답 경로는 유지했습니다. 중단 불가능한 forward가 실제로 멈추지 않으면 다음 생성도 기다립니다. timeout으로 잠금을 풀어 중첩시키는 방식은 사용하지 않습니다.
+
+## 최초 리뷰 — 수정 전 기록
 
 검토일: 2026-09-29 · 코드 기준: `a6fbfc1cf7ac943baf197810a2bb4e1b04e19217` · 대상: 최신 공개 main.
 
