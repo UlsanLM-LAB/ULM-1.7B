@@ -12,7 +12,7 @@ v1.0의 Stable 판단은 릴리즈 경로의 9개 코드 결함 수정과 CPU/�
 
 ## Review revalidation
 
-[PROJECT_REVIEW.md](PROJECT_REVIEW.md)의 1–8번과 CLI prompt 추가 관찰을 현재 1–9번으로 추적했습니다. **모두 fixed**입니다.
+사전 코드 리뷰에서 추적한 9개 release-path 항목은 v1.0에서 **모두 fixed**입니다.
 
 | 항목 | 수정 전 재현 | 수정 후 증거 |
 | --- | --- | --- |
@@ -114,7 +114,7 @@ dcb6df1da91287efd14f6c22b7ccaea162d493f90529ed1479ed834277343190
 - Benchmark: `src/ulm/evaluation/comparison.py`, `scripts/{run_model_comparison,run_all_comparisons,evaluate_ulsanbench_v2}.py`
 - Verification: `scripts/check_project.py`, `tests/{test_training_data,test_server,test_chat,test_prompt,test_model_comparison,test_release_config}.py`
 - Metadata/contract: `src/ulm/__init__.py`, `pyproject.toml`, `uv.lock`, `configs/release/ulm4b-v1.0.json`, `CITATION.cff`
-- Docs: `README.md`, `MODEL_CARD.md`, `benchmarks/README.md`, `scripts/README.md`, `reports/README.md`, `reports/PROJECT_REVIEW.md`, `reports/ULM_4B_MODEL_COMPARISON.md`, this report and release notes
+- Docs: `README.md`, `MODEL_CARD.md`, `benchmarks/README.md`, `scripts/README.md`, `reports/README.md`, `reports/ULM_4B_MODEL_COMPARISON.md`, this report and release notes
 - Evidence: `reports/v1.0-verification/{weights,model_smoke,benchmark_runtime,aws_final_state,tests}.json`
 
 기존 `configs/release/ulm4b-arm-b.json`, 모든 SFT 실험 config, 학습 데이터, 기존 비교 집계 JSON과 rejected 연구 보고서는 변경하지 않았습니다. 새 문서·계약은 Git tag `v1.0.0`의 snapshot으로 고정하며 changed checkpoint는 별도 버전이어야 합니다.

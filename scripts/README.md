@@ -1,6 +1,6 @@
 # 실행 스크립트 안내
 
-현재 텍스트 Stable Release는 ULM-4B v1.0(내부 lineage: Arm B)입니다. `src/ulm`은 공통 기능을 소유하고, 이 디렉터리는 실행 진입점과 단계별 연구 실험을 담습니다. 과거 실험의 경로·설정은 해당 보고서와 함께 읽어야 합니다.
+현재 텍스트 Stable Release는 ULM-4B v1.0(내부 lineage: Arm B)입니다. `src/ulm`은 공통 기능을 소유하고, 이 디렉터리는 실행 진입점과 일부 역사적 연구 스크립트를 담습니다. 최신 릴리스 실행 경로는 아래 표의 현재 API·추론·평가 진입점을 기준으로 사용하세요.
 
 | 목적 | 진입점 | 참고 |
 | --- | --- | --- |
@@ -15,7 +15,7 @@
 | 패키지 평가 구조 확인 | `ulm-evaluate` | [benchmarks의 fixture](../benchmarks/README.md) |
 | 전체 lint·회귀 검사 | [check_project.py](check_project.py) | 현재 Python으로 `ruff check src` → `pytest`, 첫 실패 시 중단 |
 
-`phase3`, `phase4`, `instruction_recovery` 등의 스크립트는 해당 실험의 구축·학습·게이트·회귀 평가 기록입니다. 최신 릴리스 실행 경로와 구분하며, 기존 보고서의 재현성을 위해 이름과 위치를 유지합니다.
+`phase3`, `phase4`, `instruction_recovery` 등의 스크립트는 역사적 실험 재현용으로 남아 있으며 최신 릴리스 실행 경로가 아닙니다.
 
 UlsanBench 비교에 필요한 `data/ulsanbench_v1/benchmark.jsonl`은 현재 공개 main에 포함되어 있지 않습니다. 권한 있는 평가 데이터를 준비하고 `--dataset`으로 경로를 전달해야 합니다. 패키지의 `BenchmarkItem` fixture와 UlsanBench 연구용 JSONL은 서로 다른 형식입니다. 입력 계약과 준비 절차는 [benchmarks/README.md](../benchmarks/README.md)를 참고하세요.
 
