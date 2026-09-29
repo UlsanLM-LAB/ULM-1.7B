@@ -94,12 +94,16 @@ def test_cli_uses_shared_prompt_without_accumulating_style(monkeypatch, strength
     monkeypatch.setattr("builtins.input", lambda _: next(turns))
     chat.run_chat(model_name="cpu-stub", dialect_strength=strength)
     expected_strength = 2 if strength is None else strength
-    expected_system = PHASE4_SYSTEM_PROMPT + "\n\n" + build_dialect_instruction(expected_strength)
+    instruction = build_dialect_instruction(expected_strength)
+    expected_system = PHASE4_SYSTEM_PROMPT
+    if instruction:
+        expected_system += "\n\n[기본 응답 말투 설정]\n" + instruction
     assert len(recorded_messages) == 12
     for messages in recorded_messages:
         assert messages[0] == {"role": "system", "content": expected_system}
         assert sum(message["role"] == "system" for message in messages) == 1
-        assert messages[0]["content"].count("[기본 응답 말투 설정]") == 1
+        expected_marker_count = 0 if expected_strength == 2 else 1
+        assert messages[0]["content"].count("[기본 응답 말투 설정]") == expected_marker_count
     assert recorded_messages[1][1:] == [
         {"role": "user", "content": "질문 0"},
         {"role": "assistant", "content": "답변"},
@@ -108,4 +112,4 @@ def test_cli_uses_shared_prompt_without_accumulating_style(monkeypatch, strength
     assert len(recorded_messages[-1]) == 22  # one system, ten previous turns, current user
     assert recorded_messages[-1][1] == {"role": "user", "content": "질문 1"}
     if strength == 0:
-        assert "일상적인 울산 사투리로" not in expected_system
+        assert "표준 한국어로 답하고" in expected_system
