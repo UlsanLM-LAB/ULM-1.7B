@@ -23,8 +23,8 @@
 
 ```bash
 # 1. 저장소 클론
-git clone https://github.com/UlsanLM-LAB/ULM-1.7B.git
-cd ULM-1.7B
+git clone https://github.com/UlsanLM-LAB/ULM-4B.git
+cd ULM-4B
 
 # 2. 원클릭 환경 설정 및 학습 자동 실행
 bash scripts/train_external.sh

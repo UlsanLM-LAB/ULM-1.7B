@@ -6,10 +6,10 @@ authors:
   - name: "UlsanLM Lab"
 version: 1.0.0
 date-released: 2026-09-29
-url: "https://github.com/UlsanLM-LAB/ULM-1.7B"
-repository-code: "https://github.com/UlsanLM-LAB/ULM-1.7B"
+url: "https://github.com/UlsanLM-LAB/ULM-4B"
+repository-code: "https://github.com/UlsanLM-LAB/ULM-4B"
 license: Apache-2.0
 abstract: >-
   Stable code release using the existing frozen Arm B checkpoint, with no further
   training. Model artifacts and external datasets are not included. Their
-  upstream terms apply separately. Update repository URLs after any rename.
+  upstream terms apply separately.
