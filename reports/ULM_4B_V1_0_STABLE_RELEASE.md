@@ -8,7 +8,7 @@
 
 v1.0의 Stable 판단은 릴리즈 경로의 9개 코드 결함 수정과 CPU/실제 모델 검증에 근거합니다. Instruction-trap 65%와 identification 32%, human evaluation 부재는 알려진 품질·용도 한계로 남습니다. 모든 역사적 연구 gate 통과나 모든 production 용도의 적합성을 주장하지 않습니다.
 
-기준 main `11b6ace27c10b59332ced7787f0746f7a3630bc3`에서 별도 `release/ulm4b-v1.0` 브랜치로 작업했습니다. 당시 원격 main과 로컬 SHA가 같았고 열린 PR은 없었습니다. 앞선 요청에서 만든 관련 없는 Ruff 정리 52개 파일은 검증된 로컬 백업에 보존하고 이번 diff에서 제외했습니다. 학습 데이터와 과거 연구 결과를 삭제하거나 수치로 덮어쓰지 않았습니다.
+v1.0.0 릴리스는 별도 release branch에서 검증 후 병합했습니다. 릴리스 당시 모델 가중치와 평가 수치는 변경하지 않았으며, 현재 main의 public-hygiene 정리는 모델 동작이나 v1.0.0 tag를 변경하지 않습니다.
 
 ## Review revalidation
 
@@ -43,7 +43,7 @@ v1.0의 Stable 판단은 릴리즈 경로의 9개 코드 결함 수정과 CPU/�
 | 실제 모델 HTTP smoke | health + 2 endpoint × JSON/SSE × 강도0–3 **16요청 성공** |
 | 실제 affected runtime | Neutral/Context Guard 각500문항, 출력1,000개 모두 historical raw와 exact equality |
 | Weights freeze | base14파일·adapter7파일 디렉터리 SHA 검증 전후 동일, 모든 모델 파라미터 non-trainable |
-| AWS | 시작 전 stopped, 검증 후 stopped 재확인, volume 보존; terminate 없음 |
+| AWS | 검증 전후 stopped 상태 확인; 학습 및 instance terminate 없음 |
 
 CPU/offline 명령:
 
@@ -61,7 +61,7 @@ CUDA_VISIBLE_DEVICES=-1 .venv/bin/pytest \
 
 ## Frozen artifacts and actual model smoke
 
-실제 모델 검증은 기존 EC2 `i-0f732bf7d1cc409b4` / `g6e.xlarge` / NVIDIA L40S에서 기존 파일만 로드했습니다. Hub offline 환경이며 새 모델 다운로드가 없습니다. 원격의 dirty 연구 checkout을 수정하지 않고 `/home/ubuntu/ulm-v1-verification-20260929`에서 검증했습니다.
+실제 모델 검증은 AWS EC2 `g6e.xlarge` / NVIDIA L40S에서 기존 frozen base와 Arm B adapter만 로드해 수행했습니다. Hub offline 조건에서 새 모델 다운로드·학습·weight merge 없이 검증했습니다.
 
 - Base revision: `c83cb7aa2999d2f35c43e9ae0634a30eb8985a1e`
 - Base `model.safetensors` SHA-256: `e73742841e31c04332303abf6c0e730691f8d7a08ed0a9a55496f646d39d1f29`
@@ -69,7 +69,7 @@ CUDA_VISIBLE_DEVICES=-1 .venv/bin/pytest \
 - 기존 Arm B snapshot과 hash가 같으며 검증 전후 base/adapter 전체 디렉터리 hash도 같음
 - HTTP JSON/SSE와 Live `token` 필드 유지; 강도0의 smoke 출력은 표준어 `모르면 모른다.`
 
-증거: [weights](v1.0-verification/weights.json), [model smoke](v1.0-verification/model_smoke.json), [AWS final state](v1.0-verification/aws_final_state.json), [CPU 검증 기록](v1.0-verification/tests.json). HTTP smoke는 텍스트 통합 검사이며 human evaluation이나 실제 Live TTS/STT 검증으로 해석하지 않습니다.
+Release-time raw verification JSON에는 로컬 경로와 운영 메타데이터가 포함되어 현재 public main에서는 제외했습니다. 필요한 핵심 digest·요청 수·검증 결과는 이 문서와 v1.0.0 release snapshot에 남아 있습니다. HTTP smoke는 텍스트 통합 검사이며 human evaluation이나 실제 Live TTS/STT 검증으로 해석하지 않습니다.
 
 ## Affected token count and runtime
 
@@ -91,7 +91,7 @@ dcb6df1da91287efd14f6c22b7ccaea162d493f90529ed1479ed834277343190
 | 실제 토큰 기준 throughput | **91.61 tok/s** | **100.73 tok/s** |
 | historical raw와 다른 출력 | **0** | **0** |
 
-새 결과는 [benchmark_runtime.json](v1.0-verification/benchmark_runtime.json)에 별도로 기록했습니다. 과거 throughput 174.92/176.44 tok/s 등은 역사 기록으로 남기며 v1.0의 검증된 처리량으로 사용하지 않습니다. 새 값은 같은 시간에 재계산한 historical 측정값이 아니라 이번 별도 실행의 측정값입니다. 다른 비교 모델의 처리량은 이번에 재측정하지 않았습니다.
+과거 throughput 174.92/176.44 tok/s 등은 역사 기록으로 남기며 v1.0의 검증된 처리량으로 사용하지 않습니다. 위 값은 별도 검증 실행의 측정값이며 다른 비교 모델의 처리량은 이번에 재측정하지 않았습니다.
 
 이번 runtime 검증은 HTTP smoke 뒤 같은 프로세스에서 수행했습니다. 기록된 peak allocated VRAM 17.17GiB에는 그 프로세스의 메모리 조건이 반영되므로 과거 독립 비교 프로세스의 9.27GiB와 직접 비교하지 않습니다. Avg latency는 batch wall time / 문항 수이며 단일 요청 latency나 TTFT가 아닙니다. Python3.11.16, torch2.14.0+cu130, Transformers5.17.0, PEFT0.20.0, NVIDIA driver595.91.07, torch CUDA13.0을 사용했습니다.
 
@@ -115,15 +115,14 @@ dcb6df1da91287efd14f6c22b7ccaea162d493f90529ed1479ed834277343190
 - Verification: `scripts/check_project.py`, `tests/{test_training_data,test_server,test_chat,test_prompt,test_model_comparison,test_release_config}.py`
 - Metadata/contract: `src/ulm/__init__.py`, `pyproject.toml`, `uv.lock`, `configs/release/ulm4b-v1.0.json`, `CITATION.cff`
 - Docs: `README.md`, `MODEL_CARD.md`, `benchmarks/README.md`, `scripts/README.md`, `reports/README.md`, `reports/ULM_4B_MODEL_COMPARISON.md`, this report and release notes
-- Evidence: `reports/v1.0-verification/{weights,model_smoke,benchmark_runtime,aws_final_state,tests}.json`
 
-기존 `configs/release/ulm4b-arm-b.json`, 모든 SFT 실험 config, 학습 데이터, 기존 비교 집계 JSON과 rejected 연구 보고서는 변경하지 않았습니다. 새 문서·계약은 Git tag `v1.0.0`의 snapshot으로 고정하며 changed checkpoint는 별도 버전이어야 합니다.
+기존 `configs/release/ulm4b-arm-b.json`, v1.0 release contract와 고정된 benchmark snapshot은 유지합니다. 현재 main에서는 오래된 SFT/CPT 실험 config, 학습 corpus, 중간 실험 dump를 공개 표면에서 제외했으며 v1.0.0 tag의 모델·릴리스 snapshot은 변경하지 않습니다.
 
 ## Git and release procedure
 
 별도 브랜치의 의미 있는 commit과 전체 diff self-review, 테스트 결과를 포함한 PR을 통해 mergeable 상태에서 squash merge합니다. 병합 후 main이 원격과 같고 working tree가 깨끗하며 열린 PR/blocker가 없는 것을 확인한 뒤 annotated tag `v1.0.0`과 Stable GitHub Release **ULM-4B v1.0**을 생성합니다. 최종 SHA와 release URL은 GitHub tag/release와 최종 작업 보고를 기준으로 확인할 수 있습니다.
 
-이 작업 시작 시 원격은 main만 있었고 작업용 branch만 추가했습니다. 병합된 release branch만 정리하며 main에 없는 연구 자료를 삭제하지 않습니다. GitHub `delete_branch_on_merge`를 활성화했습니다. 앞선 실험·미커밋 변경의 로컬 backup은 유지합니다. EC2 volume `vol-07580a7ba8e092248`도 보존합니다.
+릴리스 이후 repository hygiene는 별도 PR로 수행하며 public main에는 외부 사용·검증에 필요한 자료만 유지합니다. 내부 실험 백업과 운영 기록은 public tree와 분리합니다.
 
 ## License and citation
 

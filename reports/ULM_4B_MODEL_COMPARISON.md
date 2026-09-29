@@ -4,7 +4,7 @@
 - **Benchmark**: UlsanBench v2 (500 items, held-out speaker-session disjoint test set)
 - **Evaluation Environment**:
   - AWS Region: `ap-northeast-2`
-  - EC2 Instance: `i-0f732bf7d1cc409b4` (`g6e.xlarge`)
+  - EC2 Instance Type: `g6e.xlarge`
   - GPU: NVIDIA L40S 46GB VRAM (Driver: 595.91.07, CUDA: 13.2)
   - Software: PyTorch 2.14.0+cu130, Transformers 5.17.0, PEFT 0.20.0
 - **Evaluator**: Sentence embedding model (`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`) + lexical marker and ending rule matchers.

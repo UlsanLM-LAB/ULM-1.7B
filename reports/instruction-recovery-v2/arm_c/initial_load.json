@@ -1,9 +1,0 @@
-{
-  "initial_adapter": "/home/ubuntu/models/ULM-4B-Arm-B",
-  "is_trainable": true,
-  "inference_mode": false,
-  "trainable_tensor_count": 496,
-  "trainable_parameters": 16232448,
-  "release_tensors_exactly_equal": 496,
-  "base_parameters_frozen": true
-}

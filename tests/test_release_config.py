@@ -21,9 +21,7 @@ def test_v1_preserves_original_arm_b_training_inference_and_evaluation():
     assert RELEASE["weights_frozen"] is True
     assert RELEASE["further_training_planned"] is False
     assert RELEASE["checkpoint_lineage_name"] == "Arm B"
-    assert RELEASE["adapter"]["sha256"] in (
-        ROOT / "reports/ULM_4B_ARM_B_FINAL_LOW_LR_REPORT.md"
-    ).read_text()
+    assert RELEASE["adapter"]["sha256"] in (ROOT / "MODEL_CARD.md").read_text()
 
 
 def test_v1_preserves_historical_benchmark_snapshot():
