@@ -14,7 +14,6 @@ from peft import PeftModel
 from transformers import AutoModel, AutoModelForCausalLM, AutoTokenizer
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "/home/ubuntu/models/Qwen3.8-4B-Distill"
 ENCODER = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 SYSTEM = "요청한 결과만 출력하세요. 설명, 머리말, 따옴표, 부가 설명을 추가하지 마세요."
 CLASSES = ("ULSAN", "OTHER_GYEONGSANG", "STANDARD")
@@ -34,9 +33,9 @@ def save(path, obj):
 
 
 class Embedder:
-    def __init__(self, device="cuda:0"):
-        self.tokenizer = AutoTokenizer.from_pretrained(ENCODER)
-        self.model = AutoModel.from_pretrained(ENCODER).to(device).eval()
+    def __init__(self, device="cuda:0", revision=None):
+        self.tokenizer = AutoTokenizer.from_pretrained(ENCODER, revision=revision)
+        self.model = AutoModel.from_pretrained(ENCODER, revision=revision).to(device).eval()
         self.device = device
 
     @torch.inference_mode()
@@ -123,9 +122,9 @@ def generate_rows(model_path, adapter, rows, batch_size=8):
     return outputs
 
 
-def evaluate(model_path, adapter, output_dir, subset=0):
+def evaluate(model_path, adapter, output_dir, subset=0, dataset_path=None):
     output_dir = Path(output_dir)
-    rows = jsonl(ROOT / "data/ulsanbench_v1/benchmark.jsonl")
+    rows = jsonl(dataset_path or ROOT / "data/ulsanbench_v1/benchmark.jsonl")
     if subset:
         # Deterministic stratified subset; never the old 12-item gate.
         by_task = defaultdict(list)
@@ -233,12 +232,21 @@ def evaluate_regression(model_path, adapter, output_dir):
     return stats
 
 
-if __name__=="__main__":
+def main(argv=None):
     p=argparse.ArgumentParser()
-    p.add_argument("--model",default=BASE);p.add_argument("--adapter")
+    p.add_argument("--model");p.add_argument("--adapter")
+    p.add_argument("--dataset", help="Explicit UlsanBench JSONL for benchmark evaluation")
     p.add_argument("--output",required=True);p.add_argument("--subset",type=int,default=0)
     p.add_argument("--classifier",action="store_true");p.add_argument("--regression",action="store_true")
-    a=p.parse_args()
+    a=p.parse_args(argv)
+    if not a.classifier and not a.model:
+        p.error("--model is required for generation")
+    if not a.classifier and not a.regression and not a.dataset:
+        p.error("--dataset is required for benchmark evaluation")
     if a.classifier: print(train_classifier(a.output),flush=True)
     elif a.regression: print(evaluate_regression(a.model,a.adapter,a.output),flush=True)
-    else: print(evaluate(a.model,a.adapter,a.output,a.subset),flush=True)
+    else: print(evaluate(a.model,a.adapter,a.output,a.subset,a.dataset),flush=True)
+
+
+if __name__=="__main__":
+    main()

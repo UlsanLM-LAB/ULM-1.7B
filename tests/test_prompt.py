@@ -160,3 +160,15 @@ def test_dialect_instruction_rejects_invalid_levels(strength) -> None:
 
     with pytest.raises(ValueError):
         build_dialect_instruction(strength)
+
+
+@pytest.mark.parametrize("strength", [None, 0, 1, 2, 3])
+def test_single_input_uses_same_style_priority_as_chat(strength):
+    from ulm.inference.prompt import build_chat_messages
+
+    assert build_inference_messages("  표준어로 말해  ", dialect_strength=strength) == (
+        build_chat_messages(
+            [{"role": "user", "content": "표준어로 말해"}],
+            dialect_strength=2 if strength is None else strength,
+        )
+    )

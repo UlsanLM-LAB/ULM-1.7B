@@ -6,6 +6,7 @@ import argparse
 from pathlib import Path
 from typing import Any
 
+from .adapters import validate_adapter_path
 from .policy import (
     DEFAULT_MAX_NEW_TOKENS,
     DEFAULT_TEMPERATURE,
@@ -14,7 +15,7 @@ from .policy import (
 from .policy import (
     generation_kwargs as phase4_generation_kwargs,
 )
-from .prompt import _STRENGTH_GUIDANCE, PHASE4_SYSTEM_PROMPT
+from .prompt import build_chat_messages
 
 
 def run_chat(
@@ -28,6 +29,10 @@ def run_chat(
     enable_tts: bool = False,
     tts_output: str | Path = "outputs/tts/chat_reply.wav",
 ) -> None:
+    validate_adapter_path(adapter_path)
+    strength = 2 if dialect_strength is None else dialect_strength
+    # Validate the style before loading model weights.
+    build_chat_messages([], dialect_strength=strength)
     try:
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -52,7 +57,7 @@ def run_chat(
         model_kwargs["torch_dtype"] = "auto"
 
     model = AutoModelForCausalLM.from_pretrained(model_name, **model_kwargs)
-    if adapter_path:
+    if adapter_path is not None:
         from peft import PeftModel
 
         model = PeftModel.from_pretrained(model, str(adapter_path))
@@ -70,20 +75,12 @@ def run_chat(
         except Exception as e:
             print(f"[경고] TTS 로드 실패: {e}")
 
-    guidance = _STRENGTH_GUIDANCE.get(dialect_strength) if dialect_strength is not None else None
-    system_prompt = (
-        PHASE4_SYSTEM_PROMPT
-        if guidance is None
-        else "울산 지역어 대화 assistant로서 자연스럽고 일상적인 울산 사투리로 "
-        f"상대방과 친근하게 대화한다. {guidance}"
-    )
-
-    history: list[dict[str, str]] = [{"role": "system", "content": system_prompt}]
+    history: list[dict[str, str]] = []
 
     print("=" * 60)
-    print("  ULM-1.7B 울산 사투리 대화 모드")
+    print("  ULM-4B v1.0 울산 사투리 대화 모드")
     print(f"  - 모델: {model_name} (adapter: {adapter_path or 'none'})")
-    print(f"  - 사투리 강도: {dialect_strength} ({guidance or 'Phase4 기본값'})")
+    print(f"  - 사투리 강도: {strength}")
     print("  - 종료하려면 'q', 'quit', 'exit'를 입력하거나 Ctrl+C를 누르세요.")
     print("=" * 60 + "\n")
 
@@ -101,6 +98,7 @@ def run_chat(
             break
 
         history.append({"role": "user", "content": user_input})
+        messages = build_chat_messages(history, dialect_strength=strength)
 
         template_kwargs: dict[str, Any] = {
             "tokenize": False,
@@ -108,10 +106,10 @@ def run_chat(
             "enable_thinking": False,
         }
         try:
-            prompt = tokenizer.apply_chat_template(history, **template_kwargs)
+            prompt = tokenizer.apply_chat_template(messages, **template_kwargs)
         except TypeError:
             template_kwargs.pop("enable_thinking", None)
-            prompt = tokenizer.apply_chat_template(history, **template_kwargs)
+            prompt = tokenizer.apply_chat_template(messages, **template_kwargs)
 
         inputs = tokenizer(prompt, return_tensors="pt")
         if hasattr(model, "device"):
@@ -135,8 +133,8 @@ def run_chat(
         history.append({"role": "assistant", "content": reply})
 
         # Keep history from growing too long (sliding window)
-        if len(history) > 21:
-            history = [history[0]] + history[-20:]
+        if len(history) > 20:
+            history = history[-20:]
 
         if tts_pipeline:
             try:
@@ -171,10 +169,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    adapter = args.adapter if (args.adapter and Path(str(args.adapter)).exists()) else None
+    try:
+        validate_adapter_path(args.adapter)
+    except ValueError as exc:
+        parser.error(str(exc))
     run_chat(
         model_name=args.model_name,
-        adapter_path=adapter,
+        adapter_path=args.adapter,
         dialect_strength=args.dialect_strength,
         load_in_4bit=args.load_in_4bit,
         temperature=args.temperature,

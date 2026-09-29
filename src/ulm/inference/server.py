@@ -70,11 +70,17 @@ class GenerationEnd:
     reason: Literal["stop", "length"]
 
 
+class InvalidChatRequest(ValueError):
+    """An input error that must be reported before response headers are sent."""
+
+
 class ChatEngine(Protocol):
     model_path: str
     device: str
     dtype: str
     loaded: bool
+
+    def validate_request(self, request: ChatCompletionRequest) -> None: ...
 
     async def stream_chat(
         self,
@@ -139,7 +145,7 @@ class TransformersChatEngine:
             system_prompt=request.system_prompt or DEFAULT_SYSTEM_PROMPT,
         )
 
-    def _prepare_generation(self, request: ChatCompletionRequest, streamer: Any) -> dict[str, Any]:
+    def _encode_request(self, request: ChatCompletionRequest) -> dict[str, Any]:
         messages = self._messages_for_template(request)
         template_kwargs: dict[str, Any] = {
             "tokenize": False,
@@ -155,9 +161,20 @@ class TransformersChatEngine:
 
         encoded = self.tokenizer(prompt, return_tensors="pt")
         context_limit = int(getattr(self.model.config, "max_position_embeddings", 32768))
-        max_input_tokens = max(1, context_limit - request.max_tokens)
-        if encoded["input_ids"].shape[-1] > max_input_tokens:
-            raise ValueError("Chat history exceeds the model context window")
+        input_tokens = encoded["input_ids"].shape[-1]
+        if input_tokens + request.max_tokens > context_limit:
+            raise InvalidChatRequest(
+                f"Chat history ({input_tokens} tokens) plus requested output "
+                f"({request.max_tokens} tokens) exceeds the model context window "
+                f"({context_limit} tokens)"
+            )
+        return encoded
+
+    def validate_request(self, request: ChatCompletionRequest) -> None:
+        self._encode_request(request)
+
+    def _prepare_generation(self, request: ChatCompletionRequest, streamer: Any) -> dict[str, Any]:
+        encoded = self._encode_request(request)
         encoded = {key: value.to(self._input_device) for key, value in encoded.items()}
 
         generation_kwargs: dict[str, Any] = {
@@ -207,6 +224,7 @@ class TransformersChatEngine:
 
             thread = threading.Thread(target=run_generation, name="ulm-generation", daemon=True)
             thread.start()
+            generation_finished = asyncio.create_task(asyncio.to_thread(thread.join))
 
             try:
                 iterator = iter(streamer)
@@ -228,8 +246,7 @@ class TransformersChatEngine:
                         continue
                     break
 
-                if not stop_event.is_set():
-                    await asyncio.to_thread(thread.join, 2.0)
+                await asyncio.shield(generation_finished)
                 if generation_errors:
                     raise RuntimeError("모델 응답 생성에 실패했습니다.") from generation_errors[0]
                 if not generation_outputs and not stop_event.is_set():
@@ -241,7 +258,21 @@ class TransformersChatEngine:
                     yield GenerationEnd("stop" if last_id in eos_ids else "length")
             finally:
                 stop_event.set()
-                await asyncio.to_thread(thread.join, 2.0)
+                # Stopping criteria cannot interrupt an in-flight model forward. Retain
+                # ownership until the worker exits, including repeated request cancellation.
+                await _wait_for_generation(generation_finished)
+
+
+async def _wait_for_generation(generation_finished: asyncio.Task[None]) -> None:
+    cancelled = False
+    while not generation_finished.done():
+        try:
+            await asyncio.shield(generation_finished)
+        except asyncio.CancelledError:
+            cancelled = True
+    generation_finished.result()
+    if cancelled:
+        raise asyncio.CancelledError
 
 
 def _next_stream_item(iterator: Any) -> tuple[str, str]:
@@ -314,6 +345,19 @@ def create_app(
     ) -> Response:
         active_engine: ChatEngine = app.state.engine
         completion_id = _completion_id()
+
+        try:
+            await asyncio.to_thread(active_engine.validate_request, chat_request)
+        except InvalidChatRequest as exc:
+            return JSONResponse(
+                status_code=400,
+                content={"error": {"message": str(exc), "type": "invalid_request_error"}},
+            )
+        except Exception as exc:
+            return JSONResponse(
+                status_code=500,
+                content={"error": {"message": str(exc), "type": "generation_error"}},
+            )
 
         if not chat_request.stream:
             try:

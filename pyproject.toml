@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ulm-1-7b"
-version = "0.1.0"
+version = "1.0.0"
 description = "Ulsan Language Model research pipeline"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -59,7 +59,7 @@ ulm-pipeline-tts = "ulm.tts.pipeline:main"
 where = ["src"]
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+pythonpath = ["src", "."]
 testpaths = ["tests"]
 addopts = "-q"
 

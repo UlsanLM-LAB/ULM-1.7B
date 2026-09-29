@@ -172,7 +172,7 @@ def _restore_fp16_trainable_parameters(model: Any, bfloat16_dtype: Any) -> None:
 def _partition_embedded_splits(dataset: Any) -> dict[str, Any]:
     """한 JSONL에 들어 있는 split field를 DatasetDict처럼 분리한다."""
 
-    if "validation" in dataset or "test" in dataset:
+    if "train" not in dataset:
         return dict(dataset)
     train_dataset = dataset["train"]
     if "split" not in train_dataset.column_names:
@@ -186,22 +186,61 @@ def _partition_embedded_splits(dataset: Any) -> dict[str, Any]:
         )
     if len(split_values) == 0:
         return dict(dataset)
-    result: dict[str, Any] = {}
+    result: dict[str, Any] = {key: value for key, value in dataset.items() if key != "train"}
     for split in ("train", "validation", "test"):
         subset = split_values.filter(lambda row, expected=split: row.get("split") == expected)
-        if len(subset) > 0:
+        if len(subset) > 0 and split not in result:
             result[split] = subset
     return result
 
 
+def _assert_disjoint_splits(dataset: Mapping[str, Any]) -> None:
+    """Reject canonical IDs or speakers shared across training/evaluation splits."""
+    for field in ("id", "speaker_id"):
+        seen: dict[str, str] = {}
+        for split, rows in dataset.items():
+            if field not in rows.column_names:
+                continue
+            for value in rows[field]:
+                if not isinstance(value, str) or not value.strip():
+                    continue
+                previous = seen.get(value)
+                if previous is not None and previous != split:
+                    raise ValueError(f"{field} leakage: {value!r} in {previous} and {split}")
+                seen[value] = split
+
+
 def _load_dataset(load_dataset: Any, config: TrainingConfig) -> dict[str, Any]:
     data_files = _dataset_files(Path(config.dataset_path))
+    dataset = _partition_embedded_splits(load_dataset("json", data_files=data_files))
     if config.eval_dataset_path:
         evaluation_files = _dataset_files(Path(config.eval_dataset_path))
-        data_files["validation"] = evaluation_files.get("validation", evaluation_files["train"])
-    dataset = _partition_embedded_splits(load_dataset("json", data_files=data_files))
+        if "validation" in evaluation_files:
+            evaluation_path = evaluation_files["validation"]
+        elif "train" in evaluation_files:
+            evaluation_path = evaluation_files["train"]
+        else:
+            raise ValueError("evaluation dataset에는 validation 또는 train 파일이 필요합니다")
+        evaluation = _partition_embedded_splits(
+            load_dataset("json", data_files={"train": evaluation_path})
+        )
+        if "validation" in evaluation:
+            dataset["validation"] = evaluation["validation"]
+        elif "train" in evaluation:
+            if any(
+                Path(evaluation_path).samefile(path)
+                for split, path in data_files.items()
+                if split in {"train", "test"}
+            ):
+                raise ValueError("evaluation 파일은 train/test 파일을 그대로 재사용할 수 없습니다")
+            dataset["validation"] = evaluation["train"]
+        else:
+            raise ValueError("evaluation dataset에는 비어 있지 않은 validation 데이터가 필요합니다")
+        if len(dataset["validation"]) == 0:
+            raise ValueError("evaluation dataset에는 비어 있지 않은 validation 데이터가 필요합니다")
     if "train" not in dataset or len(dataset["train"]) == 0:
         raise ValueError("training dataset에는 비어 있지 않은 train split이 필요합니다")
+    _assert_disjoint_splits(dataset)
     return dataset
 
 
