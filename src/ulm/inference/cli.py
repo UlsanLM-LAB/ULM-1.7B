@@ -6,6 +6,7 @@ import argparse
 from pathlib import Path
 from typing import Any
 
+from .adapters import validate_adapter_path
 from .policy import (
     DEFAULT_MAX_NEW_TOKENS,
     DEFAULT_TEMPERATURE,
@@ -87,7 +88,7 @@ def build_parser() -> argparse.ArgumentParser:
         description="학습된 ULM model 또는 adapter로 local inference를 실행합니다."
     )
     parser.add_argument("--model-name", required=True, help="base model ID 또는 local path")
-    parser.add_argument("--adapter", type=Path, help="선택적 PEFT adapter directory")
+    parser.add_argument("--adapter", help="선택적 PEFT adapter directory")
     parser.add_argument("--text", help="입력 text")
     parser.add_argument(
         "--text-file", type=Path, help="입력 text file; --text와 함께 사용할 수 없음"
@@ -110,7 +111,12 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = build_parser().parse_args(argv)
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    try:
+        validate_adapter_path(args.adapter)
+    except ValueError as exc:
+        parser.error(str(exc))
     if bool(args.text) == bool(args.text_file):
         raise ValueError("--text 또는 --text-file 중 정확히 하나를 지정해야 합니다")
     text = args.text if args.text is not None else args.text_file.read_text(encoding="utf-8")

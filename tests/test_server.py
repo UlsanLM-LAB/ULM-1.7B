@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+import asyncio
+import queue
+import threading
 from collections.abc import AsyncIterator
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -16,6 +20,7 @@ from ulm.inference.prompt import PHASE4_SYSTEM_PROMPT, build_dialect_instruction
 from ulm.inference.server import (
     ChatCompletionRequest,
     GenerationEnd,
+    InvalidChatRequest,
     TransformersChatEngine,
     create_app,
 )
@@ -37,6 +42,9 @@ class FakeEngine:
         self.fail = fail
         self.finish_reason = finish_reason
         self.requests: list[ChatCompletionRequest] = []
+
+    def validate_request(self, request: ChatCompletionRequest) -> None:
+        pass
 
     async def stream_chat(
         self, request: ChatCompletionRequest, is_disconnected: Any
@@ -298,3 +306,173 @@ def test_invalid_dialect_strength_rejected_before_generation(endpoint, strength)
         })
     assert response.status_code == 422
     assert engine.requests == []
+
+
+class CpuTokenizer:
+    eos_token_id = 9
+
+    def __init__(self, input_tokens=5):
+        self.input_tokens = input_tokens
+
+    def apply_chat_template(self, messages, **kwargs):
+        return "formatted prompt"
+
+    def __call__(self, prompt, return_tensors):
+        return {"input_ids": torch.ones((1, self.input_tokens), dtype=torch.long)}
+
+
+class CpuModel:
+    config = SimpleNamespace(max_position_embeddings=8)
+    generation_config = SimpleNamespace(eos_token_id=9)
+
+    def get_input_embeddings(self):
+        return SimpleNamespace(weight=torch.zeros(1))
+
+
+@pytest.mark.parametrize("stream", [False, True])
+@pytest.mark.parametrize("endpoint", ["/api/chat", "/v1/chat/completions"])
+@pytest.mark.parametrize("input_tokens, max_tokens", [(5, 4), (1, 9)])
+def test_context_overflow_is_rejected_before_headers(endpoint, stream, input_tokens, max_tokens):
+    model = CpuModel()
+    model.generate = lambda **kwargs: pytest.fail("invalid request must not generate")
+    engine = TransformersChatEngine("cpu-stub", CpuTokenizer(input_tokens), model, torch)
+    with TestClient(create_app(engine=engine)) as client:
+        response = client.post(endpoint, json={
+            "messages": [{"role": "user", "content": "안녕"}],
+            "max_tokens": max_tokens,
+            "stream": stream,
+        })
+    assert response.status_code == 400
+    assert response.headers["content-type"] == "application/json"
+    assert response.json()["error"]["type"] == "invalid_request_error"
+    assert "context window" in response.json()["error"]["message"]
+
+
+def test_context_budget_accepts_exact_limit_and_rejects_extra_token():
+    engine = TransformersChatEngine("cpu-stub", CpuTokenizer(), CpuModel(), torch)
+    request = ChatCompletionRequest(messages=[{"role": "user", "content": "안녕"}], max_tokens=3)
+    engine.validate_request(request)
+    assert engine._prepare_generation(request, None)["max_new_tokens"] == 3
+    request.max_tokens = 4
+    with pytest.raises(InvalidChatRequest):
+        engine._prepare_generation(request, None)
+
+
+@pytest.mark.parametrize("cancel_request, stream_done_before_exit", [
+    (False, False), (True, False), (True, True),
+])
+def test_generation_lock_is_held_until_worker_exits(
+    monkeypatch, cancel_request, stream_done_before_exit
+):
+    """A release barrier represents an uninterruptible model forward, without sleep timing."""
+    import transformers
+
+    class Streamer:
+        def __init__(self, *args, **kwargs):
+            self.queue = queue.Queue()
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            item = self.queue.get(timeout=0.01)
+            if item is None:
+                raise StopIteration
+            return item
+
+        def on_finalized_text(self, text, stream_end=False):
+            if stream_end:
+                self.queue.put(None)
+
+    monkeypatch.setattr(transformers, "TextIteratorStreamer", Streamer)
+
+    async def scenario():
+        loop = asyncio.get_running_loop()
+        first_entered = asyncio.Event()
+        disconnect_checked = asyncio.Event()
+        second_started = asyncio.Event()
+        join_waiting = asyncio.Event()
+        release_first = threading.Event()
+        active = 0
+        calls = 0
+        maximum_active = 0
+        stop_checks = []
+        original_shield = asyncio.shield
+
+        def record_join_wait(future):
+            join_waiting.set()
+            return original_shield(future)
+
+        monkeypatch.setattr(asyncio, "shield", record_join_wait)
+
+        class Model(CpuModel):
+            def generate(self, **kwargs):
+                nonlocal active, calls, maximum_active
+                calls += 1
+                active += 1
+                maximum_active = max(maximum_active, active)
+                stop_checks.append(kwargs["stopping_criteria"][0])
+                try:
+                    if calls == 1:
+                        if stream_done_before_exit:
+                            kwargs["streamer"].on_finalized_text("", stream_end=True)
+                        loop.call_soon_threadsafe(first_entered.set)
+                        if not release_first.wait(timeout=5):
+                            raise RuntimeError("test did not release generation barrier")
+                    kwargs["streamer"].on_finalized_text("", stream_end=True)
+                    return torch.tensor([[1, 9]])
+                finally:
+                    active -= 1
+
+        engine = TransformersChatEngine("cpu-stub", CpuTokenizer(1), Model(), torch)
+        request = ChatCompletionRequest(
+            messages=[{"role": "user", "content": "안녕"}], max_tokens=1
+        )
+
+        async def disconnected():
+            disconnect_checked.set()
+            return not cancel_request
+
+        async def connected():
+            return False
+
+        async def consume(check, started=None):
+            if started is not None:
+                started.set()
+            return [part async for part in engine.stream_chat(request, check)]
+
+        first = asyncio.create_task(consume(disconnected))
+        second = None
+        try:
+            await asyncio.wait_for(first_entered.wait(), timeout=3)
+            await asyncio.wait_for(disconnect_checked.wait(), timeout=3)
+            if stream_done_before_exit:
+                await asyncio.wait_for(join_waiting.wait(), timeout=3)
+            if cancel_request:
+                first.cancel()
+                await asyncio.sleep(0)
+                first.cancel()  # cancel again while its cleanup is awaiting the worker
+                await asyncio.sleep(0)
+            second = asyncio.create_task(consume(connected, second_started))
+            await second_started.wait()
+            assert engine._generation_lock.locked()
+            assert active == 1
+            assert calls == 1
+            assert not first.done()
+            assert not second.done()
+            assert stop_checks[0](None, None)  # cancellation/disconnect requests a stop immediately
+            release_first.set()
+            if cancel_request:
+                with pytest.raises(asyncio.CancelledError):
+                    await asyncio.wait_for(first, timeout=3)
+            else:
+                assert await asyncio.wait_for(first, timeout=3) == []
+            assert await asyncio.wait_for(second, timeout=3) == [GenerationEnd("stop")]
+            assert maximum_active == 1
+            assert active == 0
+            assert not engine._generation_lock.locked()
+        finally:
+            release_first.set()
+            await asyncio.gather(first, *([second] if second else []), return_exceptions=True)
+
+    asyncio.run(scenario())

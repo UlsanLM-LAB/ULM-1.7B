@@ -73,6 +73,8 @@ For this supplementary ablation, ULM-4B repetition controls are applied only to 
 
 ## 4. Runtime & Computational Efficiency
 
+**2026-09-29 verification note:** Historical `total_tokens_generated` and throughput below counted padding after EOS and may be overstated. Values are retained as research records and are not validated v1.0 throughput claims. Corrected Arm B results are recorded separately in [v1.0 Stable Release](ULM_4B_V1_0_STABLE_RELEASE.md). Other models have not had throughput rerun for this release. `Avg Latency / Item` divides batch wall time by item count; it is not single-request latency or TTFT. Semantic/dialectness rubric and historical quality scores are unchanged.
+
 Measured on NVIDIA L40S 46GB (`g6e.xlarge`), batch size 16 in bfloat16:
 
 | Model | Total Inference Time (500 items) | Avg Latency / Item | Generation Throughput | Peak VRAM |

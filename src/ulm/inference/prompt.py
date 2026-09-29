@@ -65,12 +65,6 @@ def build_inference_messages(
     if not isinstance(text, str) or not text.strip():
         raise ValueError("입력 text는 비어 있을 수 없습니다")
     strength = 2 if dialect_strength is None else dialect_strength
-    if type(strength) is not int or strength not in range(4):
-        raise ValueError("dialect_strength는 0~3이어야 합니다")
-    return [
-        {
-            "role": "system",
-            "content": PHASE4_SYSTEM_PROMPT + " " + _STRENGTH_GUIDANCE[strength],
-        },
-        {"role": "user", "content": text.strip()},
-    ]
+    return build_chat_messages(
+        [{"role": "user", "content": text.strip()}], dialect_strength=strength
+    )

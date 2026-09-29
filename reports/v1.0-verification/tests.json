@@ -1,0 +1,38 @@
+{
+  "cpu_offline": {
+    "result": "passed",
+    "passed": 230,
+    "warnings": 3,
+    "duration_seconds": 10.1,
+    "environment": {
+      "HF_HUB_OFFLINE": "1",
+      "TRANSFORMERS_OFFLINE": "1",
+      "HF_DATASETS_OFFLINE": "1",
+      "CUDA_VISIBLE_DEVICES": "-1"
+    },
+    "command": ".venv/bin/python scripts/check_project.py",
+    "log_sha256": "59f2ef85bda810f42f0656fb72c82eda5131c14f3ed5c7ab2c4532f61517ac14"
+  },
+  "focused": {
+    "result": "passed",
+    "passed": 148,
+    "warnings": 2,
+    "duration_seconds": 5.19,
+    "test_files": [
+      "test_training_data.py",
+      "test_server.py",
+      "test_chat.py",
+      "test_prompt.py",
+      "test_model_comparison.py",
+      "test_release_config.py"
+    ],
+    "log_sha256": "5b156e4d137bcac77ababd8e55e73ca999e2426d0d2b28369fb306ed7e323c90"
+  },
+  "lint": "ruff check src and changed runners/new tests passed",
+  "lock": "uv lock --offline --check passed",
+  "diff": "git diff --check passed",
+  "historical_config_and_benchmark_json": "unchanged byte-for-byte",
+  "scoring_rubric": "AST-identical to baseline main; final evaluator CLI accepts explicit model and dataset",
+  "actual_model_smoke": "16 HTTP requests passed using final server/prompt/policy source",
+  "gpu_verification_source_note": "benchmark_runtime.json retains hashes of the actual GPU source; afterward only the standalone evaluator CLI/input plumbing changed, while scorer and benchmark generation functions remained AST-identical."
+}

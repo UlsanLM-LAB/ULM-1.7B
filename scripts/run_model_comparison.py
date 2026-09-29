@@ -1,64 +1,64 @@
-"""Universal benchmark runner for UlsanBench v2 model comparison.
-
-Runs evaluation on the 500-item UlsanBench v2 dataset with deterministic decoding,
-official model chat templates, runtime benchmarking (VRAM, latency, tokens/sec),
-and unchanged metric rubrics.
-"""
+"""Run UlsanBench comparison with explicit inputs and recorded execution provenance."""
 
 from __future__ import annotations
 
 import argparse
-import json
-import os
-import re
+import shutil
 import sys
 import time
-from collections import defaultdict
 from pathlib import Path
 
 import torch
-import torch.nn.functional as F
 from peft import PeftModel
-from transformers import AutoModel, AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
-# Adjust path so evaluate_ulsanbench_v2 can be imported
-SCRIPT_DIR = Path(__file__).resolve().parent
-ROOT = SCRIPT_DIR.parent
-if str(SCRIPT_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPT_DIR))
+ROOT = Path(__file__).resolve().parents[1]
+for directory in (ROOT / "src", ROOT / "scripts"):
+    if str(directory) not in sys.path:
+        sys.path.insert(0, str(directory))
 
-from evaluate_ulsanbench_v2 import (
-    CLASSES,
-    MARKERS,
-    REPETITION,
-    SYSTEM,
-    Embedder,
-    jsonl,
-    save,
-    score_rows,
+from evaluate_ulsanbench_v2 import SYSTEM, Embedder, save, score_rows  # noqa: E402
+from ulm.evaluation.comparison import (  # noqa: E402
+    DECODING_MODES,
+    DTYPES,
+    TASKS,
+    build_request,
+    hardware_info,
+    load_benchmark,
+    utc_timestamp,
+    validate_name,
 )
 
 
 def format_chat_prompt(tokenizer: AutoTokenizer, prompt_text: str) -> str:
     """Format prompt with the official model chat template."""
-    messages = [
-        {"role": "system", "content": SYSTEM},
-        {"role": "user", "content": prompt_text},
-    ]
+    messages = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": prompt_text}]
     try:
         return tokenizer.apply_chat_template(
             messages, tokenize=False, add_generation_prompt=True, enable_thinking=False
         )
     except TypeError:
-        return tokenizer.apply_chat_template(
-            messages, tokenize=False, add_generation_prompt=True
-        )
+        return tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
 
 def clean_output(raw_text: str) -> str:
-    """Strip special tokens and thinking traces."""
-    cleaned = raw_text.split("</think>")[-1].strip()
-    return cleaned
+    return raw_text.split("</think>")[-1].strip()
+
+
+def generated_token_count(tokens, eos_token_id) -> int:
+    """Count through the first EOS (inclusive), excluding subsequent batch padding."""
+    ids = tokens.tolist() if hasattr(tokens, "tolist") else list(tokens)
+    eos_ids = set(eos_token_id if isinstance(eos_token_id, (list, tuple)) else [eos_token_id])
+    for index, token_id in enumerate(ids):
+        if token_id in eos_ids:
+            return index + 1
+    return len(ids)
+
+
+def _revision_kwargs(identity: dict | None) -> dict:
+    if identity and identity["kind"] == "hub":
+        return {"revision": identity["resolved_commit"]}
+    return {}
 
 
 @torch.inference_mode()
@@ -70,187 +70,190 @@ def run_model_inference(
     dtype: torch.dtype = torch.bfloat16,
     batch_size: int = 8,
     decoding_mode: str = "neutral",
+    assets: dict | None = None,
 ) -> tuple[list[str], dict]:
-    """Execute batch inference and measure runtime statistics."""
-    print(f"Loading tokenizer for: {model_name_or_path} ...", flush=True)
-    tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, trust_remote_code=True)
+    """Generate deterministically; throughput counts generated tokens, including EOS."""
+    if batch_size < 1 or decoding_mode not in DECODING_MODES:
+        raise ValueError("Invalid batch size or decoding mode")
+    if any(row.get("task") not in TASKS for row in rows):
+        raise ValueError("Unsupported UlsanBench task")
+    assets = assets or {}
+    model_source = assets.get("model", {}).get("path", model_name_or_path)
+    adapter_source = (assets.get("adapter") or {}).get("path", adapter_path)
+    is_cuda = torch.device(device).type == "cuda"
+    if is_cuda and not torch.cuda.is_available():
+        raise ValueError(f"CUDA is unavailable; choose --device cpu instead of {device}")
+    print(f"Loading tokenizer/model: {model_name_or_path} (adapter={adapter_path})", flush=True)
+    t0_load = time.perf_counter()
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_source, trust_remote_code=True, **_revision_kwargs(assets.get("model"))
+    )
     tokenizer.padding_side = "left"
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token or tokenizer.bos_token
-
-    print(f"Loading model: {model_name_or_path} (adapter={adapter_path}) ...", flush=True)
-    torch.cuda.empty_cache()
-    torch.cuda.reset_peak_memory_stats(device)
-    t0_load = time.time()
-
+    if tokenizer.pad_token_id is None:
+        raise ValueError("Tokenizer has no pad, EOS or BOS token for batched generation")
+    if is_cuda:
+        torch.cuda.empty_cache()
+        torch.cuda.reset_peak_memory_stats(device)
     model = AutoModelForCausalLM.from_pretrained(
-        model_name_or_path,
+        model_source,
         dtype=dtype,
         device_map=device,
         attn_implementation="sdpa",
         trust_remote_code=True,
+        **_revision_kwargs(assets.get("model")),
     ).eval()
-
     if adapter_path:
-        print(f"Attaching PEFT adapter: {adapter_path} ...", flush=True)
-        model = PeftModel.from_pretrained(model, adapter_path).eval()
-
-    load_time = time.time() - t0_load
-    print(f"Model loaded in {load_time:.2f}s", flush=True)
-
+        model = PeftModel.from_pretrained(
+            model, adapter_source, **_revision_kwargs(assets.get("adapter"))
+        ).eval()
+    eos = tokenizer.eos_token_id
+    if eos is None:
+        eos = model.generation_config.eos_token_id
+    if is_cuda:
+        torch.cuda.synchronize(device)
+    load_time = time.perf_counter() - t0_load
     outputs = [None] * len(rows)
     total_tokens_generated = 0
-    t0_gen = time.time()
-    task_order = ("comprehension", "generation", "identification", "grammar", "context")
-
-    for task in task_order:
-        indices = [i for i, r in enumerate(rows) if r["task"] == task]
-        if not indices:
-            continue
-        limit = 16 if task == "identification" else 96
-
-        extra = {}
-        if decoding_mode == "context_guard" and task == "context":
-            extra = {"repetition_penalty": 1.10, "no_repeat_ngram_size": 3}
-
-        for start in range(0, len(indices), batch_size):
-            batch_idx = indices[start : start + batch_size]
-            prompt_texts = [
-                format_chat_prompt(tokenizer, rows[i]["prompt"]) for i in batch_idx
-            ]
-            enc = tokenizer(
-                prompt_texts,
-                padding=True,
-                truncation=True,
-                max_length=1024,
-                return_tensors="pt",
-            ).to(device)
-
-            gen = model.generate(
-                **enc,
-                max_new_tokens=limit,
-                do_sample=False,
-                temperature=0.0,
-                pad_token_id=tokenizer.pad_token_id,
-                eos_token_id=tokenizer.eos_token_id,
-                **extra,
+    t0_gen = time.perf_counter()
+    try:
+        for task in TASKS:
+            indices = [i for i, row in enumerate(rows) if row["task"] == task]
+            limit = 16 if task == "identification" else 96
+            extra = (
+                {"repetition_penalty": 1.10, "no_repeat_ngram_size": 3}
+                if decoding_mode == "context_guard" and task == "context"
+                else {}
             )
-
-            prompt_len = enc.input_ids.shape[1]
-            for i, seq in zip(batch_idx, gen):
-                new_tokens = seq[prompt_len:]
-                total_tokens_generated += len(new_tokens)
-                raw = tokenizer.decode(new_tokens, skip_special_tokens=True).strip()
-                outputs[i] = clean_output(raw)
-
-        print(f"Evaluated task '{task}': {len(indices)} items", flush=True)
-
-    total_gen_time = time.time() - t0_gen
-    peak_vram = torch.cuda.max_memory_allocated(device) / (1024**3)
-
-    runtime_stats = {
-        "load_time_seconds": round(load_time, 2),
-        "total_inference_time_seconds": round(total_gen_time, 2),
-        "avg_latency_ms_per_item": round((total_gen_time / max(1, len(rows))) * 1000, 2),
-        "total_tokens_generated": total_tokens_generated,
-        "tokens_per_second": round(total_tokens_generated / max(0.01, total_gen_time), 2),
-        "peak_vram_gib": round(peak_vram, 2),
-        "decoding_mode": decoding_mode,
-        "batch_size": batch_size,
-    }
-
-    del model
-    del tokenizer
-    torch.cuda.empty_cache()
-    return outputs, runtime_stats
+            for start in range(0, len(indices), batch_size):
+                batch_idx = indices[start : start + batch_size]
+                prompts = [format_chat_prompt(tokenizer, rows[i]["prompt"]) for i in batch_idx]
+                enc = tokenizer(
+                    prompts, padding=True, truncation=True, max_length=1024, return_tensors="pt"
+                ).to(device)
+                gen = model.generate(
+                    **enc,
+                    max_new_tokens=limit,
+                    do_sample=False,
+                    pad_token_id=tokenizer.pad_token_id,
+                    eos_token_id=eos,
+                    **extra,
+                )
+                if len(gen) != len(batch_idx):
+                    raise RuntimeError("Model returned a different number of generated sequences")
+                for i, seq in zip(batch_idx, gen, strict=True):
+                    new_tokens = seq[enc.input_ids.shape[1] :]
+                    count = generated_token_count(new_tokens, eos)
+                    total_tokens_generated += count
+                    outputs[i] = clean_output(
+                        tokenizer.decode(new_tokens[:count], skip_special_tokens=True)
+                    )
+            if indices:
+                print(f"Evaluated task '{task}': {len(indices)} items", flush=True)
+        if is_cuda:
+            torch.cuda.synchronize(device)
+        elapsed = time.perf_counter() - t0_gen
+        runtime = {
+            "load_time_seconds": round(load_time, 2),
+            "total_inference_time_seconds": round(elapsed, 2),
+            "avg_latency_ms_per_item": round(elapsed / max(1, len(rows)) * 1000, 2),
+            "latency_definition": "batch inference wall time divided by item count; not TTFT",
+            "total_tokens_generated": total_tokens_generated,
+            "token_count_definition": "first EOS inclusive; subsequent padding excluded",
+            "tokens_per_second": round(total_tokens_generated / max(0.01, elapsed), 2),
+            "peak_vram_gib": round(torch.cuda.max_memory_allocated(device) / 1024**3, 2)
+            if is_cuda
+            else None,
+            "decoding_mode": decoding_mode,
+            "batch_size": batch_size,
+            "device": device,
+            "dtype": str(dtype).removeprefix("torch."),
+        }
+        return outputs, runtime
+    finally:
+        del model, tokenizer
+        if is_cuda:
+            torch.cuda.empty_cache()
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Universal UlsanBench v2 model comparison runner")
+    parser = argparse.ArgumentParser(description="UlsanBench v2 model comparison")
     parser.add_argument("--model", required=True, help="Hugging Face model ID or local directory")
-    parser.add_argument("--adapter", default=None, help="PEFT adapter directory if any")
-    parser.add_argument("--name", required=True, help="Short identifier name for model")
-    parser.add_argument("--output-dir", required=True, help="Directory to store outputs and summaries")
-    parser.add_argument("--dataset", default=str(ROOT / "data/ulsanbench_v1/benchmark.jsonl"), help="Path to benchmark.jsonl")
-    parser.add_argument("--raw-dir", default=str(ROOT / "reports/model-comparison/raw"), help="Path to store raw prediction jsonl")
-    parser.add_argument("--device", default="cuda:0", help="CUDA device")
-    parser.add_argument("--dtype", default="bfloat16", choices=["bfloat16", "float16", "float32"], help="Model dtype")
-    parser.add_argument("--batch-size", type=int, default=8, help="Batch size for generation")
-    parser.add_argument("--decoding-mode", default="neutral", choices=["neutral", "context_guard"], help="neutral decoding or context-only repetition guard")
-    parser.add_argument("--subset", type=int, default=0, help="Subset size for smoke testing (0 = full benchmark)")
-
+    parser.add_argument("--adapter", help="PEFT adapter directory or Hugging Face ID")
+    parser.add_argument("--revision", help="Model revision; resolved to an immutable commit")
+    parser.add_argument("--adapter-revision", help="Adapter revision")
+    parser.add_argument("--name", required=True, help="Safe identifier for output filenames")
+    parser.add_argument("--output-dir", required=True)
+    parser.add_argument("--dataset", required=True, help="UlsanBench JSONL input")
+    parser.add_argument("--raw-dir", help="Defaults to <output-dir>/raw")
+    parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--dtype", default="bfloat16", choices=DTYPES)
+    parser.add_argument("--batch-size", type=int, default=8)
+    parser.add_argument("--decoding-mode", default="neutral", choices=DECODING_MODES)
+    parser.add_argument("--subset", type=int, default=0, help="0 = full; deterministic task sample")
     args = parser.parse_args()
-
-    torch_dtype = getattr(torch, args.dtype)
-    dataset_path = Path(args.dataset)
-    if not dataset_path.exists():
-        raise FileNotFoundError(f"Dataset not found at: {dataset_path}")
-
-    rows = jsonl(dataset_path)
-    if args.subset > 0:
-        # Balanced stratified sample across tasks
-        by_task = defaultdict(list)
-        for r in rows:
-            by_task[r["task"]].append(r)
-        sampled = []
-        for task, t_rows in by_task.items():
-            count = max(1, round(args.subset * len(t_rows) / len(rows)))
-            sampled.extend(t_rows[:count])
-        rows = sampled
-        print(f"Running subset of {len(rows)} items across tasks: {dict((t, sum(1 for r in rows if r['task']==t)) for t in by_task)}")
-    else:
-        print(f"Running full benchmark: {len(rows)} items")
-
+    try:
+        validate_name(args.name)
+        rows, dataset = load_benchmark(args.dataset, args.subset)
+        cfg = {
+            "id": args.name,
+            "model": args.model,
+            "adapter": args.adapter,
+            "revision": args.revision,
+            "adapter_revision": args.adapter_revision,
+            "decoding_mode": args.decoding_mode,
+        }
+        request = build_request(
+            ROOT,
+            cfg,
+            dataset,
+            device=args.device,
+            dtype=args.dtype,
+            batch_size=args.batch_size,
+            subset=args.subset,
+        )
+    except ValueError as exc:
+        parser.error(str(exc))
+    started_at = utc_timestamp()
+    hardware = hardware_info(args.device)
+    print(f"Running benchmark: {len(rows)} items", flush=True)
     outputs, runtime = run_model_inference(
-        model_name_or_path=args.model,
-        adapter_path=args.adapter,
-        rows=rows,
+        args.model,
+        args.adapter,
+        rows,
         device=args.device,
-        dtype=torch_dtype,
+        dtype=getattr(torch, args.dtype),
         batch_size=args.batch_size,
         decoding_mode=args.decoding_mode,
+        assets=request["assets"],
     )
-
     output_dir = Path(args.output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    raw_dir = Path(args.raw_dir)
-    raw_dir.mkdir(parents=True, exist_ok=True)
-
-    print("Scoring outputs using UlsanBench v2 evaluator ...", flush=True)
-    embedder = Embedder(device=args.device)
-    summary = score_rows(rows, outputs, output_dir, args.model, args.adapter, metric=embedder)
-
-    # Attach runtime info and identifier
+    raw_dir = Path(args.raw_dir) if args.raw_dir else output_dir / "raw"
+    print("Scoring outputs with unchanged UlsanBench v2 rubric", flush=True)
+    metric = Embedder(
+        device=args.device, revision=request["assets"]["encoder"].get("resolved_commit")
+    )
+    summary = score_rows(rows, outputs, output_dir, args.model, args.adapter, metric=metric)
     summary["display_name"] = args.name
     summary["runtime"] = runtime
+    summary["config"]["decoding_mode"] = args.decoding_mode
+    if args.decoding_mode == "context_guard":
+        summary["config"]["context_task_extra"] = {
+            "repetition_penalty": 1.10,
+            "no_repeat_ngram_size": 3,
+        }
+    summary["provenance"] = {
+        "version": 1,
+        "started_at": started_at,
+        "completed_at": utc_timestamp(),
+        "request": request,
+        "hardware": hardware,
+    }
     save(output_dir / "summary.json", summary)
-
-    # Copy predictions to raw_dir
-    pred_path = output_dir / "predictions.jsonl"
-    target_raw_path = raw_dir / f"{args.name}.jsonl"
-    if pred_path.exists():
-        target_raw_path.write_text(pred_path.read_text(encoding="utf-8"), encoding="utf-8")
-        print(f"Saved raw predictions to: {target_raw_path}", flush=True)
-
-    print("\n" + "=" * 60)
-    print(f"BENCHMARK RESULTS: {args.name}")
-    print(f"Model: {args.model} | Adapter: {args.adapter}")
-    print(f"Runtime: {runtime['total_inference_time_seconds']}s | Tok/s: {runtime['tokens_per_second']} | VRAM: {runtime['peak_vram_gib']} GiB")
-    print("-" * 60)
-    for task, m in summary["metrics"].items():
-        sem = m.get("semantic_similarity", 0.0)
-        dia = m.get("dialectness_proxy", 0.0)
-        acc = m.get("accuracy", 0.0)
-        rep = m.get("repetition_count", 0)
-        mal = m.get("malformed_count", 0)
-        line = f"  {task:<15}: sem={sem:.4f}"
-        if dia is not None and dia > 0:
-            line += f" | dialect={dia:.4f}"
-        if acc is not None and acc > 0:
-            line += f" | accuracy={acc:.4f}"
-        line += f" | rep={rep} | mal={mal}"
-        print(line)
-    print("=" * 60 + "\n")
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(output_dir / "predictions.jsonl", raw_dir / f"{args.name}.jsonl")
+    print(f"Saved summary: {output_dir / 'summary.json'}", flush=True)
 
 
 if __name__ == "__main__":

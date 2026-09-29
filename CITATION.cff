@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "Please cite ULM-4B v1.0 when using this software or its frozen Arm B release."
+title: "ULM-4B v1.0: Ulsan Dialect Small Language Model"
+type: software
+authors:
+  - name: "UlsanLM Lab"
+version: 1.0.0
+date-released: 2026-09-29
+url: "https://github.com/UlsanLM-LAB/ULM-1.7B"
+repository-code: "https://github.com/UlsanLM-LAB/ULM-1.7B"
+license: Apache-2.0
+abstract: >-
+  Stable code release using the existing frozen Arm B checkpoint, with no further
+  training. Model artifacts and external datasets are not included. Their
+  upstream terms apply separately. Update repository URLs after any rename.

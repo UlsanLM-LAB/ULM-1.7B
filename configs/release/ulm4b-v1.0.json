@@ -1,0 +1,99 @@
+{
+  "name": "ULM-4B v1.0",
+  "status": "stable-release",
+  "date": "2026-09-29",
+  "base_model": "Qwen3.8-4B-Distill",
+  "lineage": [
+    "Dialect Alignment v3",
+    "Context Repair v1 Arm B",
+    "Instruction Recovery v1 Arm B"
+  ],
+  "training": {
+    "method": "LoRA SFT",
+    "learning_rate": 6e-07,
+    "fraction": 0.25,
+    "steps": 35,
+    "completion_only_loss": true
+  },
+  "inference": {
+    "enable_thinking": false,
+    "repetition_penalty": 1.1,
+    "no_repeat_ngram_size": 3
+  },
+  "evaluation": {
+    "factual_qa_pct": 84.0,
+    "multi_turn_pct": 100.0,
+    "instruction_trap_pct": 65.0,
+    "generation_semantic": 0.9843,
+    "generation_dialectness": 0.6589,
+    "grammar_semantic": 0.9846,
+    "grammar_dialectness": 0.8955,
+    "context_semantic": 0.4578,
+    "context_repetition_count": 0,
+    "context_malformed_count": 0,
+    "identification_accuracy": 0.32
+  },
+  "version": "1.0.0",
+  "checkpoint_lineage_name": "Arm B",
+  "weights_frozen": true,
+  "further_training_planned": false,
+  "base_model_hub": "empero-ai/Qwen3.8-4B-Distill",
+  "base_model_revision": "c83cb7aa2999d2f35c43e9ae0634a30eb8985a1e",
+  "adapter": {
+    "lineage": "Instruction Recovery v1 Arm B",
+    "filename": "adapter_model.safetensors",
+    "sha256": "fee03f872aaff55283be0413536e20b0930334333a20c6ee01cad63f57f43716",
+    "distributed_in_git": false,
+    "peft_type": "LORA",
+    "r": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "config_sha256": "3bc2e2f3ebe622362c74693450f4b3305e354b5864147bf69d7901f1412c6e32"
+  },
+  "legacy_release_config": {
+    "path": "configs/release/ulm4b-arm-b.json",
+    "sha256": "2bc6d9fd5c1223b5b4fca9a7c1a84547dd47e21fdb7b3f47cd2341e3d6a2608f",
+    "snapshot_date": "2026-09-27"
+  },
+  "serving": {
+    "api_endpoints": [
+      "/v1/chat/completions",
+      "/api/chat"
+    ],
+    "default_dialect_strength": 2,
+    "api_dialect_strength": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "live_ui_dialect_strength": [
+      1,
+      2,
+      3
+    ],
+    "default_temperature": 0.7,
+    "default_top_p": 0.9,
+    "default_top_k": 20,
+    "default_max_new_tokens": 150,
+    "voice_repository": "https://github.com/UlsanLM-LAB/ULM-LIVE"
+  },
+  "benchmark_snapshot": {
+    "date": "2026-09-28",
+    "path": "reports/model-comparison/summary.json",
+    "sha256": "f6cee1ac8d749949826cfdc1ca1797acaa026be070a9cd475b5ff8aa7bcf898a",
+    "n": 500,
+    "historical_scores_preserved": true,
+    "historical_padding_inclusive_throughput_valid": false,
+    "note": "Release snapshot and neutral/context-only-guard comparison have different decoding conditions. Automated proxy, not human evaluation.",
+    "dataset_sha256": "dcb6df1da91287efd14f6c22b7ccaea162d493f90529ed1479ed834277343190"
+  },
+  "immutability": "v1.0.0 pins these assets and settings. A changed checkpoint requires a new version; rejected Arm B+ is research only.",
+  "licenses": {
+    "code": "Apache-2.0",
+    "upstream_model_card": "https://huggingface.co/empero-ai/Qwen3.8-4B-Distill",
+    "notice": "Base, datasets, encoder, TTS and derivative weights retain their respective upstream terms."
+  },
+  "base_model_safetensors_sha256": "e73742841e31c04332303abf6c0e730691f8d7a08ed0a9a55496f646d39d1f29",
+  "verification_report": "reports/ULM_4B_V1_0_STABLE_RELEASE.md"
+}

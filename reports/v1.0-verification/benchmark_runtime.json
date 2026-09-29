@@ -1,0 +1,127 @@
+{
+  "runs": {
+    "neutral": {
+      "started_at": "2026-09-28T23:49:24.285802+00:00",
+      "completed_at": "2026-09-28T23:50:56.961993+00:00",
+      "runtime": {
+        "load_time_seconds": 2.2,
+        "total_inference_time_seconds": 90.29,
+        "avg_latency_ms_per_item": 180.58,
+        "latency_definition": "batch inference wall time divided by item count; not TTFT",
+        "total_tokens_generated": 8271,
+        "token_count_definition": "first EOS inclusive; subsequent padding excluded",
+        "tokens_per_second": 91.61,
+        "peak_vram_gib": 17.17,
+        "decoding_mode": "neutral",
+        "batch_size": 16,
+        "device": "cuda:0",
+        "dtype": "bfloat16"
+      },
+      "old_padding_inclusive_count_on_this_run": 16184,
+      "padding_excluded": 7913,
+      "dataset": {
+        "path": "/home/ubuntu/ulm4b-benchmark-comparison/data/ulsanbench_v1/benchmark.jsonl",
+        "sha256": "dcb6df1da91287efd14f6c22b7ccaea162d493f90529ed1479ed834277343190",
+        "total_items": 500,
+        "task_counts": {
+          "comprehension": 100,
+          "generation": 150,
+          "identification": 100,
+          "grammar": 75,
+          "context": 75
+        },
+        "evaluated_items": 500,
+        "evaluated_task_counts": {
+          "comprehension": 100,
+          "generation": 150,
+          "identification": 100,
+          "grammar": 75,
+          "context": 75
+        }
+      },
+      "outputs_match_historical_raw": true,
+      "different_outputs": 0,
+      "historical_raw_found": true,
+      "outputs_sha256": "58537ab928ce6cd4d782c66bbfa11f28f0bc851ff67032e4ffe3f46e0e595d51",
+      "historical_scores_overwritten": false
+    },
+    "context_guard": {
+      "started_at": "2026-09-28T23:50:56.987110+00:00",
+      "completed_at": "2026-09-28T23:52:18.833897+00:00",
+      "runtime": {
+        "load_time_seconds": 2.19,
+        "total_inference_time_seconds": 79.47,
+        "avg_latency_ms_per_item": 158.95,
+        "latency_definition": "batch inference wall time divided by item count; not TTFT",
+        "total_tokens_generated": 8005,
+        "token_count_definition": "first EOS inclusive; subsequent padding excluded",
+        "tokens_per_second": 100.73,
+        "peak_vram_gib": 17.17,
+        "decoding_mode": "context_guard",
+        "batch_size": 16,
+        "device": "cuda:0",
+        "dtype": "bfloat16"
+      },
+      "old_padding_inclusive_count_on_this_run": 13913,
+      "padding_excluded": 5908,
+      "dataset": {
+        "path": "/home/ubuntu/ulm4b-benchmark-comparison/data/ulsanbench_v1/benchmark.jsonl",
+        "sha256": "dcb6df1da91287efd14f6c22b7ccaea162d493f90529ed1479ed834277343190",
+        "total_items": 500,
+        "task_counts": {
+          "comprehension": 100,
+          "generation": 150,
+          "identification": 100,
+          "grammar": 75,
+          "context": 75
+        },
+        "evaluated_items": 500,
+        "evaluated_task_counts": {
+          "comprehension": 100,
+          "generation": 150,
+          "identification": 100,
+          "grammar": 75,
+          "context": 75
+        }
+      },
+      "outputs_match_historical_raw": true,
+      "different_outputs": 0,
+      "historical_raw_found": true,
+      "outputs_sha256": "a35cc76a01c31780af3d4ae6a04601498ff1f7346fb6e2241164808ec2e5ea79",
+      "historical_scores_overwritten": false
+    }
+  },
+  "hardware": {
+    "platform": "Linux-6.8.0-1063-aws-x86_64-with-glibc2.35",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "device": "cuda:0",
+    "cuda_version": "13.0",
+    "gpu": {
+      "name": "NVIDIA L40S",
+      "total_memory_bytes": 47667740672,
+      "compute_capability": [
+        8,
+        9
+      ]
+    },
+    "driver_version": [
+      "595.91.07"
+    ]
+  },
+  "software": {
+    "python": "3.11.16",
+    "torch": "2.14.0",
+    "transformers": "5.17.0",
+    "peft": "0.20.0",
+    "huggingface-hub": "1.31.0"
+  },
+  "evaluator_sha256": {
+    "scripts/evaluate_ulsanbench_v2.py": "c6867836c3c770f49dfaa0ebd32d36d15b03e882e3222b327d5a2f45f6506742",
+    "scripts/run_model_comparison.py": "577ccec8600cdcd561ce4b3d2295f6a5720f8d20597d10d015e2c319a7a1fdce",
+    "scripts/run_all_comparisons.py": "3a8988f935a771ede08548713ba7b69b516e9b2655a42fa98934f526496f1f25",
+    "src/ulm/evaluation/comparison.py": "bee80a76e05fef153907c8a6753b1aa6f7a2505e5b4bbbf57ea44ae78aabfbca"
+  },
+  "adapter_model_sha256": "fee03f872aaff55283be0413536e20b0930334333a20c6ee01cad63f57f43716",
+  "note": "Separate verification. Original 2026-09-28 benchmark files and scores retained. New runtime is not a historical throughput correction for other models."
+}
