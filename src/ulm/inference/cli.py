@@ -76,6 +76,7 @@ def generate_text(
         temperature=temperature if do_sample else 0,
         top_p=top_p,
         eos_token_id=tokenizer.eos_token_id,
+        prompt_length=inputs["input_ids"].shape[-1],
     )
     with torch.inference_mode():
         output = model.generate(**inputs, **generation_kwargs)
