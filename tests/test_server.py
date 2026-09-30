@@ -207,8 +207,12 @@ def test_phase4_template_and_generation_settings() -> None:
     assert kwargs["max_new_tokens"] == DEFAULT_MAX_NEW_TOKENS == 150
     assert kwargs["attention_mask"].tolist() == [[1, 1, 1]]
     assert kwargs["pad_token_id"] == 151645
-    assert kwargs["repetition_penalty"] == REPETITION_PENALTY == 1.1
-    assert kwargs["no_repeat_ngram_size"] == NO_REPEAT_NGRAM_SIZE == 3
+    assert kwargs["repetition_penalty"] == 1.0
+    assert kwargs["no_repeat_ngram_size"] == 0
+    guard = kwargs["logits_processor"][0]
+    assert guard.prompt_length == kwargs["input_ids"].shape[-1]
+    assert guard.penalty.penalty == REPETITION_PENALTY == 1.1
+    assert guard.ngrams.ngram_size == NO_REPEAT_NGRAM_SIZE == 3
     assert kwargs["top_k"] == 20
     assert kwargs["do_sample"] is True
     assert "eos_token_id" not in kwargs  # preserve checkpoint EOS set
@@ -217,12 +221,14 @@ def test_phase4_template_and_generation_settings() -> None:
 def test_greedy_policy_keeps_repetition_penalty_and_eos_pad() -> None:
     from ulm.inference.policy import generation_kwargs
 
-    kwargs = generation_kwargs(temperature=0, eos_token_id=151645)
+    kwargs = generation_kwargs(temperature=0, eos_token_id=151645, prompt_length=3)
+    guard = kwargs.pop("logits_processor")[0]
+    assert guard.prompt_length == 3
     assert kwargs == {
         "max_new_tokens": 150,
         "do_sample": False,
-        "repetition_penalty": 1.1,
-        "no_repeat_ngram_size": 3,
+        "repetition_penalty": 1.0,
+        "no_repeat_ngram_size": 0,
         "pad_token_id": 151645,
     }
 
@@ -479,3 +485,39 @@ def test_generation_lock_is_held_until_worker_exits(
             await asyncio.gather(first, *([second] if second else []), return_exceptions=True)
 
     asyncio.run(scenario())
+
+
+def test_configured_api_key_rejects_missing_wrong_and_non_bearer_credentials(monkeypatch):
+    monkeypatch.setenv("ULM_API_KEY", "deployment-secret")
+    engine = FakeEngine()
+    with TestClient(create_app(engine=engine)) as client:
+        for headers in [
+            {},
+            {"Authorization": "Bearer wrong"},
+            {"Authorization": "Basic deployment-secret"},
+        ]:
+            response = client.post(
+                "/api/chat", headers=headers,
+                json={"messages": [{"role": "user", "content": "안녕"}], "stream": False},
+            )
+            assert response.status_code == 401
+            assert response.headers["www-authenticate"] == "Bearer"
+        assert engine.requests == []
+
+
+@pytest.mark.parametrize("stream", [False, True])
+@pytest.mark.parametrize("endpoint", ["/api/chat", "/v1/chat/completions"])
+def test_configured_api_key_allows_authenticated_transports(monkeypatch, stream, endpoint):
+    monkeypatch.setenv("ULM_API_KEY", "deployment-secret")
+    engine = FakeEngine()
+    with TestClient(create_app(engine=engine)) as client:
+        response = client.post(
+            endpoint, headers={"Authorization": "Bearer deployment-secret"},
+            json={"messages": [{"role": "user", "content": "안녕"}], "stream": stream},
+        )
+        assert response.status_code == 200
+        assert len(engine.requests) == 1
+        if stream:
+            assert "[DONE]" in response.text
+        else:
+            assert response.json()["choices"][0]["message"]["content"] == "반갑데이!"

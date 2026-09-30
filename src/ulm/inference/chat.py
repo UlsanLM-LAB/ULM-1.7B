@@ -123,6 +123,7 @@ def run_chat(
                     temperature=temperature,
                     top_p=DEFAULT_TOP_P,
                     eos_token_id=tokenizer.eos_token_id,
+                    prompt_length=inputs["input_ids"].shape[-1],
                 ),
             )
 

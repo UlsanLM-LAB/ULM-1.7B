@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import hmac
 import json
 import os
 import queue
@@ -15,8 +16,9 @@ from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from typing import Any, Literal, Protocol
 
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse, Response, StreamingResponse
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import AliasChoices, BaseModel, ConfigDict, Field, field_validator
 
 from .policy import (
@@ -185,6 +187,7 @@ class TransformersChatEngine:
                 top_p=request.top_p,
                 max_new_tokens=request.max_tokens,
                 eos_token_id=self.tokenizer.eos_token_id,
+                prompt_length=encoded["input_ids"].shape[-1],
             ),
         }
         return generation_kwargs
@@ -313,6 +316,16 @@ def create_app(
     engine: ChatEngine | None = None,
 ) -> FastAPI:
     resolved_model_path = model_path or os.environ.get("ULM_MODEL_PATH", DEFAULT_MODEL_PATH)
+    api_key = os.environ.get("ULM_API_KEY")
+
+    def authorize(
+        credentials: HTTPAuthorizationCredentials | None = Depends(HTTPBearer(auto_error=False)),
+    ) -> None:
+        if api_key and (
+            credentials is None
+            or not hmac.compare_digest(credentials.credentials.encode(), api_key.encode())
+        ):
+            raise HTTPException(401, "Unauthorized", headers={"WWW-Authenticate": "Bearer"})
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
@@ -322,7 +335,12 @@ def create_app(
             )
         yield
 
-    app = FastAPI(title="ULM-4B Inference API", version="1.0.0", lifespan=lifespan)
+    app = FastAPI(
+        title="ULM-4B Inference API",
+        version="1.0.0",
+        lifespan=lifespan,
+        dependencies=[Depends(authorize)],
+    )
     app.state.engine = engine
 
     @app.get("/health")
