@@ -102,3 +102,7 @@ reports/dialect-strength-real-model-test-*.json
 reports/investigation_results.json
 reports/test_eval_metrics.json
 reports/**/*.log
+
+# Agent and session files
+.omo/
+
